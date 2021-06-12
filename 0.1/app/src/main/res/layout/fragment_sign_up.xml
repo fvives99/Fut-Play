@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rltvLytSignUp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_purple"
+    tools:context=".Controllers.Fragments.SignUpFragment">
+
+    <ImageView
+        android:id="@+id/imgVwSignUpScrn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/contDesc"
+        android:scaleType="fitStart"
+        android:src="@drawable/fut_play_sign_up_screen_1" />
+
+    <ImageView
+        android:id="@+id/imgVwSignUpScrn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/contDesc"
+        android:scaleType="fitEnd"
+        android:src="@drawable/fut_play_sign_up_screen_2" />
+
+    <ScrollView
+        android:id="@+id/scrllVwSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/tblLytSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="true">
+
+            <TableRow
+                android:id="@+id/tblRwSignUp1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtVwSignUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/txtVwSignUp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:gravity="bottom"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="true"
+                    tools:ignore="RtlSymmetry">
+
+                    <EditText
+                        android:id="@+id/edTxtSignUpFullName"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:autofillHints="textPersonName"
+                        android:background="@drawable/fullname_field_bckgrnd"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:hint="@string/edTxtSignUpFullName"
+                        android:inputType="textPersonName"
+                        android:paddingStart="55dp"
+                        android:paddingEnd="15dp"
+                        android:textSize="22sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:gravity="bottom"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="true"
+                    tools:ignore="RtlSymmetry">
+
+                    <EditText
+                        android:id="@+id/edTxtSignUpEmail"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:autofillHints="textEmailAddress"
+                        android:background="@drawable/email_field_bckgrnd"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:hint="@string/edTxtSignUpEmail"
+                        android:inputType="textEmailAddress"
+                        android:paddingStart="55dp"
+                        android:paddingEnd="15dp"
+                        android:textSize="22sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:gravity="bottom"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="true"
+                    app:passwordToggleEnabled="true"
+                    tools:ignore="RtlSymmetry">
+
+                    <EditText
+                        android:id="@+id/edTxtSignUpPassword"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:autofillHints="textPassword"
+                        android:background="@drawable/password_field_bckgrnd"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:hint="@string/edTxtSignUpPassword"
+                        android:inputType="textPassword"
+                        android:paddingStart="55dp"
+                        android:paddingEnd="40dp"
+                        android:textSize="30sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:gravity="bottom"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="true"
+                    app:passwordToggleEnabled="true"
+                    tools:ignore="RtlSymmetry">
+
+                    <EditText
+                        android:id="@+id/edTxtSignUpConfirmPassword"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:autofillHints="textPassword"
+                        android:background="@drawable/password_field_bckgrnd"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:hint="@string/edTxtSignUpConfirmPassword"
+                        android:inputType="textPassword"
+                        android:paddingStart="55dp"
+                        android:paddingEnd="40dp"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:gravity="bottom"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="true"
+                    tools:ignore="RtlSymmetry">
+
+                    <EditText
+                        android:id="@+id/edTxtSignUpBirthDate"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:autofillHints="date"
+                        android:background="@drawable/age_field_bckgrnd"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:hint="@string/edTxtSignUpBirthDate"
+                        android:inputType="date"
+                        android:paddingStart="55dp"
+                        android:paddingEnd="15dp"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:ignore="UselessParent">
+
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/cntryCdPckrSignUpCountryCode"
+                        android:layout_width="60dp"
+                        android:layout_height="45dp"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccpDialog_showTitle="false"
+                        app:ccpDialog_allowSearch="false"
+                        app:ccp_textSize="30sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:gravity="bottom"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:errorEnabled="true"
+                        tools:ignore="RtlSymmetry">
+
+                        <EditText
+                            android:id="@+id/edTxtSignUpPhoneNumber"
+                            android:layout_width="240dp"
+                            android:layout_height="45dp"
+                            android:autofillHints="phone"
+                            android:background="@drawable/phone_number_field_bckgrnd"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:hint="@string/edTxtSignUpPhoneNumber"
+                            android:inputType="phone"
+                            android:paddingStart="55dp"
+                            android:paddingEnd="15dp"
+                            android:textSize="30sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwSignUp10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+
+                <FrameLayout
+                    android:id="@+id/frmLytImgVwLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    tools:ignore="UselessParent">
+
+                    <ImageView
+                        android:id="@+id/imgVwSignUp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:background="@drawable/sign_up_button_bckgrnd"
+                        android:contentDescription="@string/contDesc" />
+                </FrameLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>

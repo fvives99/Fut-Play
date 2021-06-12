@@ -1,0 +1,73 @@
+<resources>
+    // General Strings
+    <string name="app_name">Fut Play</string>
+    <string name="contDesc">description</string>
+    <string name="number">0</string>
+
+    // Login Strings
+    <string name="txtVwLogin">Iniciar Sesión</string>
+    <string name="edTxtLoginEmail">Correo Electrónico:</string>
+    <string name="edTxtLoginPassword">Contraseña:</string>
+    <string name="txtVwLoginForgotPass">¿Olvidó su contraseña?</string>
+    <string name="txtVwLoginRegister">Regístrese</string>
+
+    // Sign-Up Strings
+    <string name="txtVwSignUp">Registrarse</string>
+    <string name="edTxtSignUpFullName">Nombre Completo:</string>
+    <string name="edTxtSignUpEmail">Correo Electrónico:</string>
+    <string name="edTxtSignUpPassword">Contraseña:</string>
+    <string name="edTxtSignUpConfirmPassword">Confirmar Contraseña:</string>
+    <string name="edTxtSignUpNickname">Apodo:</string>
+    <string name="edTxtSignUpBirthDate">Fecha de Nacimiento:</string>
+    <string name="edTxtSignUpRegion">Región:</string>
+    <string name="edTxtSignUpPosition">Posición:</string>
+    <string name="edTxtSignUpPhoneNumber">Teléfono:</string>
+
+    // Profile Strings
+    <string name="txtVwProfileNickname">Apodo</string>
+    <string name="txtVwProfileRegion">Región</string>
+    <string name="txtVwProfilePosition">Posición</string>
+    <string name="txtVwProfileAge">Edad</string>
+    <string name="txtVwProfileStatistics">Estadísticas</string>
+    <string name="txtVwProfileMatchesPlayed">Partidos Jugados: </string>
+    <string name="txtVwProfileMVP">Jugador del Partido: </string>
+    <string name="txtVwProfileFutPlayPlayer">Jugador FutPlay: </string>
+
+    // Profile Settings Strings
+    <string name="edTxtProfileSettingsNickname">Apodo:</string>
+    <string name="edTxtProfileSettingsRegion">Región:</string>
+    <string name="edTxtProfileSettingsPosition">Posición:</string>
+    <string name="edTxtProfileSettingsEmail">Correo Electrónico:</string>
+    <string name="edTxtProfileSettingsPassword">Contraseña:</string>
+    <string name="edTxtProfileSettingsPhoneNumber">Teléfono:</string>
+
+    // Crop Strings
+    <string name="txtVwCropImageCrop">Recortar</string>
+
+    // Teams Strings
+    <string name="txtVwTeamName">Nombre</string>
+    <string name="txtVwTeamRegion">Región</string>
+    <string name="txtVwTeamCode">Código</string>
+    <string name="txtVwTeamHistory">Historial:</string>
+    <string name="txtVwTeamWDL">(G-E-P)</string>
+    <string name="txtVwTeamStreak">Racha:</string>
+    <string name="txtVwTeamPlayers">Jugadores</string>
+
+    // Fields Strings
+
+
+    // Card View Player Strings
+    <string name="txtVwCrdVwPlayerName">Nombre</string>
+
+    // Done Strings
+    <string name="txtVwDoneMessage">Mensaje</string>
+    <string name="txtVwDoneOk">OK</string>
+    <string name="title_activity_crop_image">CropImageActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

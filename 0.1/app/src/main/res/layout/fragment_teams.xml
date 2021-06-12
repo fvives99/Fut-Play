@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Controllers.Fragments.TeamsFragment">
+
+    <ProgressBar
+        android:id="@+id/progressBarTeam"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/imgVwTeamSettings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/settings_icon"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/contDesc" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="true">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="250dp">
+
+                    <ImageView
+                        android:id="@+id/imgVwTeamProfileImg"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:contentDescription="@string/contDesc"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/teams_image_icon" />
+                </androidx.cardview.widget.CardView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtVwTeamName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="@string/txtVwTeamName"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/txtVwTeamRegion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="@string/txtVwTeamRegion"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/txtVwTeamCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="@string/txtVwTeamCode"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/txtVwTeamHistory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:text="@string/txtVwTeamHistory"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/txtVwTeamWDL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:text="@string/txtVwTeamWDL"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="30sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/txtVwTeamStreak"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:text="@string/txtVwTeamStreak"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/black"
+                            android:textSize="30sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imgVwStreak1"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/streak_blank" />
+
+                            <ImageView
+                                android:id="@+id/imgVwStreak2"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/streak_blank" />
+
+                            <ImageView
+                                android:id="@+id/imgVwStreak3"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/streak_blank" />
+
+                            <ImageView
+                                android:id="@+id/imgVwStreak4"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/streak_blank" />
+
+                            <ImageView
+                                android:id="@+id/imgVwStreak5"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/streak_blank" />
+                        </LinearLayout>
+                    </TableRow>
+                </TableLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtVwTeamPlayers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="@string/txtVwTeamPlayers"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="30sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycVwTeamPlayers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:scrollbars="vertical" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>

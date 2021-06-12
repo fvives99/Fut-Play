@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "972420775027",
+    "project_id": "fut-play",
+    "storage_bucket": "fut-play.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972420775027:android:0b8443cc0ea869f31c7e06",
+        "android_client_info": {
+          "package_name": "com.example.futplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972420775027-vh11b8fu9g0d5rml0d01d5lbi2qagtvo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYeiKGnIm723ZWA1vf_fENr9r7zEvbDAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972420775027-vh11b8fu9g0d5rml0d01d5lbi2qagtvo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

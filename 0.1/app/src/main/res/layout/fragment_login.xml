@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cnstLytLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_purple"
+    tools:context=".Controllers.Fragments.LoginFragment">
+
+    <ImageView
+        android:id="@+id/imgVwLoginScrn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/contDesc"
+        android:scaleType="fitStart"
+        android:src="@drawable/fut_play_login_screen_1" />
+
+    <ImageView
+        android:id="@+id/imgVwLoginScrn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/contDesc"
+        android:scaleType="fitEnd"
+        android:src="@drawable/fut_play_login_screen_2" />
+
+    <ScrollView
+        android:id="@+id/scrllVwLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/tblLytLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="true">
+
+            <TableRow
+                android:id="@+id/tblRwLogin1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtVwLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/txtVwLogin"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwLogin2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/linLytLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:gravity="bottom"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:errorEnabled="true"
+                        tools:ignore="RtlSymmetry">
+
+                        <EditText
+                            android:id="@+id/edTxtLoginEmail"
+                            android:layout_width="295dp"
+                            android:layout_height="45dp"
+                            android:autofillHints=""
+                            android:background="@drawable/email_field_bckgrnd"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:hint="@string/edTxtLoginEmail"
+                            android:inputType="textEmailAddress"
+                            android:paddingStart="50dp"
+                            android:paddingEnd="15dp"
+                            android:textSize="22sp"
+                            tools:ignore="RtlSymmetry" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="bottom"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:errorEnabled="true"
+                        app:passwordToggleEnabled="true"
+                        tools:ignore="RtlSymmetry">
+
+                        <EditText
+                            android:id="@+id/edTxtLoginPassword"
+                            android:layout_width="295dp"
+                            android:layout_height="45dp"
+                            android:autofillHints=""
+                            android:background="@drawable/password_field_bckgrnd"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:hint="@string/edTxtLoginPassword"
+                            android:inputType="textPassword"
+                            android:paddingStart="50dp"
+                            android:paddingEnd="40dp"
+                            android:textSize="30sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imgVwLogin"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/login_button_bckgrnd"
+                    android:contentDescription="@string/contDesc" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwLogin3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:gravity="start"
+                tools:ignore="RtlHardcoded">
+
+                <TextView
+                    android:id="@+id/txtVwLoginForgotPass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/txtVwLoginForgotPass"
+                    android:textColor="@color/dark_purple"
+                    android:textSize="20sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tblRwLogin4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="start"
+                tools:ignore="RtlHardcoded">
+
+                <FrameLayout
+                    android:id="@+id/frmLytImgVwLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    tools:ignore="UselessParent">
+
+                    <TextView
+                        android:id="@+id/txtVwLoginRegister"
+                        android:layout_width="220dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/register_button_bckgrnd"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:paddingStart="65dp"
+                        android:paddingTop="3dp"
+                        android:text="@string/txtVwLoginRegister"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        tools:ignore="RtlSymmetry" />
+                </FrameLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Controllers.Fragments.ProfileSettingsFragment">
+
+    <ProgressBar
+        android:id="@+id/progressBarProfileSettings"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/imgVwProfileInfo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:contentDescription="@string/contDesc"
+        android:focusable="true"
+        android:src="@drawable/profile_image_icon" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusableInTouchMode="true">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contDesc"
+                    android:src="@drawable/person_icon" />
+
+                <EditText
+                    android:id="@+id/edTxtProfileSettingsNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="@string/edTxtProfileSettingsNickname"
+                    android:inputType="text"
+                    android:textSize="30sp"
+                    android:autofillHints="text" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contDesc"
+                    android:src="@drawable/region_icon" />
+
+                <EditText
+                    android:id="@+id/edTxtProfileSettingsRegion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="@string/edTxtProfileSettingsRegion"
+                    android:inputType="text"
+                    android:textSize="30sp"
+                    android:autofillHints="text" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contDesc"
+                    android:src="@drawable/position_icon" />
+
+                <EditText
+                    android:id="@+id/edTxtProfileSettingsPosition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="@string/edTxtProfileSettingsPosition"
+                    android:inputType="text"
+                    android:textSize="30sp"
+                    android:autofillHints="text" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contDesc"
+                    android:src="@drawable/email_icon" />
+
+                <EditText
+                    android:id="@+id/edTxtProfileSettingsEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="@string/edTxtProfileSettingsEmail"
+                    android:inputType="textEmailAddress"
+                    android:textSize="30sp"
+                    android:autofillHints="textEmailAddress" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contDesc"
+                    android:src="@drawable/password_icon" />
+
+                <EditText
+                    android:id="@+id/edTxtProfileSettingsPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="@string/edTxtProfileSettingsPassword"
+                    android:inputType="textPassword"
+                    android:textSize="30sp"
+                    android:autofillHints="textPassword" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contDesc"
+                    android:src="@drawable/phone_number_icon" />
+
+                <EditText
+                    android:id="@+id/edTxtProfileSettingsPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:hint="@string/edTxtProfileSettingsPhoneNumber"
+                    android:inputType="phone"
+                    android:textSize="30sp"
+                    android:autofillHints="phone" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>
