@@ -39,6 +39,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
@@ -161,31 +162,31 @@
                                 android:id="@+id/imgVwStreak1"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/streak_blank" />
+                                android:src="@drawable/streak_blank_icon" />
 
                             <ImageView
                                 android:id="@+id/imgVwStreak2"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/streak_blank" />
+                                android:src="@drawable/streak_blank_icon" />
 
                             <ImageView
                                 android:id="@+id/imgVwStreak3"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/streak_blank" />
+                                android:src="@drawable/streak_blank_icon" />
 
                             <ImageView
                                 android:id="@+id/imgVwStreak4"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/streak_blank" />
+                                android:src="@drawable/streak_blank_icon" />
 
                             <ImageView
                                 android:id="@+id/imgVwStreak5"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@drawable/streak_blank" />
+                                android:src="@drawable/streak_blank_icon" />
                         </LinearLayout>
                     </TableRow>
                 </TableLayout>

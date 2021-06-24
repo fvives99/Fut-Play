@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="0.75"
-            android:background="@drawable/fut_play_header"
+            android:background="@drawable/futplay_header"
             android:contentDescription="@string/contDesc" />
 
 

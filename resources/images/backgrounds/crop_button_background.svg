@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="421" height="97" viewBox="0 0 421 97">
+  <g id="Grupo_13" data-name="Grupo 13" transform="translate(-125 -1349)">
+    <rect id="Rectángulo_5" data-name="Rectángulo 5" width="421" height="97" rx="48.5" transform="translate(125 1349)" fill="#2b0082"/>
+    <g id="scissors_icon" transform="translate(162.484 1368.484)">
+      <path id="Trazado_12" data-name="Trazado 12" d="M0,0H58.041V58.041H0Z" fill="none"/>
+      <circle id="Elipse_9" data-name="Elipse 9" cx="4.646" cy="4.646" r="4.646" transform="translate(9.955 39.457)" fill="none"/>
+      <circle id="Elipse_10" data-name="Elipse 10" cx="1.209" cy="1.209" r="1.209" transform="translate(27.811 27.811)" fill="none"/>
+      <circle id="Elipse_11" data-name="Elipse 11" cx="4.646" cy="4.646" r="4.646" transform="translate(9.955 10.255)" fill="none"/>
+      <path id="Trazado_13" data-name="Trazado 13" d="M20.476,15.64a9.424,9.424,0,0,0,.871-3.966,9.673,9.673,0,1,0-9.673,9.673,9.424,9.424,0,0,0,3.966-.871l5.707,5.707L15.64,31.891a9.424,9.424,0,0,0-3.966-.871,9.673,9.673,0,1,0,9.673,9.673,9.424,9.424,0,0,0-.871-3.966l5.707-5.707L43.112,47.949h7.255V45.531Zm-8.8.871a4.837,4.837,0,1,1,4.837-4.837A4.835,4.835,0,0,1,11.673,16.51Zm0,29.02a4.837,4.837,0,1,1,4.837-4.837A4.835,4.835,0,0,1,11.673,45.531Zm14.51-18.138a1.209,1.209,0,1,1,1.209-1.209A1.2,1.2,0,0,1,26.184,27.393ZM43.112,4.418,28.6,18.929l4.837,4.837L50.367,6.837V4.418Z" transform="translate(2.837 2.837)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

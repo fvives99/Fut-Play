@@ -24,10 +24,10 @@
     <string name="edTxtSignUpPhoneNumber">Teléfono:</string>
 
     // Profile Strings
-    <string name="txtVwProfileNickname">Apodo</string>
-    <string name="txtVwProfileRegion">Región</string>
-    <string name="txtVwProfilePosition">Posición</string>
-    <string name="txtVwProfileAge">Edad</string>
+    <string name="txtVwProfileNickname">Apodo:</string>
+    <string name="txtVwProfileRegion">Región:</string>
+    <string name="txtVwProfilePosition">Posición:</string>
+    <string name="txtVwProfileAge">Edad:</string>
     <string name="txtVwProfileStatistics">Estadísticas</string>
     <string name="txtVwProfileMatchesPlayed">Partidos Jugados: </string>
     <string name="txtVwProfileMVP">Jugador del Partido: </string>
@@ -41,19 +41,46 @@
     <string name="edTxtProfileSettingsPassword">Contraseña:</string>
     <string name="edTxtProfileSettingsPhoneNumber">Teléfono:</string>
 
+    // Popup Profile Info Strings
+    <string name="txtVwPopupProfileInfoTitle">Completar Perfil</string>
+    <string name="txtVwPopupProfileInfoDescription">Ingrese la siguiente información para completar su perfil:</string>
+    <string name="edTxtPopupProfileInfoNickname">Apodo:</string>
+    <string name="edTxtPopupProfileInfoRegion">Región:</string>
+
+    // Popup Profile Settings Strings
+    <string name="txtVwPopupProfileSettingsTitle">Configurar Perfil</string>
+    <string name="txtVwPopupProfileSettingsDescription">Observe, edite y guarde la información de su perfil:</string>
+    <string name="edTxtPopupProfileSettingsFullName">Nombre Completo:</string>
+    <string name="edTxtPopupProfileSettingsNickname">Apodo:</string>
+    <string name="edTxtPopupProfileSettingsRegion">Región:</string>
+    <string name="edTxtPopupProfileSettingsAge">Edad:</string>
+    <string name="edTxtPopupProfileSettingsEmail">Correo Electrónico:</string>
+    <string name="edTxtPopupProfileSettingsNewPassword">Nueva Contraseña:</string>
+    <string name="edTxtPopupProfileSettingsConfirmNewPassword">Confirmar Nueva Contraseña:</string>
+    <string name="edTxtPopupProfileSettingsPhoneNumber">Teléfono:</string>
+
+    // Region Picker Strings
+    <string name="txtVwRegionPickerProvince">Provincia</string>
+    <string name="txtVwRegionPickerCanton">Cantón</string>
+    <string name="txtVwRegionPickerDistrict">Distrito</string>
+    <string name="txtVwRegionPickerAccept">Aceptar</string>
+
     // Crop Strings
     <string name="txtVwCropImageCrop">Recortar</string>
 
     // Teams Strings
-    <string name="txtVwTeamName">Nombre</string>
-    <string name="txtVwTeamRegion">Región</string>
-    <string name="txtVwTeamCode">Código</string>
+    <string name="txtVwTeamName">Nombre:</string>
+    <string name="txtVwTeamRegion">Región:</string>
+    <string name="txtVwTeamCode">Código:</string>
     <string name="txtVwTeamHistory">Historial:</string>
     <string name="txtVwTeamWDL">(G-E-P)</string>
     <string name="txtVwTeamStreak">Racha:</string>
     <string name="txtVwTeamPlayers">Jugadores</string>
 
     // Fields Strings
+
+
+    // Matches Strings
 
 
     // Card View Player Strings

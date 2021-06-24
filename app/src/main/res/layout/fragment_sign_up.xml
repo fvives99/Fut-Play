@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDesc"
         android:scaleType="fitStart"
-        android:src="@drawable/fut_play_sign_up_screen_1" />
+        android:src="@drawable/sign_up_screen_1" />
 
     <ImageView
         android:id="@+id/imgVwSignUpScrn2"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDesc"
         android:scaleType="fitEnd"
-        android:src="@drawable/fut_play_sign_up_screen_2" />
+        android:src="@drawable/sign_up_screen_2" />
 
     <ScrollView
         android:id="@+id/scrllVwSignUp"
@@ -74,7 +74,7 @@
                         android:layout_width="300dp"
                         android:layout_height="45dp"
                         android:autofillHints="textPersonName"
-                        android:background="@drawable/fullname_field_bckgrnd"
+                        android:background="@drawable/person_field_background"
                         android:fontFamily="@font/montserrat_semibold"
                         android:hint="@string/edTxtSignUpFullName"
                         android:inputType="textPersonName"
@@ -105,7 +105,7 @@
                         android:layout_width="300dp"
                         android:layout_height="45dp"
                         android:autofillHints="textEmailAddress"
-                        android:background="@drawable/email_field_bckgrnd"
+                        android:background="@drawable/email_field_background"
                         android:fontFamily="@font/montserrat_semibold"
                         android:hint="@string/edTxtSignUpEmail"
                         android:inputType="textEmailAddress"
@@ -137,7 +137,7 @@
                         android:layout_width="300dp"
                         android:layout_height="45dp"
                         android:autofillHints="textPassword"
-                        android:background="@drawable/password_field_bckgrnd"
+                        android:background="@drawable/password_field_background"
                         android:fontFamily="@font/montserrat_semibold"
                         android:hint="@string/edTxtSignUpPassword"
                         android:inputType="textPassword"
@@ -169,7 +169,7 @@
                         android:layout_width="300dp"
                         android:layout_height="45dp"
                         android:autofillHints="textPassword"
-                        android:background="@drawable/password_field_bckgrnd"
+                        android:background="@drawable/password_field_background"
                         android:fontFamily="@font/montserrat_semibold"
                         android:hint="@string/edTxtSignUpConfirmPassword"
                         android:inputType="textPassword"
@@ -200,7 +200,7 @@
                         android:layout_width="300dp"
                         android:layout_height="45dp"
                         android:autofillHints="date"
-                        android:background="@drawable/age_field_bckgrnd"
+                        android:background="@drawable/age_field_background"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:fontFamily="@font/montserrat_semibold"
@@ -226,7 +226,7 @@
                     tools:ignore="UselessParent">
 
                     <com.hbb20.CountryCodePicker
-                        android:id="@+id/cntryCdPckrSignUpCountryCode"
+                        android:id="@+id/countryCodePickerSignUp"
                         android:layout_width="60dp"
                         android:layout_height="45dp"
                         app:ccp_autoDetectCountry="true"
@@ -248,7 +248,7 @@
                             android:layout_width="240dp"
                             android:layout_height="45dp"
                             android:autofillHints="phone"
-                            android:background="@drawable/phone_number_field_bckgrnd"
+                            android:background="@drawable/phone_number_field_background"
                             android:fontFamily="@font/montserrat_semibold"
                             android:hint="@string/edTxtSignUpPhoneNumber"
                             android:inputType="phone"
@@ -277,7 +277,7 @@
                         android:id="@+id/imgVwSignUp"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:background="@drawable/sign_up_button_bckgrnd"
+                        android:background="@drawable/sign_up_button_background"
                         android:contentDescription="@string/contDesc" />
                 </FrameLayout>
             </TableRow>

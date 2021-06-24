@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDesc"
         android:scaleType="fitStart"
-        android:src="@drawable/fut_play_login_screen_1" />
+        android:src="@drawable/login_screen_1" />
 
     <ImageView
         android:id="@+id/imgVwLoginScrn2"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDesc"
         android:scaleType="fitEnd"
-        android:src="@drawable/fut_play_login_screen_2" />
+        android:src="@drawable/login_screen_2" />
 
     <ScrollView
         android:id="@+id/scrllVwLogin"
@@ -79,8 +79,8 @@
                             android:id="@+id/edTxtLoginEmail"
                             android:layout_width="295dp"
                             android:layout_height="45dp"
-                            android:autofillHints=""
-                            android:background="@drawable/email_field_bckgrnd"
+                            android:autofillHints="textEmailAddress"
+                            android:background="@drawable/email_field_background"
                             android:fontFamily="@font/montserrat_semibold"
                             android:hint="@string/edTxtLoginEmail"
                             android:inputType="textEmailAddress"
@@ -105,8 +105,8 @@
                             android:id="@+id/edTxtLoginPassword"
                             android:layout_width="295dp"
                             android:layout_height="45dp"
-                            android:autofillHints=""
-                            android:background="@drawable/password_field_bckgrnd"
+                            android:autofillHints="textPassword"
+                            android:background="@drawable/password_field_background"
                             android:fontFamily="@font/montserrat_semibold"
                             android:hint="@string/edTxtLoginPassword"
                             android:inputType="textPassword"
@@ -120,7 +120,7 @@
                     android:id="@+id/imgVwLogin"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/login_button_bckgrnd"
+                    android:background="@drawable/login_button_background"
                     android:contentDescription="@string/contDesc" />
             </TableRow>
 
@@ -162,7 +162,7 @@
                         android:id="@+id/txtVwLoginRegister"
                         android:layout_width="220dp"
                         android:layout_height="45dp"
-                        android:background="@drawable/register_button_bckgrnd"
+                        android:background="@drawable/register_button_background"
                         android:fontFamily="@font/montserrat_bold"
                         android:paddingStart="65dp"
                         android:paddingTop="3dp"

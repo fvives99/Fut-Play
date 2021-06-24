@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDesc"
         android:scaleType="fitStart"
-        android:src="@drawable/fut_play_sign_up_screen_1" />
+        android:src="@drawable/sign_up_screen_1" />
 
     <ImageView
         android:id="@+id/imgVwCropImageScrn2"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDesc"
         android:scaleType="fitEnd"
-        android:src="@drawable/fut_play_sign_up_screen_2" />
+        android:src="@drawable/sign_up_screen_2" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 android:id="@+id/txtVwCropImageCrop"
                 android:layout_width="180dp"
                 android:layout_height="45dp"
-                android:background="@drawable/crop_bckgnd"
+                android:background="@drawable/crop_button_background"
                 android:fontFamily="@font/montserrat_bold"
                 android:paddingStart="50dp"
                 android:paddingTop="3dp"

@@ -8,33 +8,29 @@
 
     <ImageView
         android:id="@+id/imgVwSplashScrn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/contDesc"
-        android:src="@drawable/fut_play_splash_screen_1"
-        android:scaleType="centerInside" />
+        android:src="@drawable/splash_screen_1" />
 
     <ImageView
         android:id="@+id/imgVwSplashScrn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/contDesc"
-        android:src="@drawable/fut_play_splash_screen_2"
-        android:scaleType="centerInside" />
+        android:src="@drawable/splash_screen_2" />
 
     <ImageView
         android:id="@+id/imgVwSplashScrn3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/contDesc"
-        android:src="@drawable/fut_play_splash_screen_3"
-        android:scaleType="centerInside" />
+        android:src="@drawable/splash_screen_3" />
 
     <ImageView
         android:id="@+id/imgVwSplashScrn4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/contDesc"
-        android:src="@drawable/fut_play_splash_screen_4"
-        android:scaleType="centerInside" />
+        android:src="@drawable/splash_screen_4" />
 </RelativeLayout>

@@ -68,7 +68,7 @@ public class SignUpFragment extends Fragment {
     private ImageView imgVwSignUpScrn1;
     private ImageView imgVwSignUpScrn2;
 
-    private CountryCodePicker cntryCdPckrSignUpCountryCode;
+    private CountryCodePicker countryCodePickerSignUp;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
@@ -137,7 +137,7 @@ public class SignUpFragment extends Fragment {
         imgVwSignUpScrn1 = view.findViewById(R.id.imgVwSignUpScrn1);
         imgVwSignUpScrn2 = view.findViewById(R.id.imgVwSignUpScrn2);
 
-        cntryCdPckrSignUpCountryCode = view.findViewById(R.id.cntryCdPckrSignUpCountryCode);
+        countryCodePickerSignUp = view.findViewById(R.id.countryCodePickerSignUp);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -307,11 +307,12 @@ public class SignUpFragment extends Fragment {
                         user.put("fullName", camelCase(edTxtSignUpFullName.getText().toString().trim().replaceAll(" +", " ")));
                         user.put("email", edTxtSignUpEmail.getText().toString().trim());
                         user.put("birthDate", edTxtSignUpBirthDate.getText().toString());
-                        user.put("countryCode", cntryCdPckrSignUpCountryCode.getFullNumber());
+                        user.put("countryCode", countryCodePickerSignUp.getFullNumber());
                         user.put("phoneNumber", edTxtSignUpPhoneNumber.getText().toString().trim());
+                        user.put("nickname", "");
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             defaultSetUp();
-                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerLogin, new DoneFragment("¡Registro Exitoso!", "menu")).addToBackStack("done").commit();
+                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerLogin, new DoneFragment("¡Registro Exitoso!", "menu")).commit();
                         });
                     } else {
                         throw Objects.requireNonNull(task.getException());

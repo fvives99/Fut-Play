@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="641" height="97" viewBox="0 0 641 97">
+  <g id="Grupo_14" data-name="Grupo 14" transform="translate(-320 -841)">
+    <rect id="Rectángulo_1" data-name="Rectángulo 1" width="641" height="97" rx="48.5" transform="translate(320 841)" fill="#fff"/>
+    <g id="calendar_icon" transform="translate(351.702 853.009)">
+      <path id="Trazado_12" data-name="Trazado 12" d="M0,0H73V73H0Z" fill="none"/>
+      <path id="Trazado_13" data-name="Trazado 13" d="M51.667,7.083H48.625V1H42.542V7.083H18.208V1H12.125V7.083H9.083A6.056,6.056,0,0,0,3.03,13.167L3,55.75a6.082,6.082,0,0,0,6.083,6.083H51.667A6.1,6.1,0,0,0,57.75,55.75V13.167A6.1,6.1,0,0,0,51.667,7.083Zm0,48.667H9.083V22.292H51.667Zm-36.5-27.375H30.375V43.583H15.167Z" transform="translate(6.125 2.042)"/>
+    </g>
+  </g>
+</svg>

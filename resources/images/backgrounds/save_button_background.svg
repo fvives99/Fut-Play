@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="103" height="103" viewBox="0 0 103 103">
+  <g id="Grupo_12" data-name="Grupo 12" transform="translate(-388 -1195)">
+    <rect id="Rectángulo_3" data-name="Rectángulo 3" width="103" height="103" rx="51.5" transform="translate(388 1195)" fill="#2b0082"/>
+    <g id="save_icon" transform="translate(403 1210)">
+      <path id="Trazado_12" data-name="Trazado 12" d="M0,0H73V73H0Z" fill="none"/>
+      <path id="Trazado_13" data-name="Trazado 13" d="M45.583,3H9.083A6.082,6.082,0,0,0,3,9.083V51.667A6.082,6.082,0,0,0,9.083,57.75H51.667a6.1,6.1,0,0,0,6.083-6.083v-36.5ZM30.375,51.667A9.125,9.125,0,1,1,39.5,42.542,9.113,9.113,0,0,1,30.375,51.667ZM39.5,21.25H9.083V9.083H39.5Z" transform="translate(6.125 6.125)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

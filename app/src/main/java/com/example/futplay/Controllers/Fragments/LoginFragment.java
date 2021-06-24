@@ -160,7 +160,7 @@ public class LoginFragment extends Fragment {
             passwordReset.setPositiveButton("Aceptar", (dialogInterface, i) -> {
                 String email = edTxtResetEmail.getText().toString();
                 firebaseAuth.sendPasswordResetEmail(email)
-                        .addOnSuccessListener(aVoid -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerLogin, new DoneFragment("Si el correo electrónico proporcionado se encuentra registrado, encontrará un mensaje con el enlace de reinicio de contraseña")).addToBackStack("done").commit())
+                        .addOnSuccessListener(aVoid -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerLogin, new DoneFragment("Si el correo electrónico proporcionado se encuentra registrado, encontrará un mensaje con el enlace de reinicio de contraseña")).commit())
                         .addOnFailureListener(e -> Toast.makeText(getContext(), "¡Ha habido un error!.\nIntente más tarde", Toast.LENGTH_SHORT).show());
             });
             passwordReset.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());

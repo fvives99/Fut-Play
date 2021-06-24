@@ -10,6 +10,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">	#D3D3D3</color>
+    <color name="dark_gray">#919292</color>
     <color name="green">#3AA757</color>
     <color name="red">#EA4335</color>
 </resources>

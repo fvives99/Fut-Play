@@ -1,0 +1,948 @@
+["San José","Alajuela","Cartago","Heredia","Guanacaste","Puntarenas","Limón"]
+
+["Central","Escazú","Desamparados","Puriscal","Tarrazú","Aserrí","Mora","Goicoechea","Santa Ana","Alajuelita","Vázquez De Coronado","Acosta","Tibás","Moravia","Montes De Oca","Turrubares","Dota","Curridabat","Pérez Zeledón","León Cortés Castro"]
+
+["Carmen","Merced","Hospital","Catedral","Zapote","San Francisco De Dos Rios","Uruca","Mata Redonda","Pavas","Hatillo","San Sebastián"]
+["Escazú","San Antonio","San Rafael"]
+["Desamparados","San Miguel","San Juan De Dios","San Rafael Arriba","San Rafael Abajo","San Antonio","Frailes","Patarra","San Cristobal","Rosario","Damas","Gravilias","Los Guido"]
+["Santiago","Mercedes Sur","Barbacoas","Grifo Alto","San Rafael","Candelarita","Desamparaditos","San Antonio","Chires"]
+["San Marcos","San Lorenzo","San Carlos"]
+["Aserrí","Tarbaca","Vuelta De Jorco","San Gabriel","Legua","Monterrey","Salitrillos"]
+["Colón","Guayabo","Tabarcia","Piedras Negras","Picagres","Jaris"]
+["Guadalupe","San Francisco","Calle Blancos","Mata De Platano","Ipís","Rancho Redondo","Purral"]
+["Santa Ana","Salitral","Pozos","Uruca","Piedades","Brasil"]
+["Alajuelita","San Josecito","San Antonio","Concepción","San Felipe"]
+["San Isidro","San Rafael","Dulce Nombre De Jesus","Patalillo","Cascajal"]
+["San Ignacio","Guaitil","Palmichal","Cangrejal","Sabanillas"]
+["San Juan","Cinco Esquinas","Anselmo Llorente","Leon XIII","Colima"]
+["San Vicente","San Jeronimo","La Trinidad"]
+["San Pedro","Sabanilla","Mercedes","San Rafael"]
+["San Pablo","San Pedro","San Juan De Mata","San Luis","Carara"]
+["Santa María","Jardin","Copey"]
+["Curridabat","Granadilla","Sanchez","Tirrases"]
+["San Isidro De El General","El General","Daniel Flores","Rivas","San Pedro","Platanares","Pejibaye","Cajon","Baru","Rio Nuevo","Páramo"]
+["San Pablo","San Andres","Llano Bonito","San Isidro","Santa Cruz","San Antonio"]
+
+["Central","San Ramón","Grecia","San Mateo","Atenas","Naranjo","Palmares","Poás","Orotina","San Carlos","Zarcero","Sarchí","Upala","Los Chiles","Guatuso","Río Cuarto"]
+
+["Alajuela","San José","Carrizal","San Antonio","Guácima","San Isidro","Sabanilla","San Rafael","Rio Segundo","Desamparados","Turrucares","Tambor","Garita","Sarapiquí"]
+["San Ramón","Santiago","San Juan","Piedades Norte","Piedades Sur","San Rafael","San Isidro","Angeles","Alfaro","Volio","Concepción","Zapotal","Peñas Blancas", "San Lorenzo"]
+["Grecia","San Isidro","San José","San Roque","Tacares","Rio Cuarto","Puente De Piedra","Bolivar"]
+["San Mateo","Desmonte","Jesús María","Labrador"]
+["Atenas","Jesús","Mercedes","San Isidro","Concepción","San José","Santa Eulalia","Escobal"]
+["Naranjo","San Juan","San Miguel","Palmitos","El Rosario","San José","Cirrí Sur","San Jerónimo"]
+["Palmares","Zaragoza","Buenos Aires","Santiago","Candelaria","Esquipulas","La Granja"]
+["San Pedro","San Juan","San Rafael","Carrillos","Sabana Redonda"]
+["Orotina","El Mastate","Hacienda Vieja","Coyolar","La Ceiba"]
+["Quesada","Florencia","Buenavista","Aguas Zarcas","Venecia","Pital","La Fortuna","La Tigra","La Palmera","Venado","Cutris","Monterrey","Pocosol"]
+["Zarcero","Laguna","Tapesco","Guadalupe","Palmira","Zapote","Brisas"]
+["Sarchí Norte","Sarchí Sur","Toro Amarillo","San Pedro","Rodriguez"]
+["Upala","Aguas Claras","San José o Pizote","Bijagua","Delicias","Dos Rios","Yolillal","Canalete"]
+["Los Chiles","Caño Negro","El Amparo","San Jorge"]
+["San Rafael","Buenavista","Cote","Katira"]
+["Río Cuarto","Santa Rita","Santa Isabel"]
+
+["Central","Paraíso","La Unión","Jiménez","Turrialba","Alvarado","Oreamuno","El Guarco"]
+
+["Oriental","Occidental","Carmen","San Nicolás","Aguacaliente o San Francisco","Guadalupe o Arenilla","Corralillo","Tierra Blanca","Dulce Nombre","Llano Grande","Quebradilla"]
+["Paraiso","Santiago","Orosi","Cachí","Llanos de Santa Lucía"]
+["Tres Rios","San Diego","San Juan","San Rafael","Concepción","Dulce Nombre","San Ramón","Rio Azul"]
+["Juan Viñas","Tucurrique","Pejibaye"]
+["Turrialba","La Suiza","Peralta","Santa Cruz","Santa Teresita","Pavones","Tuis","Tayutic","Santa Rosa","Tres Equis","La Isabel","Chirripó"]
+["Pacayas","Cervantes","Capellades"]
+["San Rafael","Cot","Potrero Cerrado","Cipreses","Santa Rosa"]
+["El Tejar","San Isidro","Tobosi","Patio De Agua"]
+
+["Central","Barva","Santo Domingo","Santa Barbara","San Rafael","San Isidro","Belén","Flores","San Pablo","Sarapiquí"]
+
+["Heredia","Mercedes","San Francisco","Ulloa","Varablanca"]
+["Barva","San Pedro","San Pablo","San Roque","Santa Lucía","San José de la Montaña"]
+["Santo Domingo","San Vicente","San Miguel","Paracito","Santo Tomás","Santa Rosa","Tures","Para"]
+["Santa Bárbara","San Pedro","San Juan","Jesús","Santo Domingo","Puraba"]
+["San Rafael","San Josecito","Santiago","Los Ángeles","Concepción"]
+["San Isidro","San José","Concepción","San Francisco"]
+["San Antonio","La Ribera","La Asuncion"]
+["San Joaquín","Barrantes","Llorente"]
+["San Pablo","Rincon De Sabanilla"]
+["Puerto Viejo","La Virgen","Las Horquetas","Llanuras Del Gaspar","Cureña"]
+
+["Liberia","Nicoya","Santa Cruz","Bagaces","Carrillo","Cañas","Abangares","Tilarán","Nandayure","La Cruz","Hojancha"]
+
+["Liberia","Nacascolo","Cañas Dulces","Mayorga","Curubande"]
+["Nicoya","Mansión","San Antonio","Quebrada Honda","Sámara","Nosara","Belén De Nosarita"]
+["Santa Cruz","Bolson","Veintisiete de Abril","Tempate","Cartagena","Cuajiniquil","Diria","Cabo Velas","Tamarindo"]
+["Bagaces","La Fortuna","Mogote","Rio Naranjo"]
+["Filadelfia","Palmira","Sardinal","Belen"]
+["Cañas","Palmira","San Miguel","Bebedero","Porozal"]
+["Las Juntas","Sierra","San Juan","Colorado"]
+["Tilarán","Quebrada Grande","Tronadora","Santa Rosa","Líbano","Tierras Morenas","Arenal","Cabeceras"]
+["Carmona","Santa Rita","Zapotal","San Pablo","Porvenir","Bejuco"]
+["La Cruz","Santa Cecilia","La Garita","Santa Elena"]
+["Hojancha","Monte Romo","Puerto Carrillo","Huacas"]
+
+["Central","Esparza","Buenos Aires","Montes De Oro","Osa","Quepos","Golfito","Coto Brus","Parrita","Corredores","Garabito"]
+
+["Puntarenas","Pitahaya","Chomes","Lepanto","Paquera","Manzanillo","Guacimal","Barranca","Monte Verde","Isla Del Coco","Cóbano","Chacarita","Chira","Acapulco","El Roble","Arancibia"]
+["Espíritu Santo","San Juan Grande","Macacona","San Rafael","San Jerónimo"]
+["Buenos Aires","Volcán","Potrero Grande","Boruca","Pilas","Colinas","Changuena","Biolley","Brunka"]
+["Miramar","La Unión","San Isidro"]
+["Puerto Cortés","Palmar","Sierpe","Bahía Ballena","Piedras Blancas","Bahía Drake"]
+["Quepos","Savegre","Naranjito"]
+["Golfito","Puerto Jiménez","Guaycara","Pavón"]
+["San Vito","Sabalito","Aguabuena","Limoncito","Pittier"]
+["Parrita"]
+["Corredor","La Cuesta","Canoas","Laurel"]
+["Jacó","Tárcoles"]
+
+["Central","Pococí","Siquirres","Talamanca","Matina","Guácimo"]
+
+["Limón","Valle La Estrella","Rio Blanco","Matama"]
+["Guapiles","Jiménez","Rita","Roxana","Cariari","Colorado","La Colonia"]
+["Siquirres","Pacuarito","Florida","Germania","El Cairo","Alegría"]
+["Bratsi","Sixaola","Cahuita","Telire"]
+["Matina","Batán","Carrandi"]
+["Guácimo","Mercedes","Pocora","Rio Jiménez","Duacari"]
+
+{
+   "provinces":{
+      "San José":{
+         "cantons":{
+            "Central":{
+               "districts":[
+                  "Carmen",
+                  "Merced",
+                  "Hospital",
+                  "Catedral",
+                  "Zapote",
+                  "San Francisco De Dos Rios",
+                  "Uruca",
+                  "Mata Redonda",
+                  "Pavas",
+                  "Hatillo",
+                  "San Sebastián"
+               ]
+            },
+            "Escazú":{
+               "districts":[
+                  "Escazú",
+                  "San Antonio",
+                  "San Rafael"
+               ]
+            },
+            "Desamparados":{
+               "districts":[
+                  "Desamparados",
+                  "San Miguel",
+                  "San Juan De Dios",
+                  "San Rafael Arriba",
+                  "San Rafael Abajo",
+                  "San Antonio",
+                  "Frailes",
+                  "Patarra",
+                  "San Cristobal",
+                  "Rosario",
+                  "Damas",
+                  "Gravilias",
+                  "Los Guido"
+               ]
+            },
+            "Puriscal":{
+               "districts":[
+                  "Santiago",
+                  "Mercedes Sur",
+                  "Barbacoas",
+                  "Grifo Alto",
+                  "San Rafael",
+                  "Candelarita",
+                  "Desamparaditos",
+                  "San Antonio",
+                  "Chires"
+               ]
+            },
+            "Tarrazú":{
+               "districts":[
+                  "San Marcos",
+                  "San Lorenzo",
+                  "San Carlos"
+               ]
+            },
+            "Aserrí":{
+               "districts":[
+                  "Aserrí",
+                  "Tarbaca",
+                  "Vuelta De Jorco",
+                  "San Gabriel",
+                  "Legua",
+                  "Monterrey",
+                  "Salitrillos"
+               ]
+            },
+            "Mora":{
+               "districts":[
+                  "Colón",
+                  "Guayabo",
+                  "Tabarcia",
+                  "Piedras Negras",
+                  "Picagres",
+                  "Jaris"
+               ]
+            },
+            "Goicoechea":{
+               "districts":[
+                  "Guadalupe",
+                  "San Francisco",
+                  "Calle Blancos",
+                  "Mata De Platano",
+                  "Ipís",
+                  "Rancho Redondo",
+                  "Purral"
+               ]
+            },
+            "Santa Ana":{
+               "districts":[
+                  "Santa Ana",
+                  "Salitral",
+                  "Pozos",
+                  "Uruca",
+                  "Piedades",
+                  "Brasil"
+               ]
+            },
+            "Alajuelita":{
+               "districts":[
+                  "Alajuelita",
+                  "San Josecito",
+                  "San Antonio",
+                  "Concepción",
+                  "San Felipe"
+               ]
+            },
+            "Vázquez De Coronado":{
+               "districts":[
+                  "San Isidro",
+                  "San Rafael",
+                  "Dulce Nombre De Jesus",
+                  "Patalillo",
+                  "Cascajal"
+               ]
+            },
+            "Acosta":{
+               "districts":[
+                  "San Ignacio",
+                  "Guaitil",
+                  "Palmichal",
+                  "Cangrejal",
+                  "Sabanillas"
+               ]
+            },
+            "Tibás":{
+               "districts":[
+                  "San Juan",
+                  "Cinco Esquinas",
+                  "Anselmo Llorente",
+                  "Leon Xiii",
+                  "Colima"
+               ]
+            },
+            "Moravia":{
+               "districts":[
+                  "San Vicente",
+                  "San Jeronimo",
+                  "La Trinidad"
+               ]
+            },
+            "Montes De Oca":{
+               "districts":[
+                  "San Pedro",
+                  "Sabanilla",
+                  "Mercedes",
+                  "San Rafael"
+               ]
+            },
+            "Turrubares":{
+               "districts":[
+                  "San Pablo",
+                  "San Pedro",
+                  "San Juan De Mata",
+                  "San Luis",
+                  "Carara"
+               ]
+            },
+            "Dota":{
+               "districts":[
+                  "Santa María",
+                  "Jardin",
+                  "Copey"
+               ]
+            },
+            "Curridabat":{
+               "districts":[
+                  "Curridabat",
+                  "Granadilla",
+                  "Sanchez",
+                  "Tirrases"
+               ]
+            },
+            "Pérez Zeledón":{
+               "districts":[
+                  "San Isidro de el General",
+                  "El General",
+                  "Daniel Flores",
+                  "Rivas",
+                  "San Pedro",
+                  "Platanares",
+                  "Pejibaye",
+                  "Cajon",
+                  "Baru",
+                  "Rio Nuevo",
+                  "Páramo"
+               ]
+            },
+            "León Cortés Castro":{
+               "districts":[
+                  "San Pablo",
+                  "San Andres",
+                  "Llano Bonito",
+                  "San Isidro",
+                  "Santa Cruz",
+                  "San Antonio"
+               ]
+            }
+         }
+      },
+      "Alajuela":{
+         "cantons":{
+            "Central":{
+               "districts":[
+                  "Alajuela",
+                  "San José",
+                  "Carrizal",
+                  "San Antonio",
+                  "Guácima",
+                  "San Isidro",
+                  "Sabanilla",
+                  "San Rafael",
+                  "Rio Segundo",
+                  "Desamparados",
+                  "Turrucares",
+                  "Tambor",
+                  "Garita",
+                  "Sarapiquí"
+               ]
+            },
+            "San Ramón":{
+               "districts":[
+                  "San Ramón",
+                  "Santiago",
+                  "San Juan",
+                  "Piedades Norte",
+                  "Piedades Sur",
+                  "San Rafael",
+                  "San Isidro",
+                  "Angeles",
+                  "Alfaro",
+                  "Volio",
+                  "Concepción",
+                  "Zapotal",
+                  "Peñas Blancas",
+                  "San Lorenzo"
+               ]
+            },
+            "Grecia":{
+               "districts":[
+                  "Grecia",
+                  "San Isidro",
+                  "San José",
+                  "San Roque",
+                  "Tacares",
+                  "Rio Cuarto",
+                  "Puente De Piedra",
+                  "Bolivar"
+               ]
+            },
+            "San Mateo":{
+               "districts":[
+                  "San Mateo",
+                  "Desmonte",
+                  "Jesús María",
+                  "Labrador"
+               ]
+            },
+            "Atenas":{
+               "districts":[
+                  "Atenas",
+                  "Jesús",
+                  "Mercedes",
+                  "San Isidro",
+                  "Concepción",
+                  "San José",
+                  "Santa Eulalia",
+                  "Escobal"
+               ]
+            },
+            "Naranjo":{
+               "districts":[
+                  "Naranjo",
+                  "San Juan",
+                  "San Miguel",
+                  "Palmitos",
+                  "El Rosario",
+                  "San José",
+                  "Cirrí Sur",
+                  "San Jerónimo"
+               ]
+            },
+            "Palmares":{
+               "districts":[
+                  "Palmares",
+                  "Zaragoza",
+                  "Buenos Aires",
+                  "Santiago",
+                  "Candelaria",
+                  "Esquipulas",
+                  "La Granja"
+               ]
+            },
+            "Poás":{
+               "districts":[
+                  "San Pedro",
+                  "San Juan",
+                  "San Rafael",
+                  "Carrillos",
+                  "Sabana Redonda"
+               ]
+            },
+            "Orotina":{
+               "districts":[
+                  "Orotina",
+                  "El Mastate",
+                  "Hacienda Vieja",
+                  "Coyolar",
+                  "La Ceiba"
+               ]
+            },
+            "San Carlos":{
+               "districts":[
+                  "Quesada",
+                  "Florencia",
+                  "Buenavista",
+                  "Aguas Zarcas",
+                  "Venecia",
+                  "Pital",
+                  "La Fortuna",
+                  "La Tigra",
+                  "La Palmera",
+                  "Venado",
+                  "Cutris",
+                  "Monterrey",
+                  "Pocosol"
+               ]
+            },
+            "Zarcero":{
+               "districts":[
+                  "Zarcero",
+                  "Laguna",
+                  "Tapesco",
+                  "Guadalupe",
+                  "Palmira",
+                  "Zapote",
+                  "Brisas"
+               ]
+            },
+            "Sarchí":{
+               "districts":[
+                  "Sarchí Norte",
+                  "Sarchí Sur",
+                  "Toro Amarillo",
+                  "San Pedro",
+                  "Rodriguez"
+               ]
+            },
+            "Upala":{
+               "districts":[
+                  "Upala",
+                  "Aguas Claras",
+                  "San José o Pizote",
+                  "Bijagua",
+                  "Delicias",
+                  "Dos Rios",
+                  "Yolillal",
+                  "Canalete"
+               ]
+            },
+            "Los Chiles":{
+               "districts":[
+                  "Los Chiles",
+                  "Caño Negro",
+                  "El Amparo",
+                  "San Jorge"
+               ]
+            },
+            "Guatuso":{
+               "districts":[
+                  "San Rafael",
+                  "Buenavista",
+                  "Cote",
+                  "Katira"
+               ]
+            },
+            "Río Cuarto":{
+               "districts":[
+                  "Río Cuarto",
+                  "Santa Rita",
+                  "Santa Isabel"
+               ]
+            }
+         }
+      },
+      "Cartago":{
+         "cantons":{
+            "Central":{
+               "districts":[
+                  "Oriental",
+                  "Occidental",
+                  "Carmen",
+                  "San Nicolás",
+                  "Aguacaliente o San Francisco",
+                  "Guadalupe o Arenilla",
+                  "Corralillo",
+                  "Tierra Blanca",
+                  "Dulce Nombre",
+                  "Llano Grande",
+                  "Quebradilla"
+               ]
+            },
+            "Paraíso":{
+               "districts":[
+                  "Paraiso",
+                  "Santiago",
+                  "Orosi",
+                  "Cachí",
+                  "Llanos de Santa Lucía"
+               ]
+            },
+            "La Unión":{
+               "districts":[
+                  "Tres Rios",
+                  "San Diego",
+                  "San Juan",
+                  "San Rafael",
+                  "Concepción",
+                  "Dulce Nombre",
+                  "San Ramón",
+                  "Rio Azul"
+               ]
+            },
+            "Jiménez":{
+               "districts":[
+                  "Juan Viñas",
+                  "Tucurrique",
+                  "Pejibaye"
+               ]
+            },
+            "Turrialba":{
+               "districts":[
+                  "Turrialba",
+                  "La Suiza",
+                  "Peralta",
+                  "Santa Cruz",
+                  "Santa Teresita",
+                  "Pavones",
+                  "Tuis",
+                  "Tayutic",
+                  "Santa Rosa",
+                  "Tres Equis",
+                  "La Isabel",
+                  "Chirripó"
+               ]
+            },
+            "Alvarado":{
+               "districts":[
+                  "Pacayas",
+                  "Cervantes",
+                  "Capellades"
+               ]
+            },
+            "Oreamuno":{
+               "districts":[
+                  "San Rafael",
+                  "Cot",
+                  "Potrero Cerrado",
+                  "Cipreses",
+                  "Santa Rosa"
+               ]
+            },
+            "El Guarco":{
+               "districts":[
+                  "El Tejar",
+                  "San Isidro",
+                  "Tobosi",
+                  "Patio De Agua"
+               ]
+            }
+         }
+      },
+      "Heredia":{
+         "cantons":{
+            "Central":{
+               "districts":[
+                  "Heredia",
+                  "Mercedes",
+                  "San Francisco",
+                  "Ulloa",
+                  "Varablanca"
+               ]
+            },
+            "Barva":{
+               "districts":[
+                  "Barva",
+                  "San Pedro",
+                  "San Pablo",
+                  "San Roque",
+                  "Santa Lucía",
+                  "San José de la Montaña"
+               ]
+            },
+            "Santo Domingo":{
+               "districts":[
+                  "Santo Domingo",
+                  "San Vicente",
+                  "San Miguel",
+                  "Paracito",
+                  "Santo Tomás",
+                  "Santa Rosa",
+                  "Tures",
+                  "Para"
+               ]
+            },
+            "Santa Barbara":{
+               "districts":[
+                  "Santa Bárbara",
+                  "San Pedro",
+                  "San Juan",
+                  "Jesús",
+                  "Santo Domingo",
+                  "Puraba"
+               ]
+            },
+            "San Rafael":{
+               "districts":[
+                  "San Rafael",
+                  "San Josecito",
+                  "Santiago",
+                  "Los Ángeles",
+                  "Concepción"
+               ]
+            },
+            "San Isidro":{
+               "districts":[
+                  "San Isidro",
+                  "San José",
+                  "Concepción",
+                  "San Francisco"
+               ]
+            },
+            "Belén":{
+               "districts":[
+                  "San Antonio",
+                  "La Ribera",
+                  "La Asuncion"
+               ]
+            },
+            "Flores":{
+               "districts":[
+                  "San Joaquín",
+                  "Barrantes",
+                  "Llorente"
+               ]
+            },
+            "San Pablo":{
+               "districts":[
+                  "San Pablo",
+                  "Rincon de Sabanilla"
+               ]
+            },
+            "Sarapiquí":{
+               "districts":[
+                  "Puerto Viejo",
+                  "La Virgen",
+                  "Las Horquetas",
+                  "Llanuras del Gaspar",
+                  "Cureña"
+               ]
+            }
+         }
+      },
+      "Guanacaste":{
+         "cantons":{
+            "Liberia":{
+               "districts":[
+                  "Liberia",
+                  "Nacascolo",
+                  "Cañas Dulces",
+                  "Mayorga",
+                  "Curubande"
+               ]
+            },
+            "Nicoya":{
+               "districts":[
+                  "Nicoya",
+                  "Mansión",
+                  "San Antonio",
+                  "Quebrada Honda",
+                  "Sámara",
+                  "Nosara",
+                  "Belén De Nosarita"
+               ]
+            },
+            "Santa Cruz":{
+               "districts":[
+                  "Santa Cruz",
+                  "Bolson",
+                  "Veintisiete de Abril",
+                  "Tempate",
+                  "Cartagena",
+                  "Cuajiniquil",
+                  "Diria",
+                  "Cabo Velas",
+                  "Tamarindo"
+               ]
+            },
+            "Bagaces":{
+               "districts":[
+                  "Bagaces",
+                  "La Fortuna",
+                  "Mogote",
+                  "Rio Naranjo"
+               ]
+            },
+            "Carrillo":{
+               "districts":[
+                  "Filadelfia",
+                  "Palmira",
+                  "Sardinal",
+                  "Belen"
+               ]
+            },
+            "Cañas":{
+               "districts":[
+                  "Cañas",
+                  "Palmira",
+                  "San Miguel",
+                  "Bebedero",
+                  "Porozal"
+               ]
+            },
+            "Abangares":{
+               "districts":[
+                  "Las Juntas",
+                  "Sierra",
+                  "San Juan",
+                  "Colorado"
+               ]
+            },
+            "Tilarán":{
+               "districts":[
+                  "Tilarán",
+                  "Quebrada Grande",
+                  "Tronadora",
+                  "Santa Rosa",
+                  "Líbano",
+                  "Tierras Morenas",
+                  "Arenal",
+                  "Cabeceras"
+               ]
+            },
+            "Nandayure":{
+               "districts":[
+                  "Carmona",
+                  "Santa Rita",
+                  "Zapotal",
+                  "San Pablo",
+                  "Porvenir",
+                  "Bejuco"
+               ]
+            },
+            "La Cruz":{
+               "districts":[
+                  "La Cruz",
+                  "Santa Cecilia",
+                  "La Garita",
+                  "Santa Elena"
+               ]
+            },
+            "Hojancha":{
+               "districts":[
+                  "Hojancha",
+                  "Monte Romo",
+                  "Puerto Carrillo",
+                  "Huacas"
+               ]
+            }
+         }
+      },
+      "Puntarenas":{
+         "cantons":{
+            "Central":{
+               "districts":[
+                  "Puntarenas",
+                  "Pitahaya",
+                  "Chomes",
+                  "Lepanto",
+                  "Paquera",
+                  "Manzanillo",
+                  "Guacimal",
+                  "Barranca",
+                  "Monte Verde",
+                  "Isla Del Coco",
+                  "Cóbano",
+                  "Chacarita",
+                  "Chira",
+                  "Acapulco",
+                  "El Roble",
+                  "Arancibia"
+               ]
+            },
+            "Esparza":{
+               "districts":[
+                  "Espíritu Santo",
+                  "San Juan Grande",
+                  "Macacona",
+                  "San Rafael",
+                  "San Jerónimo"
+               ]
+            },
+            "Buenos Aires":{
+               "districts":[
+                  "Buenos Aires",
+                  "Volcán",
+                  "Potrero Grande",
+                  "Boruca",
+                  "Pilas",
+                  "Colinas",
+                  "Changuena",
+                  "Biolley",
+                  "Brunka"
+               ]
+            },
+            "Montes de Oro":{
+               "districts":[
+                  "Miramar",
+                  "La Unión",
+                  "San Isidro"
+               ]
+            },
+            "Osa":{
+               "districts":[
+                  "Puerto Cortés",
+                  "Palmar",
+                  "Sierpe",
+                  "Bahía Ballena",
+                  "Piedras Blancas",
+                  "Bahía Drake"
+               ]
+            },
+            "Quepos":{
+               "districts":[
+                  "Quepos",
+                  "Savegre",
+                  "Naranjito"
+               ]
+            },
+            "Golfito":{
+               "districts":[
+                  "Golfito",
+                  "Puerto Jiménez",
+                  "Guaycara",
+                  "Pavón"
+               ]
+            },
+            "Coto Brus":{
+               "districts":[
+                  "San Vito",
+                  "Sabalito",
+                  "Aguabuena",
+                  "Limoncito",
+                  "Pittier"
+               ]
+            },
+            "Parrita":{
+               "districts":[
+                  "Parrita"
+               ]
+            },
+            "Corredores":{
+               "districts":[
+                  "Corredor",
+                  "La Cuesta",
+                  "Canoas",
+                  "Laurel"
+               ]
+            },
+            "Garabito":{
+               "districts":[
+                  "Jacó",
+                  "Tárcoles"
+               ]
+            }
+         }
+      },
+      "Limón":{
+         "cantons":{
+            "Central":{
+               "districts":[
+                  "Limón",
+                  "Valle La Estrella",
+                  "Rio Blanco",
+                  "Matama"
+               ]
+            },
+            "Pococí":{
+               "districts":[
+                  "Guapiles",
+                  "Jiménez",
+                  "Rita",
+                  "Roxana",
+                  "Cariari",
+                  "Colorado",
+                  "La Colonia"
+               ]
+            },
+            "Siquirres":{
+               "districts":[
+                  "Siquirres",
+                  "Pacuarito",
+                  "Florida",
+                  "Germania",
+                  "El Cairo",
+                  "Alegría"
+               ]
+            },
+            "Talamanca":{
+               "districts":[
+                  "Bratsi",
+                  "Sixaola",
+                  "Cahuita",
+                  "Telire"
+               ]
+            },
+            "Matina":{
+               "districts":[
+                  "Matina",
+                  "Batán",
+                  "Carrandi"
+               ]
+            },
+            "Guácimo":{
+               "districts":[
+                  "Guácimo",
+                  "Mercedes",
+                  "Pocora",
+                  "Rio Jiménez",
+                  "Duacari"
+               ]
+            }
+         }
+      }
+   }
+}
