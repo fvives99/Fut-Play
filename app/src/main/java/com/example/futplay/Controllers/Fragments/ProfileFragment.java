@@ -612,6 +612,8 @@ public class ProfileFragment extends Fragment {
                 popupProfileInfo.setCancelable(false);
                 popupProfileInfo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 popupProfileInfo.show();
+            } else {
+                completeProfileInfo();
             }
         });
     }
@@ -645,7 +647,6 @@ public class ProfileFragment extends Fragment {
         retrieveProfileImage();
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            completeProfileInfo();
             String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
             txtVwProfileAge.setText(age);
 
