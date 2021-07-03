@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center">
+
+    <ProgressBar
+        android:id="@+id/progressBarPopupTeamSettings"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="visible"
+        android:elevation="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/imgVwPopupTeamSettingsClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/close_icon"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="5dp"
+        android:tint="@color/white"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/contDesc" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:cardBackgroundColor="@color/dark_purple"
+        app:cardCornerRadius="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:background="@color/dark_purple"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtVwPopupTeamSettingsTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:text="@string/txtVwPopupProfileSettingsTitle"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_purple"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:contentDescription="@string/contDesc"
+                            android:src="@drawable/settings_icon"
+                            android:tint="@color/dark_purple" />
+
+                        <TextView
+                            android:id="@+id/txtVwPopupTeamSettingsDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="@string/txtVwPopupProfileSettingsDescription"
+                            android:textColor="@color/dark_purple"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="bottom"
+                                app:boxStrokeWidth="0dp"
+                                app:boxStrokeWidthFocused="0dp"
+                                app:errorEnabled="true">
+
+                                <EditText
+                                    android:id="@+id/edTxtPopupTeamSettingsFullName"
+                                    android:layout_width="300dp"
+                                    android:layout_height="45dp"
+                                    android:autofillHints="textPersonName"
+                                    android:background="@drawable/person_field_purple_outlined_background"
+                                    android:fontFamily="@font/montserrat_semibold"
+                                    android:hint="@string/edTxtPopupProfileSettingsFullName"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="textPersonName"
+                                    android:paddingStart="55dp"
+                                    android:paddingEnd="15dp"
+                                    android:textSize="22sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="bottom"
+                                app:boxStrokeWidth="0dp"
+                                app:boxStrokeWidthFocused="0dp"
+                                app:errorEnabled="true">
+
+                                <EditText
+                                    android:id="@+id/edTxtPopupTeamSettingsNickname"
+                                    android:layout_width="300dp"
+                                    android:layout_height="45dp"
+                                    android:autofillHints="textPersonName"
+                                    android:background="@drawable/person_field_purple_outlined_background"
+                                    android:fontFamily="@font/montserrat_semibold"
+                                    android:hint="@string/edTxtProfileSettingsNickname"
+                                    android:imeOptions="actionNext"
+                                    android:inputType="textPersonName"
+                                    android:paddingStart="55dp"
+                                    android:paddingEnd="15dp"
+                                    android:textSize="22sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="bottom"
+                                app:boxStrokeWidth="0dp"
+                                app:boxStrokeWidthFocused="0dp"
+                                app:errorEnabled="true">
+
+                                <EditText
+                                    android:id="@+id/edTxtPopupTeamSettingsRegion"
+                                    android:layout_width="300dp"
+                                    android:layout_height="45dp"
+                                    android:autofillHints="textPersonName"
+                                    android:background="@drawable/region_field_purple_outlined_background"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:fontFamily="@font/montserrat_semibold"
+                                    android:hint="@string/edTxtProfileSettingsRegion"
+                                    android:inputType="textPersonName"
+                                    android:paddingStart="55dp"
+                                    android:paddingEnd="15dp"
+                                    android:textSize="22sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp">
+
+                            <ImageView
+                                android:id="@+id/imgVwPopupTeamSettingsSave"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:background="@drawable/save_button_background"
+                                android:contentDescription="@string/contDesc" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

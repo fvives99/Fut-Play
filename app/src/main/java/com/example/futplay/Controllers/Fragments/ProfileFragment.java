@@ -753,12 +753,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void imgVwProfileSettingsOnClickListener() {
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaa entré a: imgVwProfileSettingsOnClickListener ");
         imgVwProfileSettings.setOnClickListener(v -> {
             displayPopupProfileSettings();
         });
     }
 
     private void displayPopupProfileSettings() {
+        System.out.println("bbbbbbbbbbbbbbbbbbb entré a: displayPopupProfileSettings ");
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             initPopupProfileSettings();
@@ -789,7 +791,7 @@ public class ProfileFragment extends Fragment {
         imgVwPopupProfileSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsSave);
         imgVwPopupProfileSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsClose);
 
-        countryCodePickerPopupProfileSettings = popupProfileSettings.findViewById(R.id.countryCodePick  erPopupProfileSettings);
+        countryCodePickerPopupProfileSettings = popupProfileSettings.findViewById(R.id.countryCodePickerPopupProfileSettings);
 
         progressBarPopupProfileSettings = popupProfileSettings.findViewById(R.id.progressBarPopupProfileSettings);
 

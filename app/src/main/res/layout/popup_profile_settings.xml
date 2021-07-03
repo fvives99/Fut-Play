@@ -125,7 +125,7 @@
                                     android:autofillHints="textPersonName"
                                     android:background="@drawable/person_field_purple_outlined_background"
                                     android:fontFamily="@font/montserrat_semibold"
-                                    android:hint="@string/edTxtPopupProfileSettingsFullName"
+                                    android:hint="Abre"
                                     android:imeOptions="actionNext"
                                     android:inputType="textPersonName"
                                     android:paddingStart="55dp"

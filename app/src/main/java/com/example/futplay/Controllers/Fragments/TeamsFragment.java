@@ -1,6 +1,7 @@
 package com.example.futplay.Controllers.Fragments;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,7 +29,9 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -79,6 +82,7 @@ public class TeamsFragment extends Fragment {
 
     private View view;
 
+
     private ImageView imgVwTeamProfileImg;
     private ImageView imgVwTeamSettings;
 
@@ -111,6 +115,17 @@ public class TeamsFragment extends Fragment {
     private String currentPhotoPath;
 
     public static Bitmap teamProfileImage = null;
+
+    private Dialog popupTeamSettings;
+
+    private EditText edTxtPopupTeamSettingsFullName;
+    private EditText edTxtPopupTeamSettingsAbbreviation;
+    private EditText edTxtPopupTeamSettingsRegion;
+
+    private ImageView imgVwPopupTeamSettingsSave;
+    private ImageView imgVwPopupTeamSettingsClose;
+
+    private ProgressBar progressBarPopupTeamSettings;
 
     public TeamsFragment() {
         // Required empty public constructor
@@ -157,6 +172,7 @@ public class TeamsFragment extends Fragment {
         permissions();
         listeners();
         recycVwTeamPlayersConfig();
+        initConfig();
 
         return view;
     }
@@ -223,6 +239,11 @@ public class TeamsFragment extends Fragment {
     }
 
     private void viewsMatching(View view) {
+        //popupTeamInfo = new Dialog(this.getContext());
+        //regionPicker = new Dialog(this.getContext());
+        popupTeamSettings = new Dialog(this.getContext());
+        //  popupDone = new Dialog(this.getContext());
+
         imgVwTeamProfileImg = view.findViewById(R.id.imgVwTeamProfileImg);
         imgVwTeamSettings = view.findViewById(R.id.imgVwTeamSettings);
         imgVwStreak1 = view.findViewById(R.id.imgVwStreak1);
@@ -460,15 +481,23 @@ public class TeamsFragment extends Fragment {
         });
     }
 
+    private void setupPopupLayoutParams(Dialog popup) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(popup.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        popup.getWindow().setAttributes(lp);
+    }
+
     private void displayPopupTeamSettings() {
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        System.out.println(documentReference.toString());
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             initPopupTeamSettings();
             popupTeamSettingsListeners();
             setupPopupLayoutParams(popupTeamSettings);
             hidePopupTeamSettingsViews();
             retrievePopupTeamSettingsData();
-
             popupTeamSettings.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popupTeamSettings.show();
         });
@@ -477,43 +506,14 @@ public class TeamsFragment extends Fragment {
     private void initPopupTeamSettings() {
         popupTeamSettings.setContentView(R.layout.popup_teams_settings);
 
-        edTxtPopupTeamSettingsFullName = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsFullName);
-        edTxtPopupTeamSettingsAbbreviation = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsNickname);
-        edTxtPopupProfileSettingsRegion = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsRegion);
+        edTxtPopupTeamSettingsFullName = popupTeamSettings.findViewById(R.id.edTxtPopupTeamSettingsFullName);
+        edTxtPopupTeamSettingsAbbreviation = popupTeamSettings.findViewById(R.id.edTxtPopupTeamSettingsNickname);
+        edTxtPopupTeamSettingsRegion = popupTeamSettings.findViewById(R.id.edTxtPopupTeamSettingsRegion);
 
-        spinnerPopupTeamSettingsPosition = popupProfileSettings.findViewById(R.id.spinnerPopupProfileSettingsPosition);
+        imgVwPopupTeamSettingsSave = popupTeamSettings.findViewById(R.id.imgVwPopupTeamSettingsSave);
+        imgVwPopupTeamSettingsClose = popupTeamSettings.findViewById(R.id.imgVwPopupTeamSettingsClose);
 
-        imgVwPopupTeamSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsSave);
-        imgVwPopupTeamSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsClose);
-
-        progressBarPopupTeamSettings = popupTeamSettings.findViewById(R.id.progressBarPopupProfileSettings);
-
-        fillUpSpinnerPopupProfileSettingsPosition();
-    }
-
-    private void fillUpSpinnerPopupProfileSettingsPosition() {
-        DocumentReference documentReference = firebaseFirestore.collection("spinners_data").document("positions");
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                String json = (String) documentSnapshot.get("spanish");
-                try {
-                    if (json != null) {
-                        JSONObject jsonObject = new JSONObject(json);
-                        JSONArray jsonArray = jsonObject.getJSONArray("spanish");
-                        int jsonArrayLength = jsonArray.length();
-                        ArrayList<String> positionsValues = new ArrayList<>();
-                        positionsValues.add("Posición:");
-                        for (int i = 0; i < jsonArrayLength; i++) {
-                            positionsValues.add(jsonArray.getString(i));
-                        }
-                        ArrayAdapter<String> positionsArrayAdapter = new ArrayAdapter<>(popupTeamSettings.getContext(), R.layout.custom_spinner_dialog_item, R.id.txtVwCustomSpinnerDialogItemText, positionsValues);
-                        spinnerPopupTeamSettingsPosition.setAdapter(positionsArrayAdapter);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        progressBarPopupTeamSettings = popupTeamSettings.findViewById(R.id.progressBarPopupTeamSettings);
     }
 
     private void popupTeamSettingsListeners() {
@@ -526,13 +526,9 @@ public class TeamsFragment extends Fragment {
             String fullName = (String) Objects.requireNonNull(documentSnapshot.get("fullName"));
             String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
             String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
-            String position = (String) Objects.requireNonNull(documentSnapshot.get("position"));
-            String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
-            String email = (String) Objects.requireNonNull(documentSnapshot.get("email"));
-            String phoneNumber = (String) Objects.requireNonNull(documentSnapshot.get("phoneNumber"));
-            edTxtPopupProfileSettingsFullName.setText(fullName);
+            edTxtPopupTeamSettingsFullName.setText(fullName);
             edTxtPopupTeamSettingsAbbreviation.setText(nickname);
-            edTxtPopupProfileSettingsRegion.setText(region);
+            edTxtPopupTeamSettingsRegion.setText(region);
 
             progressBarPopupTeamSettings.setVisibility(View.GONE);
             showPopupTeamSettingsViews();
@@ -549,17 +545,17 @@ public class TeamsFragment extends Fragment {
     }
 
     private void hidePopupTeamSettingsViews() {
-        edTxtPopupProfileSettingsFullName.setVisibility(View.GONE);
+        edTxtPopupTeamSettingsFullName.setVisibility(View.GONE);
         edTxtPopupTeamSettingsAbbreviation.setVisibility(View.GONE);
-        edTxtPopupProfileSettingsRegion.setVisibility(View.GONE);
+        edTxtPopupTeamSettingsRegion.setVisibility(View.GONE);
 
-        imgVwPopupTeamofileSettingsSave.setVisibility(View.GONE);
+        imgVwPopupTeamSettingsSave.setVisibility(View.GONE);
     }
 
     private void showPopupTeamSettingsViews() {
-        edTxtPopupProfileSettingsFullName.setVisibility(View.VISIBLE);
+        edTxtPopupTeamSettingsFullName.setVisibility(View.VISIBLE);
         edTxtPopupTeamSettingsAbbreviation.setVisibility(View.VISIBLE);
-        edTxtPopupProfileSettingsRegion.setVisibility(View.VISIBLE);
+        edTxtPopupTeamSettingsRegion.setVisibility(View.VISIBLE);
 
         imgVwPopupTeamSettingsSave.setVisibility(View.VISIBLE);
     }
