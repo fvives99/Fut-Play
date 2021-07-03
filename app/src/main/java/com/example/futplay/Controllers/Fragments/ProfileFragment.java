@@ -716,7 +716,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initConfig() {
-        imgVwProfileSettings.bringToFront();
+         imgVwProfileSettings.bringToFront();
     }
 
     private void imgVwProfileImgOnClickListener() {
@@ -789,7 +789,7 @@ public class ProfileFragment extends Fragment {
         imgVwPopupProfileSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsSave);
         imgVwPopupProfileSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsClose);
 
-        countryCodePickerPopupProfileSettings = popupProfileSettings.findViewById(R.id.countryCodePickerPopupProfileSettings);
+        countryCodePickerPopupProfileSettings = popupProfileSettings.findViewById(R.id.countryCodePick  erPopupProfileSettings);
 
         progressBarPopupProfileSettings = popupProfileSettings.findViewById(R.id.progressBarPopupProfileSettings);
 

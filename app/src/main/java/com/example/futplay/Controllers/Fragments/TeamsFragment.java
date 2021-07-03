@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,8 +28,10 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +46,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -73,6 +81,7 @@ public class TeamsFragment extends Fragment {
 
     private ImageView imgVwTeamProfileImg;
     private ImageView imgVwTeamSettings;
+
     private ImageView imgVwStreak1;
     private ImageView imgVwStreak2;
     private ImageView imgVwStreak3;
@@ -347,6 +356,7 @@ public class TeamsFragment extends Fragment {
 
     private void listeners() {
         imgVwProfileImgOnClickListener();
+        imgVwTeamSettingsOnClickListener();
     }
 
     private void imgVwProfileImgOnClickListener() {
@@ -434,4 +444,124 @@ public class TeamsFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(imgVwTeamProfileImg)))
                 .addOnFailureListener(e -> Toast.makeText(requireContext(), "Error al actualizar\nla foto de perfil", Toast.LENGTH_SHORT).show());
     }
+
+    private void initConfig() {
+        imgVwTeamSettings.bringToFront();
+    }
+/*
+*
+* Acá se muestra la configuación del equipo y los datos que se pueden modificar
+*
+ */
+
+    private void imgVwTeamSettingsOnClickListener() {
+        imgVwTeamSettings.setOnClickListener(v -> {
+            displayPopupTeamSettings();
+        });
+    }
+
+    private void displayPopupTeamSettings() {
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            initPopupTeamSettings();
+            popupTeamSettingsListeners();
+            setupPopupLayoutParams(popupTeamSettings);
+            hidePopupTeamSettingsViews();
+            retrievePopupTeamSettingsData();
+
+            popupTeamSettings.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupTeamSettings.show();
+        });
+    }
+
+    private void initPopupTeamSettings() {
+        popupTeamSettings.setContentView(R.layout.popup_teams_settings);
+
+        edTxtPopupTeamSettingsFullName = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsFullName);
+        edTxtPopupTeamSettingsAbbreviation = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsNickname);
+        edTxtPopupProfileSettingsRegion = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsRegion);
+
+        spinnerPopupTeamSettingsPosition = popupProfileSettings.findViewById(R.id.spinnerPopupProfileSettingsPosition);
+
+        imgVwPopupTeamSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsSave);
+        imgVwPopupTeamSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsClose);
+
+        progressBarPopupTeamSettings = popupTeamSettings.findViewById(R.id.progressBarPopupProfileSettings);
+
+        fillUpSpinnerPopupProfileSettingsPosition();
+    }
+
+    private void fillUpSpinnerPopupProfileSettingsPosition() {
+        DocumentReference documentReference = firebaseFirestore.collection("spinners_data").document("positions");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String json = (String) documentSnapshot.get("spanish");
+                try {
+                    if (json != null) {
+                        JSONObject jsonObject = new JSONObject(json);
+                        JSONArray jsonArray = jsonObject.getJSONArray("spanish");
+                        int jsonArrayLength = jsonArray.length();
+                        ArrayList<String> positionsValues = new ArrayList<>();
+                        positionsValues.add("Posición:");
+                        for (int i = 0; i < jsonArrayLength; i++) {
+                            positionsValues.add(jsonArray.getString(i));
+                        }
+                        ArrayAdapter<String> positionsArrayAdapter = new ArrayAdapter<>(popupTeamSettings.getContext(), R.layout.custom_spinner_dialog_item, R.id.txtVwCustomSpinnerDialogItemText, positionsValues);
+                        spinnerPopupTeamSettingsPosition.setAdapter(positionsArrayAdapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void popupTeamSettingsListeners() {
+
+    }
+
+    private void retrievePopupTeamSettingsData() {
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("fullName"));
+            String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
+            String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
+            String position = (String) Objects.requireNonNull(documentSnapshot.get("position"));
+            String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
+            String email = (String) Objects.requireNonNull(documentSnapshot.get("email"));
+            String phoneNumber = (String) Objects.requireNonNull(documentSnapshot.get("phoneNumber"));
+            edTxtPopupProfileSettingsFullName.setText(fullName);
+            edTxtPopupTeamSettingsAbbreviation.setText(nickname);
+            edTxtPopupProfileSettingsRegion.setText(region);
+
+            progressBarPopupTeamSettings.setVisibility(View.GONE);
+            showPopupTeamSettingsViews();
+        });
+    }
+
+    private int getIndexOfStringInSpinner(String text, Spinner spinner) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equals(text)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void hidePopupTeamSettingsViews() {
+        edTxtPopupProfileSettingsFullName.setVisibility(View.GONE);
+        edTxtPopupTeamSettingsAbbreviation.setVisibility(View.GONE);
+        edTxtPopupProfileSettingsRegion.setVisibility(View.GONE);
+
+        imgVwPopupTeamofileSettingsSave.setVisibility(View.GONE);
+    }
+
+    private void showPopupTeamSettingsViews() {
+        edTxtPopupProfileSettingsFullName.setVisibility(View.VISIBLE);
+        edTxtPopupTeamSettingsAbbreviation.setVisibility(View.VISIBLE);
+        edTxtPopupProfileSettingsRegion.setVisibility(View.VISIBLE);
+
+        imgVwPopupTeamSettingsSave.setVisibility(View.VISIBLE);
+    }
+
 }
