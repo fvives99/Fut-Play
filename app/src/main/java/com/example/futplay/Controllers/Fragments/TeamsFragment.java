@@ -521,13 +521,13 @@ public class TeamsFragment extends Fragment {
     }
 
     private void retrievePopupTeamSettingsData() {
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("fullName"));
-            String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
+            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
+            String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
             String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
             edTxtPopupTeamSettingsFullName.setText(fullName);
-            edTxtPopupTeamSettingsAbbreviation.setText(nickname);
+            edTxtPopupTeamSettingsAbbreviation.setText(Abbreviation);
             edTxtPopupTeamSettingsRegion.setText(region);
 
             progressBarPopupTeamSettings.setVisibility(View.GONE);
