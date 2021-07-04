@@ -1,12 +1,17 @@
 package com.example.futplay.Controllers.Fragments;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -20,12 +25,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,6 +44,7 @@ import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -47,6 +55,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -94,12 +105,39 @@ public class TeamsFragment extends Fragment {
 
     private ProgressBar progressBarTeam;
 
+
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
 
     private String userID;
     private String currentPhotoPath;
+
+    private Dialog popupVwTeamMate;
+    private Dialog popupDone;
+
+    private ImageView imgVwPopupDoneCheck;
+    AnimatedVectorDrawableCompat avdc;
+    AnimatedVectorDrawable avd;
+
+    private TextView txtVwPopupDoneMessage;
+    private TextView txtVwPopupDoneOk;
+
+    private ProgressBar progressBarPopupTeamMateProfile;
+
+    private ImageView imgVwPopupTeamMateProfileExit;
+    private ImageView imgVwPopupTeamMateProfileDoAdmin;
+    private ImageView imgVwPopupTeamMateProfileBack;
+
+    private TextView txtVwPopupTeamMateNickname;
+    private TextView txtVwPopupTeamMateRegion;
+    private TextView txtVwPopupTeamMateAge;
+    private TextView txtVwPopupTeamMatePosition;
+    private TextView txtVwPopupTeamMateMatchesPlayedNumber;
+    private TextView txtVwPopupTeamMateMVPNumber;
+    private TextView txtVwPopupTeamMateFutPlayPlayerNumber;
+
+
 
     public static Bitmap teamProfileImage = null;
 
@@ -146,11 +184,11 @@ public class TeamsFragment extends Fragment {
         hideViews();
         retrieveData();
         permissions();
-        listeners();
         recycVwTeamPlayersConfig();
-
+        listeners();
         return view;
     }
+
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
@@ -164,8 +202,12 @@ public class TeamsFragment extends Fragment {
             PlayersItem deletedPlayer = playersList.get(position);
             switch (direction) {
                 case ItemTouchHelper.LEFT:
-                    View profileMenuOption = getActivity().findViewById(R.id.imgVwMenuProfile);
-                    profileMenuOption.performClick();
+                    initPopupTeamMate();
+                    PlayersItem selected = playersList.get(position);
+                    displayPopupTeamMateProfile(selected.getUID());
+                    recycVwTeamPlayersAdapter.notifyItemChanged(position);
+                    //View profileMenuOption = getActivity().findViewById(R.id.imgVwMenuProfile);
+                    //profileMenuOption.performClick();
                     break;
                 case ItemTouchHelper.RIGHT:
                     AlertDialog.Builder deletePlyr = new AlertDialog.Builder(getContext());
@@ -208,12 +250,151 @@ public class TeamsFragment extends Fragment {
     };
 
     private void fillPlayersList() {
-        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Jean Pierre Araya Meléndez"));
-        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Jean Paul Araya Meléndez"));
-        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Jean Xavi Araya Meléndez"));
+        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Ronald Esquivel","HE9Xhb6R2dPZid0YDMQFWt0dfA32"));
+        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Fabian Vives","S6LaJOrL8TRae7KDYz8En511wJY2"));
+        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Ricardo Murilo", "p7gRJCKhqyWDHzexfKAuf9EkFsO2"));
+    }
+    private void completeProfileInfo(String UID) {
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(UID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
+            String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
+            String position = (String) Objects.requireNonNull(documentSnapshot.get("position"));
+            String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
+            txtVwPopupTeamMateNickname.setText(nickname);
+            txtVwPopupTeamMateRegion.setText(region);
+            txtVwPopupTeamMatePosition.setText(position);
+            txtVwPopupTeamMateAge.setText(age);
+            progressBarPopupTeamMateProfile.setVisibility(View.GONE);
+        });
+    }
+
+    private void displayPopupTeamMateProfile(String UID) {
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(UID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            //if (!Objects.equals(documentSnapshot.get("nickname"), "")) {
+
+                completeProfileInfo(UID);
+                //popupProfileInfoListeners();
+                setupPopupLayoutParams(popupVwTeamMate);
+
+                popupVwTeamMate.setCancelable(false);
+                popupVwTeamMate.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popupVwTeamMate.show();
+            //}
+        });
+    }
+    private void imgVwPopupTeamMateProfileExitOnClickListener() {
+        if(imgVwPopupTeamMateProfileExit != null){
+            imgVwPopupTeamMateProfileExit.setOnClickListener(v -> {
+                popupVwTeamMate.dismiss();
+            });
+        }
+    }
+
+
+    private void displayPopupDone(String message) {
+        initPopupDone(message);
+        popupDoneListeners();
+        setupPopupLayoutParams(popupDone);
+
+        popupDone.setCancelable(false);
+        popupDone.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupDone.show();
+        initPopupDoneAnims();
+    }
+
+    private void initPopupDoneAnims() {
+        int delay = 500;
+        imgVwPopupDoneCheck.setVisibility(View.GONE);
+        view.postDelayed(() -> {
+            imgVwPopupDoneCheck.setVisibility(View.VISIBLE);
+            Drawable drawable = imgVwPopupDoneCheck.getDrawable();
+            if (drawable instanceof AnimatedVectorDrawableCompat) {
+                avdc = (AnimatedVectorDrawableCompat) drawable;
+                avdc.start();
+            } else if (drawable instanceof AnimatedVectorDrawable) {
+                avd = (AnimatedVectorDrawable) drawable;
+                avd.start();
+            }
+        }, delay);
+    }
+
+    private void initPopupDone(String message) {
+        popupDone.setContentView(R.layout.popup_done);
+
+        imgVwPopupDoneCheck = popupDone.findViewById(R.id.imgVwPopupDoneCheck);
+
+        txtVwPopupDoneMessage = popupDone.findViewById(R.id.txtVwPopupDoneMessage);
+        txtVwPopupDoneOk = popupDone.findViewById(R.id.txtVwPopupDoneOk);
+
+        txtVwPopupDoneMessage.setText(message);
+    }
+
+    private void popupDoneListeners() {
+        txtVwPopupDoneOkOnClickListener();
+    }
+    private void txtVwPopupDoneOkOnClickListener() {
+        txtVwPopupDoneOk.setOnClickListener(v -> popupDone.dismiss());
+    }
+
+    private String calculateAge(String date) {
+        String[] dateArray = date.split("/");
+        int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        if (currentMonth < Integer.parseInt(dateArray[1]) || currentMonth == Integer.parseInt(dateArray[1]) &&
+                currentDay < Integer.parseInt(dateArray[0])) {
+            return (currentYear - Integer.parseInt(dateArray[2]) - 1) + " años";
+        } else {
+            return (currentYear - Integer.parseInt(dateArray[2])) + " años";
+        }
+    }
+
+    private void teamMatePopupListeners(){
+        imgVwPopupTeamMateProfileExitOnClickListener();
+        imgVwTeamMateAdminOnClickListener();
+    }
+    private void initPopupTeamMate() {
+        progressBarPopupTeamMateProfile = view.findViewById(R.id.progressBarPopupTeamMateProfile);
+
+        popupVwTeamMate.setContentView(R.layout.popup_teammate_profile);
+
+        imgVwPopupTeamMateProfileExit = popupVwTeamMate.findViewById(R.id.imgVwPopupTeamMateProfileClose);
+        imgVwPopupTeamMateProfileDoAdmin = popupVwTeamMate.findViewById(R.id.imgVwTeamMateMakeAdmin);
+
+        teamMatePopupListeners();
+
+        txtVwPopupTeamMateNickname = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileNickname);
+        txtVwPopupTeamMateRegion = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileRegion);
+        txtVwPopupTeamMateAge = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileAge);
+        txtVwPopupTeamMatePosition = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfilePosition);
+        txtVwPopupTeamMateMatchesPlayedNumber = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileMatchesPlayedNumber);
+        txtVwPopupTeamMateMVPNumber = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileMVPNumber);
+        txtVwPopupTeamMateFutPlayPlayerNumber = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileFutPlayPlayerNumber);
+        progressBarPopupTeamMateProfile = popupVwTeamMate.findViewById(R.id.progressBarPopupTeamMateProfile);
+    }
+
+    private void setupPopupLayoutParams(Dialog popup) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(popup.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        popup.getWindow().setAttributes(lp);
+    }
+
+
+    private void imgVwTeamMateAdminOnClickListener() {
+        imgVwPopupTeamMateProfileDoAdmin.setOnClickListener(v -> {
+            popupVwTeamMate.dismiss();
+            displayPopupDone("Lider establecido");
+        });
     }
 
     private void viewsMatching(View view) {
+        popupVwTeamMate = new Dialog(this.getContext());
+        popupDone = new Dialog(this.getContext());
+
         imgVwTeamProfileImg = view.findViewById(R.id.imgVwTeamProfileImg);
         imgVwTeamSettings = view.findViewById(R.id.imgVwTeamSettings);
         imgVwStreak1 = view.findViewById(R.id.imgVwStreak1);

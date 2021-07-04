@@ -44,21 +44,22 @@
 
                 <TextView
                     android:id="@+id/txtVwLogin"
-                    android:layout_width="wrap_content"
+                    android:layout_width="244dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/txtVwLogin"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="40sp" />
+                    android:textSize="35sp" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/tblRwLogin2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="23dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/linLytLogin"
@@ -77,7 +78,7 @@
 
                         <EditText
                             android:id="@+id/edTxtLoginEmail"
-                            android:layout_width="295dp"
+                            android:layout_width="329dp"
                             android:layout_height="45dp"
                             android:autofillHints="textEmailAddress"
                             android:background="@drawable/email_field_background"
@@ -103,7 +104,7 @@
 
                         <EditText
                             android:id="@+id/edTxtLoginPassword"
-                            android:layout_width="295dp"
+                            android:layout_width="331dp"
                             android:layout_height="45dp"
                             android:autofillHints="textPassword"
                             android:background="@drawable/password_field_background"
@@ -112,14 +113,14 @@
                             android:inputType="textPassword"
                             android:paddingStart="50dp"
                             android:paddingEnd="40dp"
-                            android:textSize="30sp" />
+                            android:textSize="22sp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgVwLogin"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="44dp"
+                    android:layout_height="46dp"
                     android:background="@drawable/login_button_background"
                     android:contentDescription="@string/contDesc" />
             </TableRow>
@@ -127,25 +128,26 @@
             <TableRow
                 android:id="@+id/tblRwLogin3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="49dp"
                 android:layout_marginLeft="30dp"
                 android:gravity="start"
                 tools:ignore="RtlHardcoded">
 
                 <TextView
                     android:id="@+id/txtVwLoginForgotPass"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="51dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/txtVwLoginForgotPass"
                     android:textColor="@color/dark_purple"
-                    android:textSize="20sp" />
+                    android:textSize="22sp"
+                    android:translationY="10dp" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/tblRwLogin4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="319dp"
+                android:layout_height="15dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:gravity="start"
@@ -160,8 +162,8 @@
 
                     <TextView
                         android:id="@+id/txtVwLoginRegister"
-                        android:layout_width="220dp"
-                        android:layout_height="45dp"
+                        android:layout_width="244dp"
+                        android:layout_height="48dp"
                         android:background="@drawable/register_button_background"
                         android:fontFamily="@font/montserrat_bold"
                         android:paddingStart="65dp"

@@ -8,14 +8,17 @@ public class PlayersItem {
 
     private String name;
 
+    private  String UID;
+
     public PlayersItem(){
         this.image = R.drawable.profile_image_icon;
         this.name = "Nombre";
     }
 
-    public PlayersItem(int image, String name){
+    public PlayersItem(int image, String name, String UID){
         this.image = image;
         this.name = name;
+        this.UID = UID;
     }
 
     public int getImage() {
@@ -24,5 +27,9 @@ public class PlayersItem {
 
     public String getName() {
         return name;
+    }
+
+    public String getUID() {
+        return UID;
     }
 }

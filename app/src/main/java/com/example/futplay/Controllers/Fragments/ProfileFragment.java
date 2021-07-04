@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +45,6 @@ import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -215,17 +213,17 @@ public class ProfileFragment extends Fragment {
         popupProfileSettings = new Dialog(this.getContext());
         popupDone = new Dialog(this.getContext());
 
-        txtVwProfileNickname = view.findViewById(R.id.txtVwProfileNickname);
-        txtVwProfileRegion = view.findViewById(R.id.txtVwProfileRegion);
-        txtVwProfilePosition = view.findViewById(R.id.txtVwProfilePosition);
-        txtVwProfileAge = view.findViewById(R.id.txtVwProfileAge);
-        txtVwProfileStatistics = view.findViewById(R.id.txtVwProfileStatistics);
-        txtVwProfileMatchesPlayed = view.findViewById(R.id.txtVwProfileMatchesPlayed);
-        txtVwProfileMVP = view.findViewById(R.id.txtVwProfileMVP);
-        txtVwProfileFutPlayPlayer = view.findViewById(R.id.txtVwProfileFutPlayPlayer);
-        txtVwProfileMatchesPlayedNumber = view.findViewById(R.id.txtVwProfileMatchesPlayedNumber);
-        txtVwProfileMVPNumber = view.findViewById(R.id.txtVwProfileMVPNumber);
-        txtVwProfileFutPlayPlayerNumber = view.findViewById(R.id.txtVwProfileFutPlayPlayerNumber);
+        txtVwProfileNickname = view.findViewById(R.id.txtVwTeamMateProfileNickname);
+        txtVwProfileRegion = view.findViewById(R.id.txtVwTeamMateProfileRegion);
+        txtVwProfilePosition = view.findViewById(R.id.txtVwTeamMateProfilePosition);
+        txtVwProfileAge = view.findViewById(R.id.txtVwTeamMateProfileAge);
+        txtVwProfileStatistics = view.findViewById(R.id.txtVwTeamMateProfileStatistics);
+        txtVwProfileMatchesPlayed = view.findViewById(R.id.txtVwTeamMateProfileMatchesPlayed);
+        txtVwProfileMVP = view.findViewById(R.id.txtVwTeamMateProfileMVP);
+        txtVwProfileFutPlayPlayer = view.findViewById(R.id.txtVwTeamMateProfileFutPlayPlayer);
+        txtVwProfileMatchesPlayedNumber = view.findViewById(R.id.txtVwTeamMateProfileMatchesPlayedNumber);
+        txtVwProfileMVPNumber = view.findViewById(R.id.txtVwTeamMateProfileMVPNumber);
+        txtVwProfileFutPlayPlayerNumber = view.findViewById(R.id.txtVwTeamMateProfileFutPlayPlayerNumber);
 
         imgVwProfileImg = view.findViewById(R.id.imgVwProfileImg);
         imgVwProfileSettings = view.findViewById(R.id.imgVwProfileSettings);
@@ -786,12 +784,12 @@ public class ProfileFragment extends Fragment {
 
         spinnerPopupProfileSettingsPosition = popupProfileSettings.findViewById(R.id.spinnerPopupProfileSettingsPosition);
 
-        imgVwPopupProfileSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsSave);
-        imgVwPopupProfileSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsClose);
+        imgVwPopupProfileSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupTeamMateProfileSave);
+        imgVwPopupProfileSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupTeamMateProfileSettingsClose);
 
         countryCodePickerPopupProfileSettings = popupProfileSettings.findViewById(R.id.countryCodePickerPopupProfileSettings);
 
-        progressBarPopupProfileSettings = popupProfileSettings.findViewById(R.id.progressBarPopupProfileSettings);
+        progressBarPopupProfileSettings = popupProfileSettings.findViewById(R.id.progressBarPopupTeamMateProfile);
 
         fillUpSpinnerPopupProfileSettingsPosition();
     }

@@ -70,7 +70,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtVwProfileNickname"
+                        android:id="@+id/txtVwTeamMateProfileNickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_semibold"
@@ -80,7 +80,7 @@
                         android:textSize="30sp" />
 
                     <TextView
-                        android:id="@+id/txtVwProfileRegion"
+                        android:id="@+id/txtVwTeamMateProfileRegion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_semibold"
@@ -90,7 +90,7 @@
                         android:textSize="30sp" />
 
                     <TextView
-                        android:id="@+id/txtVwProfilePosition"
+                        android:id="@+id/txtVwTeamMateProfilePosition"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_semibold"
@@ -100,7 +100,7 @@
                         android:textSize="30sp" />
 
                     <TextView
-                        android:id="@+id/txtVwProfileAge"
+                        android:id="@+id/txtVwTeamMateProfileAge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_semibold"
@@ -124,7 +124,7 @@
                     tools:ignore="UselessParent">
 
                     <TextView
-                        android:id="@+id/txtVwProfileStatistics"
+                        android:id="@+id/txtVwTeamMateProfileStatistics"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_semibold"
@@ -142,7 +142,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/txtVwProfileMatchesPlayed"
+                                android:id="@+id/txtVwTeamMateProfileMatchesPlayed"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/montserrat_semibold"
@@ -152,7 +152,7 @@
                                 android:textSize="25sp" />
 
                             <TextView
-                                android:id="@+id/txtVwProfileMatchesPlayedNumber"
+                                android:id="@+id/txtVwTeamMateProfileMatchesPlayedNumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
@@ -169,7 +169,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/txtVwProfileMVP"
+                                android:id="@+id/txtVwTeamMateProfileMVP"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/montserrat_semibold"
@@ -179,7 +179,7 @@
                                 android:textSize="25sp" />
 
                             <TextView
-                                android:id="@+id/txtVwProfileMVPNumber"
+                                android:id="@+id/txtVwTeamMateProfileMVPNumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
@@ -196,7 +196,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/txtVwProfileFutPlayPlayer"
+                                android:id="@+id/txtVwTeamMateProfileFutPlayPlayer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/montserrat_semibold"
@@ -206,7 +206,7 @@
                                 android:textSize="25sp" />
 
                             <TextView
-                                android:id="@+id/txtVwProfileFutPlayPlayerNumber"
+                                android:id="@+id/txtVwTeamMateProfileFutPlayPlayerNumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"

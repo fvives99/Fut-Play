@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center">
+
+    <ProgressBar
+        android:id="@+id/progressBarPopupTeamMateProfile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="visible"
+        android:elevation="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <ImageView
+        android:id="@+id/imgVwPopupTeamMateProfileClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/contDesc"
+        android:elevation="5dp"
+        android:src="@drawable/close_icon"
+        android:tint="@color/white" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:cardBackgroundColor="@color/dark_purple"
+        app:cardCornerRadius="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:background="@color/dark_purple"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtVwPopupProfileSettingsTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:text="@string/txtVwTeamMateProfileTitle"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_purple"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/imgVwTeamMateMakeAdmin"
+                            android:layout_width="50dp"
+                            android:layout_height="46dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:contentDescription="@string/contDesc"
+                            android:src="@drawable/settings_icon"
+                            android:tint="@color/dark_purple"
+                            app:srcCompat="@drawable/matches_icon" />
+
+                        <TextView
+                            android:id="@+id/txtVwPopupTeamMateAdminDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="@string/txtVwPopupTeamMateAdminDescription"
+                            android:textAlignment="center"
+                            android:textColor="@color/red"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:orientation="vertical">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/txtVwTeamMateProfileNickname"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/montserrat_semibold"
+                                        android:text="@string/txtVwTeamMateProfileNickname"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/black"
+                                        android:textSize="30sp" />
+
+                                    <TextView
+                                        android:id="@+id/txtVwTeamMateProfileRegion"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/montserrat_semibold"
+                                        android:text="@string/txtVwTeamMateProfileRegion"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/black"
+                                        android:textSize="30sp" />
+
+                                    <TextView
+                                        android:id="@+id/txtVwTeamMateProfilePosition"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/montserrat_semibold"
+                                        android:text="@string/txtVwTeamMateProfilePosition"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/black"
+                                        android:textSize="30sp" />
+
+                                    <TextView
+                                        android:id="@+id/txtVwTeamMateProfileAge"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/montserrat_semibold"
+                                        android:text="@string/txtVwTeamMateProfileAge"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/black"
+                                        android:textSize="30sp" />
+                                </LinearLayout>
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    tools:ignore="UselessParent">
+
+                                    <TextView
+                                        android:id="@+id/txtVwTeamMateProfileStatistics"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/montserrat_semibold"
+                                        android:text="@string/txtVwTeamMateProfileStatistics"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/black"
+                                        android:textSize="30sp" />
+
+                                    <TableLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TableRow
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/txtVwTeamMateProfileMatchesPlayed"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/montserrat_semibold"
+                                                android:text="@string/txtVwTeamMateProfileMatchesPlayed"
+                                                android:textAlignment="textStart"
+                                                android:textColor="@color/black"
+                                                android:textSize="25sp" />
+
+                                            <TextView
+                                                android:id="@+id/txtVwTeamMateProfileMatchesPlayedNumber"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/montserrat_semibold"
+                                                android:text="@string/number"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/black"
+                                                android:textSize="25sp" />
+                                        </TableRow>
+
+                                        <TableRow
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/txtVwTeamMateProfileMVP"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/montserrat_semibold"
+                                                android:text="@string/txtVwTeamMateProfileMVP"
+                                                android:textAlignment="textStart"
+                                                android:textColor="@color/black"
+                                                android:textSize="25sp" />
+
+                                            <TextView
+                                                android:id="@+id/txtVwTeamMateProfileMVPNumber"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/montserrat_semibold"
+                                                android:text="@string/number"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/black"
+                                                android:textSize="25sp" />
+                                        </TableRow>
+
+                                        <TableRow
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/txtVwTeamMateProfileFutPlayPlayer"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/montserrat_semibold"
+                                                android:text="@string/txtVwTeamMateProfileFutPlayPlayer"
+                                                android:textAlignment="textStart"
+                                                android:textColor="@color/black"
+                                                android:textSize="25sp" />
+
+                                            <TextView
+                                                android:id="@+id/txtVwTeamMateProfileFutPlayPlayerNumber"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/montserrat_semibold"
+                                                android:text="@string/number"
+                                                android:textAlignment="center"
+                                                android:textColor="@color/black"
+                                                android:textSize="25sp" />
+                                        </TableRow>
+                                    </TableLayout>
+                                </LinearLayout>
+                            </TableRow>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

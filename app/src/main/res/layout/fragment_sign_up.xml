@@ -39,13 +39,13 @@
             <TableRow
                 android:id="@+id/tblRwSignUp1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="127dp"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/txtVwSignUp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="95dp"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/txtVwSignUp"
                     android:textAlignment="center"
@@ -56,7 +56,7 @@
             <TableRow
                 android:id="@+id/tblRwSignUp2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
 
@@ -111,7 +111,7 @@
                         android:inputType="textEmailAddress"
                         android:paddingStart="55dp"
                         android:paddingEnd="15dp"
-                        android:textSize="22sp" />
+                        android:textSize="21sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </TableRow>
 
@@ -143,7 +143,7 @@
                         android:inputType="textPassword"
                         android:paddingStart="55dp"
                         android:paddingEnd="40dp"
-                        android:textSize="30sp" />
+                        android:textSize="21sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </TableRow>
 
@@ -229,9 +229,9 @@
                         android:id="@+id/countryCodePickerSignUp"
                         android:layout_width="60dp"
                         android:layout_height="45dp"
-                        app:ccp_autoDetectCountry="true"
-                        app:ccpDialog_showTitle="false"
                         app:ccpDialog_allowSearch="false"
+                        app:ccpDialog_showTitle="false"
+                        app:ccp_autoDetectCountry="true"
                         app:ccp_textSize="30sp" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -254,7 +254,7 @@
                             android:inputType="phone"
                             android:paddingStart="55dp"
                             android:paddingEnd="15dp"
-                            android:textSize="30sp" />
+                            android:textSize="22sp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </TableRow>

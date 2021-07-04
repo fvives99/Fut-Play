@@ -33,6 +33,19 @@
     <string name="txtVwProfileMVP">Jugador del Partido: </string>
     <string name="txtVwProfileFutPlayPlayer">Jugador FutPlay: </string>
 
+    // Popup TeamMate Profile Strings
+    <string name="txtVwTeamMateProfileTitle">Ver Perfil</string>
+    <string name="txtVwPopupTeamMateAdminDescription">Presiona el balón para hacer a este jugador líder del equipo.</string>
+    <string name="txtVwTeamMateProfileNickname">Apodo:</string>
+    <string name="txtVwTeamMateProfileRegion">Región:</string>
+    <string name="txtVwTeamMateProfilePosition">Posición:</string>
+    <string name="txtVwTeamMateProfileAge">Edad:</string>
+    <string name="txtVwTeamMateProfileStatistics">Estadísticas</string>
+    <string name="txtVwTeamMateProfileMatchesPlayed">Partidos Jugados: </string>
+    <string name="txtVwTeamMateProfileMVP">Jugador del Partido: </string>
+    <string name="txtVwTeamMateProfileFutPlayPlayer">Jugador FutPlay: </string>
+
+
     // Profile Settings Strings
     <string name="edTxtProfileSettingsNickname">Apodo:</string>
     <string name="edTxtProfileSettingsRegion">Región:</string>
