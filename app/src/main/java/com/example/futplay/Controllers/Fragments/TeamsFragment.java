@@ -44,6 +44,7 @@ import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -122,10 +123,14 @@ public class TeamsFragment extends Fragment {
     private EditText edTxtPopupTeamSettingsAbbreviation;
     private EditText edTxtPopupTeamSettingsRegion;
 
+    private EditText IDteam;
+
     private ImageView imgVwPopupTeamSettingsSave;
     private ImageView imgVwPopupTeamSettingsClose;
 
     private ProgressBar progressBarPopupTeamSettings;
+
+    private String teamID;
 
     public TeamsFragment() {
         // Required empty public constructor
@@ -472,6 +477,7 @@ public class TeamsFragment extends Fragment {
 /*
 *
 * Acá se muestra la configuación del equipo y los datos que se pueden modificar
+* Nombre, Abreviación, Región
 *
  */
 
@@ -517,11 +523,28 @@ public class TeamsFragment extends Fragment {
     }
 
     private void popupTeamSettingsListeners() {
+        imgVwPopupTeamSettingsSaveOnClickListener();
+        imgVwPopupTeamSettingsCloseOnClickListener();
+    }
 
+    private void getTeamID() {
+        System.out.println("askndafaofjasnansl este soy  yooooooo asdandnasndasnd ");
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        System.out.println("lOGRÉ CREAR EL DOCUEMNT REFERECE");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            System.out.println("lOGRÉ entrar a EL listener");
+            String teamIDa = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
+            System.out.println("Este es la variable del teamIDa del documento: "+teamIDa);
+            teamID = teamIDa;
+            System.out.println("Este es la variable del teamID: "+teamID);
+            System.out.println("holaaaaa: "+teamID.toString());
+        });
     }
 
     private void retrievePopupTeamSettingsData() {
-        DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
+        getTeamID();
+        System.out.println("hola: "+teamID.toString());
+        DocumentReference documentReference = firebaseFirestore.collection("teams").document(teamID);
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             String fullName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
             String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
@@ -532,6 +555,24 @@ public class TeamsFragment extends Fragment {
 
             progressBarPopupTeamSettings.setVisibility(View.GONE);
             showPopupTeamSettingsViews();
+        });
+    }
+
+    private void imgVwPopupTeamSettingsSaveOnClickListener() {
+        imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
+            popupTeamSettings.dismiss();
+        });
+    }
+
+
+
+    /*
+    agarrar el idTeam del useracatual, bhuscar el team, rellenar info
+    UNa vez que tengo la info, ver si la puedo modificar
+     */
+    private void imgVwPopupTeamSettingsCloseOnClickListener() {
+        imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
+            popupTeamSettings.dismiss();
         });
     }
 
