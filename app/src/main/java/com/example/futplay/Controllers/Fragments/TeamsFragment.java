@@ -176,6 +176,7 @@ public class TeamsFragment extends Fragment {
         viewsMatching(view);
         hideViews();
         retrieveData();
+        completeTeamInfo();
         permissions();
         listeners();
         recycVwTeamPlayersConfig();
@@ -514,7 +515,7 @@ public class TeamsFragment extends Fragment {
 
     private void completeTeamInfo() {
         //getTeamID();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document("O6GNayOlR6zMBRiinjbF");
+        DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             String teamName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
             String teamAbb = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
@@ -540,7 +541,7 @@ public class TeamsFragment extends Fragment {
 
     private void popupTeamSettingsListeners() {
         imgVwPopupTeamSettingsSaveOnClickListener();
-        setImgVwPopupTeamSettingsCloseOnClickListener();
+        imgVwPopupTeamSettingsCloseOnClickListener();
         imgVwPopupTeamSettingsCloseOnClickListener();
     }
 
@@ -579,7 +580,12 @@ public class TeamsFragment extends Fragment {
     }
 
     private void imgVwPopupTeamSettingsSaveOnClickListener() {
+        System.out.println("++++++++++++++++++++++++++++++++++++++acá apreté el boton de guardar en team popup +++++++++++++++++++++++++++++");
+        System.out.println();
+        System.out.println();
+        System.out.println();
         imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
+            System.out.println("------------------------------------acá apreté el boton de guardar en team popup ------------------------");
             //if (!invalidFields()) {
             String teamName = edTxtPopupTeamSettingsFullName.getText().toString();
             String abb = edTxtPopupTeamSettingsAbbreviation.getText().toString();
@@ -599,20 +605,13 @@ public class TeamsFragment extends Fragment {
     }
 
     //Salir del popup de Team Settings
-    private void setImgVwPopupTeamSettingsCloseOnClickListener() {
-        if(imgVwPopupTeamSettingsClose != null){
-            imgVwPopupTeamSettingsClose.setOnClickListener(v -> {
-                popupTeamSettings.dismiss();
-            });
-        }
-    }
 
     /*
     agarrar el idTeam del useracatual, bhuscar el team, rellenar info
     UNa vez que tengo la info, ver si la puedo modificar
      */
     private void imgVwPopupTeamSettingsCloseOnClickListener() {
-        imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
+        imgVwPopupTeamSettingsClose.setOnClickListener(v -> {
             popupTeamSettings.dismiss();
         });
     }
