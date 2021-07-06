@@ -113,7 +113,7 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:src="@drawable/matches_icon"
-            android:contentDescription="@string/contDesc" />
+            android:contentDescription="@string/contDesc"
+            android:src="@drawable/matches_icon" />
     </TableRow>
 </TableLayout>

@@ -59,6 +59,13 @@
     <string name="edTxtPopupProfileSettingsConfirmNewPassword">Confirmar Nueva Contraseña:</string>
     <string name="edTxtPopupProfileSettingsPhoneNumber">Teléfono:</string>
 
+    // Popup Team Settings Strings
+    <string name="txtVwPopupTeamSettingsTitle">Configurar Team</string>
+    <string name="txtVwPopupTeamSettingsDescription">Observe, edite y guarde la información de su Team:</string>
+    <string name="edTxtPopupTeamSettingsTeamName">Nombre Team:</string>
+    <string name="edTxtPopupTeamSettingsAbreviación">Abreviación:</string>
+    <string name="edTxtPopupTeamSettingsRegion">Región:</string>
+
     // Region Picker Strings
     <string name="txtVwRegionPickerProvince">Provincia</string>
     <string name="txtVwRegionPickerCanton">Cantón</string>
@@ -76,6 +83,7 @@
     <string name="txtVwTeamWDL">(G-E-P)</string>
     <string name="txtVwTeamStreak">Racha:</string>
     <string name="txtVwTeamPlayers">Jugadores</string>
+    <string name="txtVwTeamDejarEquipo">Dejar Equipo</string>
 
     // Fields Strings
 

@@ -72,7 +72,7 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:fontFamily="@font/montserrat_bold"
-                            android:text="@string/txtVwPopupProfileSettingsTitle"
+                            android:text="@string/txtVwPopupTeamSettingsTitle"
                             android:textAlignment="center"
                             android:textColor="@color/dark_purple"
                             android:textSize="25sp"
@@ -97,7 +97,7 @@
                             android:layout_marginRight="20dp"
                             android:layout_marginBottom="20dp"
                             android:fontFamily="@font/montserrat_regular"
-                            android:text="@string/txtVwPopupProfileSettingsDescription"
+                            android:text="@string/txtVwPopupTeamSettingsDescription"
                             android:textColor="@color/dark_purple"
                             android:textSize="18sp" />
 
@@ -125,7 +125,7 @@
                                     android:autofillHints="textPersonName"
                                     android:background="@drawable/person_field_purple_outlined_background"
                                     android:fontFamily="@font/montserrat_semibold"
-                                    android:hint="@string/edTxtPopupProfileSettingsFullName"
+                                    android:hint="@string/edTxtPopupTeamSettingsTeamName"
                                     android:imeOptions="actionNext"
                                     android:inputType="textPersonName"
                                     android:paddingStart="55dp"
@@ -149,7 +149,7 @@
                                     android:autofillHints="textPersonName"
                                     android:background="@drawable/person_field_purple_outlined_background"
                                     android:fontFamily="@font/montserrat_semibold"
-                                    android:hint="@string/edTxtProfileSettingsNickname"
+                                    android:hint="@string/edTxtPopupTeamSettingsAbreviación"
                                     android:imeOptions="actionNext"
                                     android:inputType="textPersonName"
                                     android:paddingStart="55dp"
@@ -175,7 +175,7 @@
                                     android:focusable="false"
                                     android:focusableInTouchMode="false"
                                     android:fontFamily="@font/montserrat_semibold"
-                                    android:hint="@string/edTxtProfileSettingsRegion"
+                                    android:hint="@string/edTxtPopupTeamSettingsRegion"
                                     android:inputType="textPersonName"
                                     android:paddingStart="55dp"
                                     android:paddingEnd="15dp"
@@ -198,6 +198,7 @@
                                 android:background="@drawable/save_button_background"
                                 android:contentDescription="@string/contDesc" />
                         </FrameLayout>
+
                     </LinearLayout>
                 </ScrollView>
             </LinearLayout>

@@ -42,10 +42,12 @@ import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.Controllers.Adapters.PlayersAdapter;
 import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -59,6 +61,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -123,14 +127,12 @@ public class TeamsFragment extends Fragment {
     private EditText edTxtPopupTeamSettingsAbbreviation;
     private EditText edTxtPopupTeamSettingsRegion;
 
-    private EditText IDteam;
+    private String teamID;
 
     private ImageView imgVwPopupTeamSettingsSave;
     private ImageView imgVwPopupTeamSettingsClose;
 
     private ProgressBar progressBarPopupTeamSettings;
-
-    private String teamID;
 
     public TeamsFragment() {
         // Required empty public constructor
@@ -506,6 +508,20 @@ public class TeamsFragment extends Fragment {
             retrievePopupTeamSettingsData();
             popupTeamSettings.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popupTeamSettings.show();
+            imgVwPopupTeamSettingsSave.bringToFront();
+        });
+    }
+
+    private void completeTeamInfo() {
+        //getTeamID();
+        DocumentReference documentReference = firebaseFirestore.collection("users").document("O6GNayOlR6zMBRiinjbF");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            String teamName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
+            String teamAbb = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
+            String teamRegion = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
+            txtVwTeamName.setText(teamName);
+            txtVwTeamCode.setText(teamAbb);
+            txtVwTeamRegion.setText(teamRegion);
         });
     }
 
@@ -524,30 +540,34 @@ public class TeamsFragment extends Fragment {
 
     private void popupTeamSettingsListeners() {
         imgVwPopupTeamSettingsSaveOnClickListener();
+        setImgVwPopupTeamSettingsCloseOnClickListener();
         imgVwPopupTeamSettingsCloseOnClickListener();
     }
 
-    private void getTeamID() {
-        System.out.println("askndafaofjasnansl este soy  yooooooo asdandnasndasnd ");
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        System.out.println("lOGRÉ CREAR EL DOCUEMNT REFERECE");
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            System.out.println("lOGRÉ entrar a EL listener");
-            String teamIDa = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
-            System.out.println("Este es la variable del teamIDa del documento: "+teamIDa);
-            teamID = teamIDa;
-            System.out.println("Este es la variable del teamID: "+teamID);
-            System.out.println("holaaaaa: "+teamID.toString());
-        });
-    }
-
-    private void retrievePopupTeamSettingsData() {
-        getTeamID();
-        System.out.println("hola: "+teamID.toString());
-        DocumentReference documentReference = firebaseFirestore.collection("teams").document(teamID);
+    /*private void getTeamID() {
+        System.out.println("hola1: "+teamID);
+        System.out.println("id user: "+userID);
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID.trim());
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             String fullName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
             String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
+            String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
+            edTxtPopupTeamSettingsFullName.setText(fullName);
+            edTxtPopupTeamSettingsAbbreviation.setText(Abbreviation);
+            edTxtPopupTeamSettingsRegion.setText(region);
+
+            progressBarPopupTeamSettings.setVisibility(View.GONE);
+            showPopupTeamSettingsViews();
+        });
+    }*/
+
+    private void retrievePopupTeamSettingsData() {
+        //getTeamID();
+        //System.out.println("hola: "+teamID);
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot ->{
+            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("fullName"));
+            String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
             String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
             edTxtPopupTeamSettingsFullName.setText(fullName);
             edTxtPopupTeamSettingsAbbreviation.setText(Abbreviation);
@@ -560,11 +580,32 @@ public class TeamsFragment extends Fragment {
 
     private void imgVwPopupTeamSettingsSaveOnClickListener() {
         imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
+            //if (!invalidFields()) {
+            String teamName = edTxtPopupTeamSettingsFullName.getText().toString();
+            String abb = edTxtPopupTeamSettingsAbbreviation.getText().toString();
+            String region = edTxtPopupTeamSettingsRegion.getText().toString();
+            DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
+            Map<String, Object> team = new HashMap<>();
+            team.put("teamName", teamName);
+            team.put("teamAbbreviations", abb);
+            team.put("region", region);
+            documentReference.update(team).addOnSuccessListener(command -> {
+                //displayPopupDone("¡Perfil Completado!");
+                completeTeamInfo();
+            });
             popupTeamSettings.dismiss();
+            //}
         });
     }
 
-
+    //Salir del popup de Team Settings
+    private void setImgVwPopupTeamSettingsCloseOnClickListener() {
+        if(imgVwPopupTeamSettingsClose != null){
+            imgVwPopupTeamSettingsClose.setOnClickListener(v -> {
+                popupTeamSettings.dismiss();
+            });
+        }
+    }
 
     /*
     agarrar el idTeam del useracatual, bhuscar el team, rellenar info
