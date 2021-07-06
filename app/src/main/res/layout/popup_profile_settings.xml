@@ -11,7 +11,7 @@
     android:gravity="center">
 
     <ProgressBar
-        android:id="@+id/progressBarPopupTeamMateProfile"
+        android:id="@+id/progressBarProfileSettings"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:visibility="visible"
@@ -20,7 +20,7 @@
         android:layout_centerVertical="true" />
 
     <ImageView
-        android:id="@+id/imgVwPopupTeamMateProfileSettingsClose"
+        android:id="@+id/imgVwPopupProfileSettingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/close_icon"
@@ -66,7 +66,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/txtVwPopupProfileSettingsTitle"
+                            android:id="@+id/txtVwPopupProfileSettingsTittle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -90,7 +90,7 @@
                             android:tint="@color/dark_purple" />
 
                         <TextView
-                            android:id="@+id/txtVwPopupProfileSettingsDescription"
+                            android:id="@+id/txtVwProfileSettingsDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -119,7 +119,7 @@
                                 app:errorEnabled="true">
 
                                 <EditText
-                                    android:id="@+id/edTxtPopupProfileSettingsFullName"
+                                    android:id="@+id/txtVwPopupProfileSettingsFullName"
                                     android:layout_width="300dp"
                                     android:layout_height="45dp"
                                     android:autofillHints="textPersonName"
@@ -344,7 +344,7 @@
                             android:layout_marginBottom="20dp">
 
                             <ImageView
-                                android:id="@+id/imgVwPopupTeamMateProfileSave"
+                                android:id="@+id/imgVwPopupProfileSettingsSave"
                                 android:layout_width="65dp"
                                 android:layout_height="65dp"
                                 android:background="@drawable/save_button_background"

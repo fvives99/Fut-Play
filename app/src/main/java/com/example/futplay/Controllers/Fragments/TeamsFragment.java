@@ -41,10 +41,10 @@ import android.widget.Toast;
 import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.Controllers.Adapters.PlayersAdapter;
 import com.example.futplay.Controllers.Items.PlayersItem;
+import com.example.futplay.Controllers.Items.Club;
 import com.example.futplay.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -56,8 +56,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -102,6 +100,8 @@ public class TeamsFragment extends Fragment {
     private RecyclerView.Adapter recycVwTeamPlayersAdapter;
     private RecyclerView.LayoutManager recycVwTeamPlayersLytMngr;
     private ArrayList<PlayersItem> playersList = new ArrayList<>();
+
+    private ArrayList<Club> teamList = new ArrayList<>();
 
     private ProgressBar progressBarTeam;
 
@@ -188,7 +188,6 @@ public class TeamsFragment extends Fragment {
         listeners();
         return view;
     }
-
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
@@ -356,15 +355,11 @@ public class TeamsFragment extends Fragment {
         imgVwTeamMateAdminOnClickListener();
     }
     private void initPopupTeamMate() {
-        progressBarPopupTeamMateProfile = view.findViewById(R.id.progressBarPopupTeamMateProfile);
-
+        progressBarPopupTeamMateProfile = view.findViewById(R.id.progressBarTeamMate);
         popupVwTeamMate.setContentView(R.layout.popup_teammate_profile);
-
         imgVwPopupTeamMateProfileExit = popupVwTeamMate.findViewById(R.id.imgVwPopupTeamMateProfileClose);
         imgVwPopupTeamMateProfileDoAdmin = popupVwTeamMate.findViewById(R.id.imgVwTeamMateMakeAdmin);
-
         teamMatePopupListeners();
-
         txtVwPopupTeamMateNickname = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileNickname);
         txtVwPopupTeamMateRegion = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileRegion);
         txtVwPopupTeamMateAge = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileAge);
@@ -372,7 +367,7 @@ public class TeamsFragment extends Fragment {
         txtVwPopupTeamMateMatchesPlayedNumber = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileMatchesPlayedNumber);
         txtVwPopupTeamMateMVPNumber = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileMVPNumber);
         txtVwPopupTeamMateFutPlayPlayerNumber = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileFutPlayPlayerNumber);
-        progressBarPopupTeamMateProfile = popupVwTeamMate.findViewById(R.id.progressBarPopupTeamMateProfile);
+        progressBarPopupTeamMateProfile = popupVwTeamMate.findViewById(R.id.progressBarTeamMate);
     }
 
     private void setupPopupLayoutParams(Dialog popup) {

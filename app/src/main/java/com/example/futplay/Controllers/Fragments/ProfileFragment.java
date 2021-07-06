@@ -773,7 +773,7 @@ public class ProfileFragment extends Fragment {
     private void initPopupProfileSettings() {
         popupProfileSettings.setContentView(R.layout.popup_profile_settings);
 
-        edTxtPopupProfileSettingsFullName = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsFullName);
+        edTxtPopupProfileSettingsFullName = popupProfileSettings.findViewById(R.id.txtVwPopupProfileSettingsFullName);
         edTxtPopupProfileSettingsNickname = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsNickname);
         edTxtPopupProfileSettingsRegion = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsRegion);
         edTxtPopupProfileSettingsAge = popupProfileSettings.findViewById(R.id.edTxtPopupProfileSettingsAge);
@@ -784,12 +784,12 @@ public class ProfileFragment extends Fragment {
 
         spinnerPopupProfileSettingsPosition = popupProfileSettings.findViewById(R.id.spinnerPopupProfileSettingsPosition);
 
-        imgVwPopupProfileSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupTeamMateProfileSave);
-        imgVwPopupProfileSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupTeamMateProfileSettingsClose);
+        imgVwPopupProfileSettingsSave = popupProfileSettings.findViewById(R.id.imgVwPopupProfileSettingsSave);
+        imgVwPopupProfileSettingsClose = popupProfileSettings.findViewById(R.id.imgVwPopupJoinClubRequestCloseButton);
 
         countryCodePickerPopupProfileSettings = popupProfileSettings.findViewById(R.id.countryCodePickerPopupProfileSettings);
 
-        progressBarPopupProfileSettings = popupProfileSettings.findViewById(R.id.progressBarPopupTeamMateProfile);
+        progressBarPopupProfileSettings = popupProfileSettings.findViewById(R.id.progressBarProfileSettings);
 
         fillUpSpinnerPopupProfileSettingsPosition();
     }

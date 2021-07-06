@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/purple_500"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:backgroundTint="#5CFFFFFF"
+        tools:backgroundTintMode="src_over"></LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.49">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtVwSelectExistingClub"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/txtVwSelectExistingClub"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_500"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <Spinner
+                    android:id="@+id/SelectExistingClubS"
+                    android:layout_width="288dp"
+                    android:layout_height="69dp"
+                    android:background="@color/dark_gray"
+                    android:clickable="false"
+                    android:dropDownWidth="wrap_content"
+                    android:popupBackground="@color/gray"
+                    android:spinnerMode="dropdown" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtVwCreateClub"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/txtVwCreateClub"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_500"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgVwCreateClub"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:contentDescription="@string/contDesc"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/teams_image_icon"
+                    tools:contentDescription="@string/contDesc" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txtVwJoinClub"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/txtVwJoinClub"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_500"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgVwJoinClub"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:contentDescription="@string/contDesc"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/teams_image_icon" />
+
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.futplay.Controllers.Fragments.ClubMenuFragment;
 import com.example.futplay.Controllers.Fragments.FieldsFragment;
 import com.example.futplay.Controllers.Fragments.MatchesFragment;
 import com.example.futplay.Controllers.Fragments.ProfileFragment;
@@ -22,6 +23,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private ProfileFragment profileFragment;
     private TeamsFragment teamsFragment;
+    private ClubMenuFragment clubsFragment;
     private FieldsFragment fieldsFragment;
     private MatchesFragment matchesFragment;
 
@@ -79,6 +81,7 @@ public class MenuActivity extends AppCompatActivity {
         teamsFragment = new TeamsFragment();
         fieldsFragment = new FieldsFragment();
         matchesFragment = new MatchesFragment();
+        clubsFragment = new ClubMenuFragment();
 
         imgVwMenuBack = findViewById(R.id.imgVwMenuBack);
         imgVwMenuSignOut = findViewById(R.id.imgVwMenuSignOut);
@@ -99,7 +102,7 @@ public class MenuActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, profileFragment).addToBackStack(type).commit();
                 break;
             case "teams":
-                getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, teamsFragment).addToBackStack(type).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, clubsFragment).addToBackStack(type).commit();
                 break;
             case "fields":
                 getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, fieldsFragment).addToBackStack(type).commit();
@@ -166,7 +169,7 @@ public class MenuActivity extends AppCompatActivity {
                 break;
             case "teams":
                 imgVwMenuTeams.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.teams_icon_colored));
-                selectedFragment = teamsFragment;
+                selectedFragment = clubsFragment;
                 break;
             case "fields":
                 imgVwMenuFields.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.fields_icon_colored));

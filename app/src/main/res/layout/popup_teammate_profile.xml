@@ -11,7 +11,7 @@
     android:gravity="center">
 
     <ProgressBar
-        android:id="@+id/progressBarPopupTeamMateProfile"
+        android:id="@+id/progressBarTeamMate"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:visibility="visible"
@@ -66,7 +66,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/txtVwPopupProfileSettingsTitle"
+                            android:id="@+id/txtVwPopupTeamMateProfileTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
