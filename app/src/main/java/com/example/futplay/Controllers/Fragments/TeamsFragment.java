@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -122,12 +123,22 @@ public class TeamsFragment extends Fragment {
     public static Bitmap teamProfileImage = null;
 
     private Dialog popupTeamSettings;
+    private Dialog regionPicker;
+
+    private TextView txtVwRegionPickerAccept;
+
+    private NumberPicker regionPickerProvinces;
+    private NumberPicker regionPickerCantons;
+    private NumberPicker regionPickerDistricts;
+
+    private ArrayList<Integer> regionChosenValues;
 
     private EditText edTxtPopupTeamSettingsFullName;
     private EditText edTxtPopupTeamSettingsAbbreviation;
     private EditText edTxtPopupTeamSettingsRegion;
 
     private String teamID;
+    private EditText txtTeamID;
 
     private ImageView imgVwPopupTeamSettingsSave;
     private ImageView imgVwPopupTeamSettingsClose;
@@ -176,12 +187,11 @@ public class TeamsFragment extends Fragment {
         viewsMatching(view);
         hideViews();
         retrieveData();
-        completeTeamInfo();
+        retrieveCurrentTeamIDFragment();
         permissions();
         listeners();
         recycVwTeamPlayersConfig();
         initConfig();
-
         return view;
     }
 
@@ -248,7 +258,7 @@ public class TeamsFragment extends Fragment {
 
     private void viewsMatching(View view) {
         //popupTeamInfo = new Dialog(this.getContext());
-        //regionPicker = new Dialog(this.getContext());
+        regionPicker = new Dialog(this.getContext());
         popupTeamSettings = new Dialog(this.getContext());
         //  popupDone = new Dialog(this.getContext());
 
@@ -474,15 +484,31 @@ public class TeamsFragment extends Fragment {
                 .addOnFailureListener(e -> Toast.makeText(requireContext(), "Error al actualizar\nla foto de perfil", Toast.LENGTH_SHORT).show());
     }
 
-    private void initConfig() {
-        imgVwTeamSettings.bringToFront();
-    }
+    /*
+    private void completeTeamInfo() {
+        //getTeamID();
+        DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            String teamName = (String) Objects.requireNonNull(documentSnapshot.get("clubName"));
+            String teamAbb = (String) Objects.requireNonNull(documentSnapshot.get("clubTag"));
+            String teamRegion = ((String) Objects.requireNonNull(documentSnapshot.get("clubRegion"))).split("/")[0];
+            txtVwTeamName.setText(teamName);
+            txtVwTeamCode.setText(teamAbb);
+            txtVwTeamRegion.setText(teamRegion);
+        });
+    }*/
+
+
 /*
-*
+* POPUP TEAM SETTINGS - TUERCA
 * Acá se muestra la configuación del equipo y los datos que se pueden modificar
 * Nombre, Abreviación, Región
-*
+* Botón para salir del equipo
+* Botón para crear equipo
  */
+    private void initConfig() {
+    imgVwTeamSettings.bringToFront();
+}
 
     private void imgVwTeamSettingsOnClickListener() {
         imgVwTeamSettings.setOnClickListener(v -> {
@@ -506,25 +532,13 @@ public class TeamsFragment extends Fragment {
             popupTeamSettingsListeners();
             setupPopupLayoutParams(popupTeamSettings);
             hidePopupTeamSettingsViews();
-            retrievePopupTeamSettingsData();
+            retrieveCurrentTeamIDPopUp();
             popupTeamSettings.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popupTeamSettings.show();
             imgVwPopupTeamSettingsSave.bringToFront();
         });
     }
 
-    private void completeTeamInfo() {
-        //getTeamID();
-        DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            String teamName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
-            String teamAbb = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
-            String teamRegion = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
-            txtVwTeamName.setText(teamName);
-            txtVwTeamCode.setText(teamAbb);
-            txtVwTeamRegion.setText(teamRegion);
-        });
-    }
 
     private void initPopupTeamSettings() {
         popupTeamSettings.setContentView(R.layout.popup_teams_settings);
@@ -542,87 +556,125 @@ public class TeamsFragment extends Fragment {
     private void popupTeamSettingsListeners() {
         imgVwPopupTeamSettingsSaveOnClickListener();
         imgVwPopupTeamSettingsCloseOnClickListener();
-        imgVwPopupTeamSettingsCloseOnClickListener();
+        edTxtPopupTeamSettingsRegionOnClickListener();
     }
-
-    /*private void getTeamID() {
-        System.out.println("hola1: "+teamID);
-        System.out.println("id user: "+userID);
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID.trim());
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("teamName"));
-            String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("teamAbbreviations"));
-            String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
-            edTxtPopupTeamSettingsFullName.setText(fullName);
-            edTxtPopupTeamSettingsAbbreviation.setText(Abbreviation);
-            edTxtPopupTeamSettingsRegion.setText(region);
-
-            progressBarPopupTeamSettings.setVisibility(View.GONE);
-            showPopupTeamSettingsViews();
-        });
-    }*/
-
-    private void retrievePopupTeamSettingsData() {
-        //getTeamID();
-        //System.out.println("hola: "+teamID);
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.get().addOnSuccessListener(documentSnapshot ->{
-            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("fullName"));
-            String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
-            String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
-            edTxtPopupTeamSettingsFullName.setText(fullName);
-            edTxtPopupTeamSettingsAbbreviation.setText(Abbreviation);
-            edTxtPopupTeamSettingsRegion.setText(region);
-
-            progressBarPopupTeamSettings.setVisibility(View.GONE);
-            showPopupTeamSettingsViews();
-        });
-    }
-
-    private void imgVwPopupTeamSettingsSaveOnClickListener() {
-        System.out.println("++++++++++++++++++++++++++++++++++++++acá apreté el boton de guardar en team popup +++++++++++++++++++++++++++++");
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
-            System.out.println("------------------------------------acá apreté el boton de guardar en team popup ------------------------");
-            //if (!invalidFields()) {
-            String teamName = edTxtPopupTeamSettingsFullName.getText().toString();
-            String abb = edTxtPopupTeamSettingsAbbreviation.getText().toString();
-            String region = edTxtPopupTeamSettingsRegion.getText().toString();
-            DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
-            Map<String, Object> team = new HashMap<>();
-            team.put("teamName", teamName);
-            team.put("teamAbbreviations", abb);
-            team.put("region", region);
-            documentReference.update(team).addOnSuccessListener(command -> {
-                //displayPopupDone("¡Perfil Completado!");
-                completeTeamInfo();
-            });
-            popupTeamSettings.dismiss();
-            //}
-        });
-    }
-
-    //Salir del popup de Team Settings
 
     /*
-    agarrar el idTeam del useracatual, bhuscar el team, rellenar info
-    UNa vez que tengo la info, ver si la puedo modificar
+    Se llama a función de rellenar info del equipo actual
      */
+    private void retrieveCurrentTeamIDFragment() {//retrieve current TEAM ID for fragmentt
+        System.out.println("id user: "+userID);//para rellnear el fragment
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            String TeamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
+            retrieveTeamData(TeamID);
+        });
+    }
+
+    /*
+    Con el ID del TEAM, relleno la info del fragment con información del equipo actual
+     */
+    private void retrieveTeamData(String teamID) {
+
+        if(teamID == null){
+            txtVwTeamName.setText("No Team");
+            txtVwTeamRegion.setText("");
+            txtVwTeamCode.setText("No Team");
+        }else{
+            DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
+            documentReference.get().addOnSuccessListener(documentSnapshot ->{
+                //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
+                String fullName = (String) Objects.requireNonNull(documentSnapshot.get("clubName"));
+                System.out.println("Name team "+ fullName);
+                String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("clubTag"));
+                String code = ((String) Objects.requireNonNull(documentSnapshot.get("clubID")));
+                txtVwTeamName.setText(fullName);
+                txtVwTeamRegion.setText(Abbreviation);
+                txtVwTeamCode.setText(code);
+
+            });
+        }
+    }
+
+    /*
+    Se llama a función de rellenar info del popup con ID del equipo actual
+     */
+    private void retrieveCurrentTeamIDPopUp() {//retrieve current TEAM Data for pop up
+        System.out.println("id usera: "+userID);//para relllenar el pop pop
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            String TeamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
+            retrieveTeamDataPopup(TeamID);
+        });
+    }
+
+
+
+    /*
+Con el ID del TEAM, relleno la info del pop up con información del equipo actual
+ */
+    private void retrieveTeamDataPopup(String teamID) {
+
+        if(teamID == null){
+            edTxtPopupTeamSettingsFullName.setText("No Team");
+            edTxtPopupTeamSettingsAbbreviation.setText("No Team");
+            edTxtPopupTeamSettingsRegion.setText("");
+        }else{
+            DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
+            documentReference.get().addOnSuccessListener(documentSnapshot ->{
+                //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
+                String region = ((String) Objects.requireNonNull(documentSnapshot.get("clubRegion"))).split("/")[0];
+                edTxtPopupTeamSettingsFullName.setText(txtVwTeamName.getText().toString());
+                edTxtPopupTeamSettingsAbbreviation.setText(txtVwTeamRegion.getText().toString());
+                edTxtPopupTeamSettingsRegion.setText(region);
+
+                progressBarPopupTeamSettings.setVisibility(View.GONE);
+                showPopupTeamSettingsViews();
+            });
+        }
+    }
+
+    /*
+    Guardar Información en Base de Datos cuando se le da a guardar
+     */
+    private void imgVwPopupTeamSettingsSaveOnClickListener() {
+        imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
+            //if (!invalidFields()) {
+            DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+
+            documentReference.get().addOnSuccessListener(documentSnapshot ->{
+                //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
+                String teamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
+                SaveInfoPopUpTeamSettings(teamID);
+            });
+        });
+    }
+
+    private void SaveInfoPopUpTeamSettings(String TeamID){
+
+        //if (!invalidFields()) {
+        String teamName = edTxtPopupTeamSettingsFullName.getText().toString();
+        String abb = edTxtPopupTeamSettingsAbbreviation.getText().toString();
+        String region = edTxtPopupTeamSettingsRegion.getText().toString();
+        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(TeamID);
+        Map<String, Object> team = new HashMap<>();
+        team.put("clubName", teamName);
+        team.put("clubTag", abb);
+        team.put("clubRegion", region);
+        documentReference.update(team).addOnSuccessListener(command -> {
+            //displayPopupDone("¡Perfil Completado!");
+            retrieveTeamData(TeamID);
+        });
+        popupTeamSettings.dismiss();
+    }
+
+     /*
+     cerrar pop up en (x)
+      */
     private void imgVwPopupTeamSettingsCloseOnClickListener() {
         imgVwPopupTeamSettingsClose.setOnClickListener(v -> {
             popupTeamSettings.dismiss();
         });
-    }
-
-    private int getIndexOfStringInSpinner(String text, Spinner spinner) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equals(text)) {
-                return i;
-            }
-        }
-        return 0;
     }
 
     private void hidePopupTeamSettingsViews() {
@@ -639,6 +691,152 @@ public class TeamsFragment extends Fragment {
         edTxtPopupTeamSettingsRegion.setVisibility(View.VISIBLE);
 
         imgVwPopupTeamSettingsSave.setVisibility(View.VISIBLE);
+    }
+
+
+    /*
+    Región Picker
+     */
+
+
+
+    private void initRegionPicker() {
+        regionPicker.setContentView(R.layout.region_picker);
+
+        txtVwRegionPickerAccept = regionPicker.findViewById(R.id.txtVwRegionPickerAccept);
+
+        regionPickerProvinces = regionPicker.findViewById(R.id.regionPickerProvinces);
+        regionPickerCantons = regionPicker.findViewById(R.id.regionPickerCantons);
+        regionPickerDistricts = regionPicker.findViewById(R.id.regionPickerDistricts);
+
+        regionChosenValues = new ArrayList<>();
+    }
+
+    private void regionPickerListeners() {
+        regionPickerProvincesOnValueChangedListener();
+        regionPickerCantonsOnValueChangedListener();
+        txtVwRegionPickerAcceptOnClickListener();
+    }
+
+    private void regionPickerProvincesOnValueChangedListener() {
+        regionPickerProvinces.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            picker.setOnScrollListener((regionPicker, scrollState) -> {
+                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                    String province = String.valueOf(regionPicker.getValue() + 1);
+                    String canton = String.valueOf(regionPickerCantons.getValue() + 1);
+                    String districtsList = province + "_" + canton;
+                    regionPickerProvinceChange(province, districtsList);
+                }
+            });
+            String province = String.valueOf(newVal + 1);
+            String canton = String.valueOf(regionPickerCantons.getValue() + 1);
+            String districtsList = province + "_" + canton;
+            regionPickerProvinceChange(province, districtsList);
+        });
+    }
+
+    private void regionPickerCantonsOnValueChangedListener() {
+        regionPickerCantons.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            picker.setOnScrollListener((regionPicker, scrollState) -> {
+                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                    String province = String.valueOf(regionPickerProvinces.getValue() + 1);
+                    String canton = String.valueOf(regionPicker.getValue() + 1);
+                    String districtsList = province + "_" + canton;
+                    regionPickerCantonChange(districtsList);
+                }
+            });
+            String province = String.valueOf(regionPickerProvinces.getValue() + 1);
+            String canton = String.valueOf(newVal + 1);
+            String districtsList = province + "_" + canton;
+            regionPickerCantonChange(districtsList);
+        });
+    }
+
+    private void regionPickerProvinceChange(String province, String districtsList) {
+        DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            populateRegionPicker((String) documentSnapshot.get(province), province, regionPickerCantons);
+            populateRegionPicker((String) documentSnapshot.get(districtsList), districtsList, regionPickerDistricts);
+        });
+    }
+
+    private void regionPickerCantonChange(String districtsList) {
+        DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
+        documentReference.get().addOnSuccessListener(documentSnapshot ->
+                populateRegionPicker((String) documentSnapshot.get(districtsList), districtsList, regionPickerDistricts));
+    }
+
+    private void txtVwRegionPickerAcceptOnClickListener() {
+        txtVwRegionPickerAccept.setOnClickListener(v1 -> {
+            String region = regionPickerProvinces.getDisplayedValues()[regionPickerProvinces.getValue()] + "/"
+                    + regionPickerCantons.getDisplayedValues()[regionPickerCantons.getValue()] + "/"
+                    + regionPickerDistricts.getDisplayedValues()[regionPickerDistricts.getValue()];
+            edTxtPopupTeamSettingsRegion.setText(region);
+            fillUpRegionChosenValues();
+            regionPicker.dismiss();
+        });
+    }
+
+    private void fillUpRegionChosenValues() {
+        regionChosenValues.clear();
+        regionChosenValues.add(regionPickerProvinces.getValue());
+        regionChosenValues.add(regionPickerCantons.getValue());
+        regionChosenValues.add(regionPickerDistricts.getValue());
+    }
+
+    private void populateRegionPicker(String json, String arrayName, NumberPicker picker) {
+        try {
+            if (json != null) {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray jsonArray = jsonObject.getJSONArray(arrayName);
+                String[] values = new String[jsonArray.length()];
+                for (int i = 0; i < values.length; i++) {
+                    values[i] = jsonArray.getString(i);
+                }
+                picker.setValue(0);
+                picker.setDisplayedValues(null);
+                picker.setMinValue(0);
+                picker.setMaxValue(values.length - 1);
+                picker.setDisplayedValues(values);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void edTxtPopupTeamSettingsRegionOnClickListener() {
+        System.out.print("Acá entre al teamSettingsRegiónOnclicka1");
+        edTxtPopupTeamSettingsRegion.setOnClickListener(v -> {
+            System.out.print("Acá entre al teamSettingsRegiónOnclick2");
+            if (edTxtPopupTeamSettingsRegion.getText().toString().equals("")) {
+                initRegionPicker();
+                regionPickerListeners();
+                populateAndDisplayRegionPickers();
+            } else {
+                System.out.println("Entre a comprobar su regionschosenvalues is null"+regionChosenValues.isEmpty());
+                regionPickerProvinces.setValue(regionChosenValues.get(0));
+                regionPickerCantons.setValue(regionChosenValues.get(1));
+                regionPickerDistricts.setValue(regionChosenValues.get(2));
+                displayRegionPicker();
+            }
+        });
+    }
+
+    private void populateAndDisplayRegionPickers() {
+        DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                populateRegionPicker((String) documentSnapshot.get("0"), "0", regionPickerProvinces);
+                populateRegionPicker((String) documentSnapshot.get("1"), "1", regionPickerCantons);
+                populateRegionPicker((String) documentSnapshot.get("1_1"), "1_1", regionPickerDistricts);
+            }
+            displayRegionPicker();
+        });
+    }
+
+    private void displayRegionPicker() {
+        regionPicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        regionPicker.show();
     }
 
 }

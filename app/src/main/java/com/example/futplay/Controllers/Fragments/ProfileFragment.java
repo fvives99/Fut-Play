@@ -347,7 +347,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void regionPickerProvinceChange(String province, String districtsList) {
+    public void regionPickerProvinceChange(String province, String districtsList) {
         DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             populateRegionPicker((String) documentSnapshot.get(province), province, regionPickerCantons);
