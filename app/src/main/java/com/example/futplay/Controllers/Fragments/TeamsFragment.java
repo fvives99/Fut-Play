@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -258,8 +260,8 @@ public class TeamsFragment extends Fragment {
 
     private void viewsMatching(View view) {
         //popupTeamInfo = new Dialog(this.getContext());
-        regionPicker = new Dialog(this.getContext());
         popupTeamSettings = new Dialog(this.getContext());
+        regionPicker = new Dialog(this.getContext());
         //  popupDone = new Dialog(this.getContext());
 
         imgVwTeamProfileImg = view.findViewById(R.id.imgVwTeamProfileImg);
@@ -577,9 +579,9 @@ public class TeamsFragment extends Fragment {
     private void retrieveTeamData(String teamID) {
 
         if(teamID == null){
-            txtVwTeamName.setText("No Team");
+            txtVwTeamName.setText("");
             txtVwTeamRegion.setText("");
-            txtVwTeamCode.setText("No Team");
+            txtVwTeamCode.setText("");
         }else{
             DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
             documentReference.get().addOnSuccessListener(documentSnapshot ->{
@@ -615,23 +617,23 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
  */
     private void retrieveTeamDataPopup(String teamID) {
 
-        if(teamID == null){
-            edTxtPopupTeamSettingsFullName.setText("No Team");
-            edTxtPopupTeamSettingsAbbreviation.setText("No Team");
-            edTxtPopupTeamSettingsRegion.setText("");
-        }else{
-            DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
-            documentReference.get().addOnSuccessListener(documentSnapshot ->{
-                //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
-                String region = ((String) Objects.requireNonNull(documentSnapshot.get("clubRegion"))).split("/")[0];
-                edTxtPopupTeamSettingsFullName.setText(txtVwTeamName.getText().toString());
-                edTxtPopupTeamSettingsAbbreviation.setText(txtVwTeamRegion.getText().toString());
-                edTxtPopupTeamSettingsRegion.setText(region);
+        //if(teamID == null){
+        //    edTxtPopupTeamSettingsFullName.setText("");
+        //    edTxtPopupTeamSettingsAbbreviation.setText("");
+        //    edTxtPopupTeamSettingsRegion.setText("");
+        //}else{
+        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
+        documentReference.get().addOnSuccessListener(documentSnapshot ->{
+            //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
+            String region = ((String) Objects.requireNonNull(documentSnapshot.get("clubRegion")));//.split("/")[0]
+            edTxtPopupTeamSettingsFullName.setText(txtVwTeamName.getText().toString());
+            edTxtPopupTeamSettingsAbbreviation.setText(txtVwTeamRegion.getText().toString());
+            edTxtPopupTeamSettingsRegion.setText(region);
 
-                progressBarPopupTeamSettings.setVisibility(View.GONE);
-                showPopupTeamSettingsViews();
-            });
-        }
+            progressBarPopupTeamSettings.setVisibility(View.GONE);
+            showPopupTeamSettingsViews();
+        });
+        //}
     }
 
     /*
@@ -716,6 +718,7 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         regionPickerProvincesOnValueChangedListener();
         regionPickerCantonsOnValueChangedListener();
         txtVwRegionPickerAcceptOnClickListener();
+        setEdTxtPopupTeamSettingsRegionAddTextChangedListener();
     }
 
     private void regionPickerProvincesOnValueChangedListener() {
@@ -806,19 +809,19 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
 
     private void edTxtPopupTeamSettingsRegionOnClickListener() {
         System.out.print("Acá entre al teamSettingsRegiónOnclicka1");
+        System.out.print("edTxtPopupTeamSettingsRegion contiene: "+edTxtPopupTeamSettingsRegion.getText().toString());
         edTxtPopupTeamSettingsRegion.setOnClickListener(v -> {
             System.out.print("Acá entre al teamSettingsRegiónOnclick2");
-            if (edTxtPopupTeamSettingsRegion.getText().toString().equals("")) {
+            //if (edTxtPopupTeamSettingsRegion.getText().toString().equals("")) {
                 initRegionPicker();
                 regionPickerListeners();
                 populateAndDisplayRegionPickers();
-            } else {
-                System.out.println("Entre a comprobar su regionschosenvalues is null"+regionChosenValues.isEmpty());
-                regionPickerProvinces.setValue(regionChosenValues.get(0));
-                regionPickerCantons.setValue(regionChosenValues.get(1));
-                regionPickerDistricts.setValue(regionChosenValues.get(2));
-                displayRegionPicker();
-            }
+            //} else {
+                //regionPickerProvinces.setValue(regionChosenValues.get(0));
+                //regionPickerCantons.setValue(regionChosenValues.get(1));
+                //regionPickerDistricts.setValue(regionChosenValues.get(2));
+                //displayRegionPicker();
+            //}
         });
     }
 
@@ -837,6 +840,25 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     private void displayRegionPicker() {
         regionPicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         regionPicker.show();
+    }
+
+    private void setEdTxtPopupTeamSettingsRegionAddTextChangedListener() {
+        edTxtPopupTeamSettingsRegion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                edTxtPopupTeamSettingsRegion.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
 }
