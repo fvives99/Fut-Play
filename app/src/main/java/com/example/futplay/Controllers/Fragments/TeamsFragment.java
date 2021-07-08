@@ -567,6 +567,7 @@ public class TeamsFragment extends Fragment {
     private void retrieveCurrentTeamIDFragment() {//retrieve current TEAM ID for fragmentt
         System.out.println("id user: "+userID);//para rellnear el fragment
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        System.out.println("Document SnapShot "+ documentReference.getPath());
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             String TeamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
             retrieveTeamData(TeamID);
@@ -584,8 +585,9 @@ public class TeamsFragment extends Fragment {
             txtVwTeamCode.setText("");
         }else{
             DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
+            System.out.println("Document SnapShot "+ documentReference.getPath());
+            System.out.println("teamIDaaa: "+teamID);
             documentReference.get().addOnSuccessListener(documentSnapshot ->{
-                //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
                 String fullName = (String) Objects.requireNonNull(documentSnapshot.get("clubName"));
                 System.out.println("Name team "+ fullName);
                 String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("clubTag"));

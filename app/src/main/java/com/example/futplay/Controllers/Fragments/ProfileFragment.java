@@ -1,6 +1,8 @@
 package com.example.futplay.Controllers.Fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +37,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -46,6 +49,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -163,6 +167,9 @@ public class ProfileFragment extends Fragment {
     private String currentPhotoPath;
 
     public static Bitmap profileImage = null;
+
+    private int month = 0, day = 0, year = 0;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -364,12 +371,16 @@ public class ProfileFragment extends Fragment {
                 populateRegionPicker((String) documentSnapshot.get(districtsList), districtsList, regionPickerDistricts));
     }
 
-    private void txtVwRegionPickerAcceptOnClickListener() {
+    private void txtVwRegionPickerAcceptOnClickListener(){//1 == lllenar información de perfil 2 == Settings del proifile
         txtVwRegionPickerAccept.setOnClickListener(v1 -> {
             String region = regionPickerProvinces.getDisplayedValues()[regionPickerProvinces.getValue()] + "/"
                     + regionPickerCantons.getDisplayedValues()[regionPickerCantons.getValue()] + "/"
                     + regionPickerDistricts.getDisplayedValues()[regionPickerDistricts.getValue()];
-            edTxtPopupProfileInfoRegion.setText(region);
+            if(popupProfileInfo.isShowing()){
+                edTxtPopupProfileInfoRegion.setText(region);
+            }if(popupProfileSettings.isShowing()) {
+                edTxtPopupProfileSettingsRegion.setText(region);
+            }
             fillUpRegionChosenValues();
             regionPicker.dismiss();
         });
@@ -475,6 +486,24 @@ public class ProfileFragment extends Fragment {
                 regionPickerDistricts.setValue(regionChosenValues.get(2));
                 displayRegionPicker();
             }
+        });
+    }
+
+    /*
+    descomentar y usarlo
+     */
+    private void edTxtPopupProfileSettingsRegionOnClickListener() {
+        edTxtPopupProfileSettingsRegion.setOnClickListener(v -> {
+            //if (edTxtPopupProfileInfoRegion.getText().toString().equals("")) {
+                initRegionPicker();
+                regionPickerListeners();
+                populateAndDisplayRegionPickers();
+            /*} else {
+                regionPickerProvinces.setValue(regionChosenValues.get(0));
+                regionPickerCantons.setValue(regionChosenValues.get(1));
+                regionPickerDistricts.setValue(regionChosenValues.get(2));
+                displayRegionPicker();
+            }*/
         });
     }
 
@@ -591,17 +620,33 @@ public class ProfileFragment extends Fragment {
 
     private boolean invalidFields() {
         boolean invalid = false;
-        if (edTxtPopupProfileInfoNickname.getText().toString().trim().equals("")) {
-            edTxtPopupProfileInfoNickname.setError("Campo Obligatorio");
-            invalid = true;
+        if(popupProfileInfo.isShowing()){
+            if (edTxtPopupProfileInfoNickname.getText().toString().trim().equals("")) {
+                edTxtPopupProfileInfoNickname.setError("Campo Obligatorio");
+                invalid = true;
+            }
+            if (edTxtPopupProfileInfoRegion.getText().toString().equals("")) {
+                edTxtPopupProfileInfoRegion.setError("Campo Obligatorio");
+                invalid = true;
+            }
+            if (spinnerPopupProfileInfoPosition.getSelectedItemPosition() == 0) {
+                ((TextView) ((LinearLayout) spinnerPopupProfileInfoPosition.getSelectedView()).getChildAt(0)).setError("Campo Obligatorio");
+                invalid = true;
+            }
         }
-        if (edTxtPopupProfileInfoRegion.getText().toString().equals("")) {
-            edTxtPopupProfileInfoRegion.setError("Campo Obligatorio");
-            invalid = true;
-        }
-        if (spinnerPopupProfileInfoPosition.getSelectedItemPosition() == 0) {
-            ((TextView) ((LinearLayout) spinnerPopupProfileInfoPosition.getSelectedView()).getChildAt(0)).setError("Campo Obligatorio");
-            invalid = true;
+        if(popupProfileSettings.isShowing()){
+            if (edTxtPopupProfileSettingsNickname.getText().toString().trim().equals("")) {
+                edTxtPopupProfileSettingsNickname.setError("Campo Obligatorio");
+                invalid = true;
+            }
+            if (edTxtPopupProfileSettingsRegion.getText().toString().equals("")) {
+                edTxtPopupProfileSettingsRegion.setError("Campo Obligatorio");
+                invalid = true;
+            }
+            if (spinnerPopupProfileSettingsPosition.getSelectedItemPosition() == 0) {
+                ((TextView) ((LinearLayout) spinnerPopupProfileSettingsPosition.getSelectedView()).getChildAt(0)).setError("Campo Obligatorio");
+                invalid = true;
+            }
         }
         return invalid;
     }
@@ -629,9 +674,11 @@ public class ProfileFragment extends Fragment {
             String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
             String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
             String position = (String) Objects.requireNonNull(documentSnapshot.get("position"));
+            String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
             txtVwProfileNickname.setText(nickname);
             txtVwProfileRegion.setText(region);
             txtVwProfilePosition.setText(position);
+            txtVwProfileAge.setText(age);
         });
     }
 
@@ -828,46 +875,84 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
+    private void setEdTxtPopupProfileSettingsAgeSetUpListener() {
+        edTxtPopupProfileSettingsAge.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            day = cal.get(Calendar.DAY_OF_MONTH);
+            month = cal.get(Calendar.MONTH);
+            year = cal.get(Calendar.YEAR) - 18;
+
+            DatePickerDialog dialog = new DatePickerDialog(requireContext(),
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    dateSetListener, year, month, day);
+            dialog.setButton(DatePickerDialog.BUTTON_POSITIVE, "Aceptar", dialog);
+            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setOnShowListener(dialogInterface -> dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setVisibility(View.GONE));
+            //dialog.setOnDismissListener(dialogInterface -> {
+                //edTxtSignUpPhoneNumber.requestFocus();
+                //showKeyboard();
+            //});
+            dialog.setCancelable(false);
+            dialog.show();
+        });
+
+        dateSetListener = (datePicker, yearDP, monthDP, dayOfMonthDP) -> {
+            monthDP++;
+            String formattedMonth = "" + monthDP;
+            String formattedDayOfMonth = "" + dayOfMonthDP;
+
+            if (monthDP < 10) {
+                formattedMonth = "0" + monthDP;
+            }
+            if (dayOfMonthDP < 10) {
+                formattedDayOfMonth = "0" + dayOfMonthDP;
+            }
+
+            edTxtPopupProfileSettingsAge.setText(formattedDayOfMonth + "/" + formattedMonth + "/" + yearDP);
+            edTxtPopupProfileSettingsAge.setError(null);
+        };
+    }
+
     private void popupProfileSettingsListeners() {
         imgVwPopupProfileSettingsSaveOnClickListener();
         imgVwPopupProfileSettingsCloseOnClickListener();
+        edTxtPopupProfileSettingsRegionOnClickListener();
+        setEdTxtPopupProfileSettingsAgeSetUpListener();
     }
 
 
 
     private void imgVwPopupProfileSettingsSaveOnClickListener() {
         imgVwPopupProfileSettingsSave.setOnClickListener(v -> {
-            popupProfileSettings.dismiss();
-        });
-        imgVwPopupProfileSettingsSave.setOnClickListener(v -> {
             if (!invalidFields()) {
                 String name = edTxtPopupProfileSettingsFullName.getText().toString();
                 String nickName = edTxtPopupProfileSettingsNickname.getText().toString();
                 String region = edTxtPopupProfileSettingsRegion.getText().toString();
-                String position = spinnerPopupProfileInfoPosition.getSelectedItem().toString();
+                String position = spinnerPopupProfileSettingsPosition.getSelectedItem().toString();
                 String age = edTxtPopupProfileSettingsAge.getText().toString();
                 String email = edTxtPopupProfileSettingsEmail.getText().toString();
                 String newPassword = edTxtPopupProfileSettingsNewPassword.getText().toString();
                 String confirmPassword = edTxtPopupProfileSettingsConfirmNewPassword.getText().toString();
-                String phone = edTxtPopupProfileSettingsPhoneNumber .getText().toString();
+                String phone = edTxtPopupProfileSettingsPhoneNumber.getText().toString();
                 DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
                 Map<String, Object> user = new HashMap<>();
                 user.put("fullName", name);
                 user.put("nickname", nickName);
                 user.put("region", region);
                 user.put("position", position);
-                user.put("birthDate", position);
-                user.put("email", position);
-                user.put("position", position);
-                user.put("position", position);
-                user.put("position", position);
-                user.put("position", countryCodePickerPopupProfileSettings.getFullNumber());
-                updatePassword(newPassword);
+                user.put("birthDate", age);
+                user.put("email", email);
+                user.put("phoneNumber", phone);
+                user.put("countryCode", countryCodePickerPopupProfileSettings.getFullNumber());
+                if(newPassword != "" && newPassword == confirmPassword){
+                    updatePassword(newPassword);
+                }
                 documentReference.update(user).addOnSuccessListener(command -> {
                     displayPopupDone("¡Perfil Completado!");
                     completeProfileInfo();
                 });
-                popupProfileInfo.dismiss();
+                popupProfileSettings.dismiss();
             }
         });
     }
@@ -877,6 +962,8 @@ public class ProfileFragment extends Fragment {
 
         user.updatePassword(pass)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    private static final String TAG = "pAssword changted";
+
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -899,7 +986,7 @@ public class ProfileFragment extends Fragment {
             String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
             String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
             String position = (String) Objects.requireNonNull(documentSnapshot.get("position"));
-            String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
+            String age = (String) Objects.requireNonNull(documentSnapshot.get("birthDate"));
             String email = (String) Objects.requireNonNull(documentSnapshot.get("email"));
             String phoneNumber = (String) Objects.requireNonNull(documentSnapshot.get("phoneNumber"));
             edTxtPopupProfileSettingsFullName.setText(fullName);
