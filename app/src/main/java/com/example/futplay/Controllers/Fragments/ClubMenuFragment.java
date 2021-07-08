@@ -5,21 +5,17 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
+import android.provider.Settings;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,22 +25,14 @@ import android.widget.Toast;
 
 import com.example.futplay.Controllers.Items.Club;
 import com.example.futplay.Controllers.Items.Players;
+import com.example.futplay.Controllers.Items.Requests;
 import com.example.futplay.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hbb20.CountryCodePicker;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -78,8 +66,8 @@ public class ClubMenuFragment extends Fragment {
     private EditText edTxtClubRegion;
 
     //Club Fragment view Images
-    private ImageView imgVwCreateClub;
-    private ImageView imgVwJoinClub;
+    private TextView txtVwCreateClub;
+    private TextView txtVwJoinClub;
 
     //Club Fragment
     private Spinner spinnerClubJoined;
@@ -102,7 +90,10 @@ public class ClubMenuFragment extends Fragment {
     //Request Join Club ImageView
     private ImageView imgVwRequestJoinCLubExit;
     private ImageView imgVwRequestJoinClubSend;
-    private ImageView imgVwRequestJoinClubPaste;
+
+    //Request Join Club EditText
+    private EditText edTxtRequestClubTag;
+    private EditText edTxtRequestClubID;
 
     //Done popUp Variables
     private Dialog popupDone;
@@ -166,10 +157,9 @@ public class ClubMenuFragment extends Fragment {
     private void initPopupMain(){
         popUpCreateClub = new Dialog(this.getContext());
         popupDone = new Dialog(this.getContext());
-        //progressBarSendRequest= view.findViewById(R.id.progressBarJoinClubRequest);
-        //popupSendJoinClubRequest.setContentView(R.layout.popup_send_join_club_request);
-        imgVwCreateClub = view.findViewById(R.id.imgVwCreateClub);
-        imgVwJoinClub = view.findViewById(R.id.imgVwJoinClub);
+        popupSendJoinClubRequest = new Dialog(this.getContext());
+        txtVwCreateClub = view.findViewById(R.id.txtVwCreateClub);
+        txtVwJoinClub = view.findViewById(R.id.txtVwRequestJoinClub);
     }
 
     private void fillUpSpinnerClubsJoined() {
@@ -186,127 +176,42 @@ public class ClubMenuFragment extends Fragment {
         createClubListeners();
     }
 
+    private void initPopupJoinRequest() {
+        popupSendJoinClubRequest.setContentView(R.layout.popup_send_join_club_request);
+        imgVwRequestJoinCLubExit = popupSendJoinClubRequest.findViewById(R.id.imgVwPopupJoinClubRequestCloseButton);
+        imgVwRequestJoinClubSend = popupSendJoinClubRequest.findViewById(R.id.imgVwPopupSendJoinClubRequest);
+        edTxtRequestClubID = popupSendJoinClubRequest.findViewById(R.id.txtVwPopupJoinClubRequestID);
+        edTxtRequestClubTag = popupSendJoinClubRequest.findViewById(R.id.txtVwPopupJoinClubRequestTag);
+        progressBarSendRequest = popupSendJoinClubRequest.findViewById(R.id.progressBarJoinClubRequest);
+        joinRequestListeners();
+    }
+
     private void mainListeners() {
-        //imgVwPopupSendClubRequestClickListener();
+        imgVwPopupClubRequestClickListener();
         imgVwPopupCreateTeamOnClickListener();
     }
 
     private void createClubListeners(){
         imgVwPopupCreateClubSaveClickListener();
         imgVwPopupCreateClubExitClickListener();
-        edTxtFieldsOnFocusChangeListeners();
+        createClubEdTxtFieldsOnFocusChangeListeners();
     }
 
-    private boolean invalidFields() {
-        boolean invalid = false;
-        if (edTxtClubName.getText().toString().trim().equals("")) {
-            edTxtClubName.setError("Campo Obligatorio");
-            invalid = true;
-        }
-        if (edTxtClubTag.getText().toString().trim().equals("")) {
-            edTxtClubTag.setError("Campo Obligatorio");
-            invalid = true;
-        }
-        if (edTxtClubRegion.getText().toString().equals("")) {
-            edTxtClubName.setError("Campo Obligatorio");
-            invalid = true;
-        }
-
-        return invalid;
+    private void joinRequestListeners(){
+        imgVwPopupJoinRequestExitClickListener();
+        imgVwCreateClubRequestSendClickListener();
+        sendRequestEdTxtFieldsOnFocusChangeListeners();
     }
-
-    private void edTxtFieldsOnFocusChangeListeners() {
-        edTxtClubName.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus && !edTxtClubName.getText().toString().equals("") && edTxtClubName.getText().toString().length() < 3 || edTxtClubName.getText().toString().length() > 30) {
-                edTxtClubName.setError("El nombre del club debe tener de 3 a 30 caracteres");
-            }
-        });
-
-        edTxtClubTag.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus && !edTxtClubTag.getText().toString().equals("") && edTxtClubTag.getText().toString().length() > 3 || edTxtClubTag.getText().toString().length() < 3) {
-                edTxtClubTag.setError("El TAG del club tiene que tener 3 letras mayúsculas");
-            }
-        });
-    }
-
-    private void clearFields() {
-        edTxtClubName.setText("");
-        edTxtClubTag.setText("");
-        edTxtClubRegion.setText("");
-    }
-
-    private void clearErrors() {
-        edTxtClubName.setError(null);
-        edTxtClubTag.setError(null);
-        edTxtClubRegion.setError(null);
-    }
-
-    private String insertClub() {
-        if (!invalidFields()) {
-            progressBarCreateClub.setVisibility(View.VISIBLE);
-            Club newClub = new Club();
-            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            newClub.setClubName(camelCase(edTxtClubName.getText().toString().trim().replaceAll(" +", " ")));
-            newClub.setClubTag(edTxtClubTag.getText().toString().trim());
-            newClub.setClubRegion(edTxtClubRegion.getText().toString().trim());
-            newClub.setMatchesWon(0);newClub.setMatchesLost(0);newClub.setMatchesTied(0);
-            Players newMember = new Players(userID);
-            newMember.setPrivileges("C");
-            newClub.addMember(newMember);
-            clubID = newClub.setClubID();
-            DocumentReference documentReference = firebaseFirestore.collection("clubs").document(clubID);
-            documentReference.set(newClub);
-            clearFields();
-            clearErrors();
-            return newClub.getClubName();
-        }else{
-            return "";
-        }
-
-    }
-
-    public static String camelCase(String str) {
-        if (str == null) {
-            return null;
-        }
-
-        boolean space = true;
-        StringBuilder builder = new StringBuilder(str);
-        final int length = builder.length();
-
-        for (int i = 0; i < length; ++i) {
-            char c = builder.charAt(i);
-            if (space) {
-                if (!Character.isWhitespace(c)) {
-                    builder.setCharAt(i, Character.toTitleCase(c));
-                    space = false;
-                }
-            } else if (Character.isWhitespace(c)) {
-                space = true;
-            } else {
-                builder.setCharAt(i, Character.toLowerCase(c));
-            }
-        }
-        return builder.toString();
-    }
-
+ //CREATE TEAM LISTENERS
     private void imgVwPopupCreateTeamOnClickListener() {
-        if(imgVwCreateClub != null){
-            imgVwCreateClub.setOnClickListener(v -> {
+        if(txtVwCreateClub != null){
+            txtVwCreateClub.setOnClickListener(v -> {
                 initPopupCreateClub();
                 setupPopupLayoutParams(popUpCreateClub);
                 popUpCreateClub.setCancelable(false);
                 popUpCreateClub.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 popUpCreateClub.show();
                 progressBarCreateClub.setVisibility(View.GONE);
-            });
-        }
-    }
-
-    private void imgVwPopupSendClubRequestClickListener() {
-        if(imgVwJoinClub != null){
-            imgVwJoinClub.setOnClickListener(v -> {
-                popupSendJoinClubRequest.dismiss();
             });
         }
     }
@@ -328,6 +233,171 @@ public class ClubMenuFragment extends Fragment {
                 }
             });
         }
+    }
+    //CLUB JOIN REQUEST LISTENERS
+    private void imgVwPopupClubRequestClickListener() {
+        if(txtVwJoinClub != null){
+            txtVwJoinClub.setOnClickListener(v -> {
+                initPopupJoinRequest();
+                setupPopupLayoutParams(popupSendJoinClubRequest);
+                popupSendJoinClubRequest.setCancelable(false);
+                popupSendJoinClubRequest.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popupSendJoinClubRequest.show();
+                progressBarSendRequest.setVisibility(View.GONE);
+            });
+        }
+    }
+
+    private void imgVwPopupJoinRequestExitClickListener() {
+        if(imgVwRequestJoinCLubExit != null){
+            imgVwRequestJoinCLubExit.setOnClickListener(v -> {
+                popupSendJoinClubRequest.dismiss();
+            });
+        }
+    }
+
+    private void imgVwCreateClubRequestSendClickListener() {
+        if(imgVwRequestJoinClubSend != null){
+            imgVwRequestJoinClubSend.setOnClickListener(v -> {
+                String clubName = createRequest();
+                if(clubName != ""){
+                    progressBarSendRequest.setVisibility(View.GONE);
+                    displayPopupDone("Solicitud a "+clubName+" Enviada Exitósamente!!");
+                    popupSendJoinClubRequest.dismiss();
+                }
+            });
+        }
+    }
+    //INPUT VALIDATION METHODS
+    private boolean createClubInvalidFields() {
+        boolean invalid = false;
+        if (edTxtClubName.getText().toString().trim().equals("")) {
+            edTxtClubName.setError("Campo Obligatorio");
+            invalid = true;
+        }
+        if (edTxtClubTag.getText().toString().trim().equals("")) {
+            edTxtClubTag.setError("Campo Obligatorio");
+            invalid = true;
+        }
+        if (edTxtClubRegion.getText().toString().equals("")) {
+            edTxtClubName.setError("Campo Obligatorio");
+            invalid = true;
+        }
+
+        return invalid;
+    }
+
+    private boolean joinRequestInvalidFields() {
+        boolean invalid = false;
+        if (edTxtRequestClubTag.getText().toString().trim().equals("")) {
+            edTxtClubName.setError("Campo Obligatorio");
+            invalid = true;
+        }
+        if (edTxtRequestClubID.getText().toString().trim().equals("")) {
+            edTxtClubTag.setError("Campo Obligatorio");
+            invalid = true;
+        }
+
+        return invalid;
+    }
+
+    private void createClubEdTxtFieldsOnFocusChangeListeners() {
+        edTxtClubName.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus && !edTxtClubName.getText().toString().equals("") && edTxtClubName.getText().toString().length() < 3 || edTxtClubName.getText().toString().length() > 30) {
+                edTxtClubName.setError("El nombre del club debe tener de 3 a 30 caracteres");
+            }
+        });
+
+        edTxtClubTag.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus && !edTxtClubTag.getText().toString().equals("") && edTxtClubTag.getText().toString().length() > 3 || edTxtClubTag.getText().toString().length() < 3) {
+                edTxtClubTag.setError("El TAG del club tiene que tener 3 letras mayúsculas");
+            }
+        });
+    }
+
+    private void sendRequestEdTxtFieldsOnFocusChangeListeners() {
+        edTxtRequestClubTag.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus && !edTxtRequestClubTag.getText().toString().equals("") && edTxtRequestClubTag.getText().toString().length() > 3 || edTxtRequestClubTag.getText().toString().length() < 3) {
+                edTxtRequestClubTag.setError("El TAG del club tiene que tener 3 letras mayúsculas");
+            }
+        });
+    }
+
+    private void createClubClearFields() {
+        edTxtClubName.setText("");
+        edTxtClubTag.setText("");
+        edTxtClubRegion.setText("");
+    }
+
+    private void createClubClearErrors() {
+        edTxtClubName.setError(null);
+        edTxtClubTag.setError(null);
+        edTxtClubRegion.setError(null);
+    }
+
+    private void sendRequestClearFields() {
+        edTxtRequestClubID.setText("");
+        edTxtRequestClubTag.setText("");
+    }
+
+    private void sendRequestClearErrors() {
+        edTxtRequestClubID.setError(null);
+        edTxtRequestClubTag.setError(null);
+    }
+
+    private String insertClub() {
+        if (!createClubInvalidFields()) {
+            progressBarCreateClub.setVisibility(View.VISIBLE);
+            Club newClub = new Club();
+            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+            newClub.setClubName(edTxtClubName.getText().toString().trim().replaceAll(" +", " "));
+            newClub.setClubTag(edTxtClubTag.getText().toString().trim());
+            newClub.setClubRegion(edTxtClubRegion.getText().toString().trim());
+            newClub.setMatchesWon(0);newClub.setMatchesLost(0);newClub.setMatchesTied(0);
+            Players newMember = new Players(userID);
+            newMember.setPrivileges("C");
+            newClub.addMember(newMember);
+            clubID = newClub.setClubID();
+            DocumentReference documentReference = firebaseFirestore.collection("clubs").document(clubID);
+            documentReference.set(newClub);
+            createClubClearFields();
+            createClubClearErrors();
+            return newClub.getClubName();
+        }else{
+            return "";
+        }
+
+    }
+
+    private String createRequest() {
+        if (!joinRequestInvalidFields()) {
+            progressBarSendRequest.setVisibility(View.VISIBLE);
+            userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+            final Requests[] newRequest = new Requests[1];
+            final Club[] newClub = new Club[1];
+            String clubRequestID = edTxtRequestClubTag.getText().toString().trim()+"#"+edTxtRequestClubID.getText().toString().trim();
+            Toast toast = Toast.makeText(getActivity(),
+                    clubRequestID,
+                    Toast.LENGTH_SHORT);
+
+            toast.show();
+            final DocumentReference[] docRef = {firebaseFirestore.collection("clubs").document(clubRequestID)};
+            docRef[0].get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    newClub[0] = documentSnapshot.toObject(Club.class);
+                    newRequest[0] = new Requests(clubRequestID,"Pending");
+                    docRef[0] = firebaseFirestore.collection("requests").document(clubRequestID);
+                    docRef[0].set(newRequest[0]);
+                }
+            });
+            sendRequestClearFields();
+            sendRequestClearErrors();
+            return edTxtRequestClubTag.getText().toString().trim();
+        }else{
+            return "";
+        }
+
     }
 
     // Done PopUp functions

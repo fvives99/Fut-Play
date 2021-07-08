@@ -34,22 +34,22 @@
     <string name="txtVwProfileFutPlayPlayer">Jugador FutPlay: </string>
 
     // Club Menu
-    <string name="txtVwSelectExistingClub">Selecciona un Club:</string>
-    <string name="txtVwCreateClub">Crea tu Propio Club:</string>
-    <string name="txtVwJoinClub">Unete a un Club:</string>
+    <string name="txtVwClubFirstTime">Crea o solicita unirte a un club!</string>
+    <string name="btnCreateClub">Crea tu Propio Club</string>
+    <string name="btnVwJoinClub">Únete a un Club</string>
 
     // Create Club
     <string name="txtVwPopupCreateClubTittle">Creación del Club:</string>
     <string name="txtVwPopupCreateClubDescription">Completa los siguientes campos y crea tu propio Club:</string>
     <string name="edTxtPopupClubName">Nombre del Club:</string>
-    <string name="edTxtPopupClubTag">Abreviación: Ej. LDA</string>
+    <string name="edTxtPopupClubTag">Abreviación: Ej. ABC</string>
     <string name="edTxtPopupClubRegion">Región:</string>
 
     // Send Join-Club Request
     <string name="txtVwPopupSendClubRequestTitle">Solicitud de Ingreso a un Club:</string>
-    <string name="txtVwPopupSendClubRequestDescription">Ingresa el ID del club para solicitar unirte:</string>
+    <string name="txtVwPopupSendClubRequestDescription">Ingresa el TAG y el ID del club para solicitar unirte:</string>
     <string name="edTxtPopupClubRequestID">ID del club:</string>
-    <string name="btnPopupSendClubRequestPaste">Pegar ID</string>
+    <string name="edTxtPopupClubRequestName">TAG del club: Ej. ABC</string>
 
     // Popup TeamMate Profile Strings
     <string name="txtVwTeamMateProfileTitle">Ver Perfil</string>

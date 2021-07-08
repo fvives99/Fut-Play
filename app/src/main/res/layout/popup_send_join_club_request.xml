@@ -84,18 +84,41 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:layout_marginBottom="20dp"
-                            android:fontFamily="@font/montserrat_regular"
+                            android:fontFamily="@font/montserrat_semibold"
                             android:text="@string/txtVwPopupSendClubRequestDescription"
                             android:textColor="@color/green"
                             android:textSize="18sp" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="328dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="5dp"
                             android:layout_marginEnd="5dp"
                             android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="bottom"
+                                app:boxStrokeWidth="0dp"
+                                app:boxStrokeWidthFocused="0dp"
+                                app:errorEnabled="true">
+
+                                <EditText
+                                    android:id="@+id/txtVwPopupJoinClubRequestTag"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="45dp"
+                                    android:autofillHints="textPersonName"
+                                    android:background="@drawable/join_request_field_bckgrnd"
+                                    android:fontFamily="@font/montserrat_semibold"
+                                    android:hint="@string/edTxtPopupClubRequestName"
+                                    android:inputType="text|textCapWords"
+                                    android:paddingStart="75dp"
+                                    android:paddingEnd="15dp"
+                                    android:textSize="20sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="wrap_content"
@@ -108,35 +131,19 @@
 
                                 <EditText
                                     android:id="@+id/txtVwPopupJoinClubRequestID"
-                                    android:layout_width="300dp"
+                                    android:layout_width="329dp"
                                     android:layout_height="45dp"
                                     android:autofillHints="textPersonName"
-                                    android:background="@drawable/nickname_field_bckgrnd"
+                                    android:background="@drawable/join_request_field_bckgrnd"
                                     android:fontFamily="@font/montserrat_semibold"
                                     android:hint="@string/edTxtPopupClubRequestID"
                                     android:inputType="text"
-                                    android:paddingStart="55dp"
+                                    android:paddingStart="75dp"
                                     android:paddingEnd="15dp"
-                                    android:textSize="22sp" />
+                                    android:textSize="20sp" />
                             </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="65dp"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="20dp">
-
-                            <Button
-                                android:id="@+id/btnPopUpRequestClubJoinPaste"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:backgroundTint="@color/green"
-                                android:gravity="center"
-                                android:text="@string/btnPopupSendClubRequestPaste" />
-                        </FrameLayout>
 
                         <FrameLayout
                             android:layout_width="wrap_content"

@@ -26,11 +26,11 @@ public class Club {
         this.matchesWon = matchesWon;
         this.matchesLost = matchesLost;
         this.matchesTied = matchesTied;
-        this.clubID = generateUniqueClubID(clubTag);
+        this.clubID = generateUniqueClubID();
     }
 
     public String setClubID(){
-        this.clubID = generateUniqueClubID(clubTag);
+        this.clubID = generateUniqueClubID();
         return this.clubID;
     }
 
@@ -71,10 +71,13 @@ public class Club {
         this.clubSize++;
     }
 
-    public String generateUniqueClubID(String clubTag){ //this function implements UUID class from JAVA that creates an UNIQUE id in this case for the clubs
+    public String generateUniqueClubID(){
         String uniqueClubID = "";
-        UUID uniqueKey = UUID.randomUUID();
-        uniqueClubID = clubTag +"-"+ uniqueKey.toString(); //The unique id consists in a string with the club's tag at the beginning and the unique uuid next
+        int random1 = (int)Math.floor(Math.random()*(9-0+1)+0);
+        int random2 = (int)Math.floor(Math.random()*(9-0+1)+0);
+        int random3 = (int)Math.floor(Math.random()*(9-0+1)+0);
+        int random4 = (int)Math.floor(Math.random()*(9-0+1)+0);
+        uniqueClubID = this.clubTag+"#"+ Integer.toString(random1) + Integer.toString(random2)  + Integer.toString(random3)  + Integer.toString(random4) ; //The unique id consists in a string with the club's name and tag, and finally 4 random digits between 0 - 9
         return uniqueClubID;
     }
 

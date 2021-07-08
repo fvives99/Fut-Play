@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.futplay.Controllers.Items.UserClubs;
 import com.example.futplay.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -74,6 +75,8 @@ public class SignUpFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
 
     private String userID;
+
+    private UserClubs userClubs;
 
     private int month = 0, day = 0, year = 0;
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -301,6 +304,7 @@ public class SignUpFragment extends Fragment {
             firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 try {
                     if (task.isSuccessful()) {
+                        userClubs = new UserClubs();
                         userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
                         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
                         Map<String, Object> user = new HashMap<>();
@@ -309,6 +313,7 @@ public class SignUpFragment extends Fragment {
                         user.put("birthDate", edTxtSignUpBirthDate.getText().toString());
                         user.put("countryCode", countryCodePickerSignUp.getFullNumber());
                         user.put("phoneNumber", edTxtSignUpPhoneNumber.getText().toString().trim());
+                        user.put("userClubs", userClubs);
                         user.put("nickname", "");
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             defaultSetUp();
