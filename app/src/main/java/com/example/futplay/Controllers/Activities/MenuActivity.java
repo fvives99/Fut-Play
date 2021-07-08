@@ -2,21 +2,37 @@ package com.example.futplay.Controllers.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.futplay.Controllers.Fragments.ClubMenuFragment;
 import com.example.futplay.Controllers.Fragments.FieldsFragment;
 import com.example.futplay.Controllers.Fragments.MatchesFragment;
 import com.example.futplay.Controllers.Fragments.ProfileFragment;
 import com.example.futplay.Controllers.Fragments.TeamsFragment;
+import com.example.futplay.Controllers.Items.UserClubs;
 import com.example.futplay.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class MenuActivity extends AppCompatActivity {
@@ -34,13 +50,19 @@ public class MenuActivity extends AppCompatActivity {
     private ImageView imgVwMenuFields;
     private ImageView imgVwMenuMatches;
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
+    private String userID;
+
     private String type = "profile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_purple));
 
         viewsMatching();
@@ -76,6 +98,8 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void viewsMatching() {
         profileFragment = new ProfileFragment();
         teamsFragment = new TeamsFragment();
@@ -102,6 +126,32 @@ public class MenuActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, profileFragment).addToBackStack(type).commit();
                 break;
             case "teams":
+                DocumentReference verifyUserRef = firebaseFirestore.collection("users").document(userID);
+                verifyUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> userTask) {
+                        if (userTask.isSuccessful()) {
+                            DocumentSnapshot userDocument = userTask.getResult();
+                            if (userDocument.exists()) {
+                                Map<String, Object> user = userDocument.getData();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(user.get("userClubs"));
+                                UserClubs temp = new Gson().fromJson(json, UserClubs.class);
+                                if(temp.getNumClubsJoined() > 0){
+                                    getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, teamsFragment).addToBackStack(type).commit();
+                                }else{
+                                    getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, clubsFragment).addToBackStack(type).commit();
+                                }
+
+                            } else {
+                                Log.d("firebase", "get failed with ", userTask.getException());
+                            }
+                        } else {
+                            Log.d("firebase", "get failed with ", userTask.getException());
+
+                        }
+                    }
+                });
                 getSupportFragmentManager().beginTransaction().add(R.id.fragContainerMenu, clubsFragment).addToBackStack(type).commit();
                 break;
             case "fields":
@@ -169,7 +219,44 @@ public class MenuActivity extends AppCompatActivity {
                 break;
             case "teams":
                 imgVwMenuTeams.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.teams_icon_colored));
-                selectedFragment = clubsFragment;
+
+                FragmentManager tempFrag = this.getSupportFragmentManager();
+                DocumentReference verifyUserRef = firebaseFirestore.collection("users").document(userID);
+
+                verifyUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> userTask) {
+                        if (userTask.isSuccessful()) {
+                            DocumentSnapshot userDocument = userTask.getResult();
+                            if (userDocument.exists()) {
+                                Map<String, Object> user = userDocument.getData();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(user.get("userClubs"));
+                                UserClubs temp = new Gson().fromJson(json, UserClubs.class);
+                                Fragment selectedFragmentTemp;
+                                if(temp.getNumClubsJoined() > 0){
+                                    selectedFragmentTemp = teamsFragment;
+                                }else{
+                                    selectedFragmentTemp = clubsFragment;
+                                }
+
+                                if (tempFrag.getBackStackEntryCount() > 0) {
+                                    if (Objects.equals(tempFrag.getBackStackEntryAt(tempFrag.getBackStackEntryCount() - 1).getName(), tag)) {
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerMenu, selectedFragmentTemp).commit();
+                                    } else {
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerMenu, selectedFragmentTemp).addToBackStack(tag).commit();
+                                    }
+                                }
+
+                            } else {
+                                Log.d("firebase", "get failed with ", userTask.getException());
+                            }
+                        } else {
+                            Log.d("firebase", "get failed with ", userTask.getException());
+
+                        }
+                    }
+                });
                 break;
             case "fields":
                 imgVwMenuFields.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.fields_icon_colored));
@@ -180,7 +267,7 @@ public class MenuActivity extends AppCompatActivity {
                 selectedFragment = matchesFragment;
                 break;
         }
-        if (this.getSupportFragmentManager().getBackStackEntryCount() > 0) {
+        if (this.getSupportFragmentManager().getBackStackEntryCount() > 0 && tag != "teams") {
             if (Objects.equals(this.getSupportFragmentManager().getBackStackEntryAt(this.getSupportFragmentManager().getBackStackEntryCount() - 1).getName(), tag)) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragContainerMenu, selectedFragment).commit();
             } else {
