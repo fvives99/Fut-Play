@@ -84,6 +84,8 @@
     <string name="txtVwTeamStreak">Racha:</string>
     <string name="txtVwTeamPlayers">Jugadores</string>
     <string name="txtVwTeamDejarEquipo">Dejar Equipo</string>
+    <string name="imgSolicitudes">Solicitudes</string>
+    <string name="imgExitTeam">ExitTeam</string>
 
     // Fields Strings
 

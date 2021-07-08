@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,9 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -538,6 +541,8 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+
+
     private void displayPopupDone(String message) {
         initPopupDone(message);
         popupDoneListeners();
@@ -824,7 +829,67 @@ public class ProfileFragment extends Fragment {
     }
 
     private void popupProfileSettingsListeners() {
+        imgVwPopupProfileSettingsSaveOnClickListener();
+        imgVwPopupProfileSettingsCloseOnClickListener();
+    }
 
+
+
+    private void imgVwPopupProfileSettingsSaveOnClickListener() {
+        imgVwPopupProfileSettingsSave.setOnClickListener(v -> {
+            popupProfileSettings.dismiss();
+        });
+        imgVwPopupProfileSettingsSave.setOnClickListener(v -> {
+            if (!invalidFields()) {
+                String name = edTxtPopupProfileSettingsFullName.getText().toString();
+                String nickName = edTxtPopupProfileSettingsNickname.getText().toString();
+                String region = edTxtPopupProfileSettingsRegion.getText().toString();
+                String position = spinnerPopupProfileInfoPosition.getSelectedItem().toString();
+                String age = edTxtPopupProfileSettingsAge.getText().toString();
+                String email = edTxtPopupProfileSettingsEmail.getText().toString();
+                String newPassword = edTxtPopupProfileSettingsNewPassword.getText().toString();
+                String confirmPassword = edTxtPopupProfileSettingsConfirmNewPassword.getText().toString();
+                String phone = edTxtPopupProfileSettingsPhoneNumber .getText().toString();
+                DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                Map<String, Object> user = new HashMap<>();
+                user.put("fullName", name);
+                user.put("nickname", nickName);
+                user.put("region", region);
+                user.put("position", position);
+                user.put("birthDate", position);
+                user.put("email", position);
+                user.put("position", position);
+                user.put("position", position);
+                user.put("position", position);
+                user.put("position", countryCodePickerPopupProfileSettings.getFullNumber());
+                updatePassword(newPassword);
+                documentReference.update(user).addOnSuccessListener(command -> {
+                    displayPopupDone("¡Perfil Completado!");
+                    completeProfileInfo();
+                });
+                popupProfileInfo.dismiss();
+            }
+        });
+    }
+
+    private void updatePassword(String pass){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.updatePassword(pass)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User password updated.");
+                        }
+                    }
+                });
+    }
+
+    private void imgVwPopupProfileSettingsCloseOnClickListener() {
+        imgVwPopupProfileSettingsClose.setOnClickListener(v -> {
+            popupProfileSettings.dismiss();
+        });
     }
 
     private void retrievePopupProfileSettingsData() {

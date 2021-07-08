@@ -183,20 +183,55 @@
 
                         </LinearLayout>
 
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
-                            <ImageView
-                                android:id="@+id/imgVwPopupTeamSettingsSave"
-                                android:layout_width="65dp"
-                                android:layout_height="65dp"
-                                android:background="@drawable/save_button_background"
-                                android:contentDescription="@string/contDesc" />
-                        </FrameLayout>
+                            <FrameLayout
+                                android:layout_width="129dp"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:id="@+id/imgExitTeam"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/exit_team_icon"
+                                    android:contentDescription="@string/contDesc"
+                                    tools:srcCompat="@drawable/exit_team_icon" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="122dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginBottom="20dp">
+
+                                <ImageView
+                                    android:id="@+id/imgVwPopupTeamSettingsSave"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/save_button_background"
+                                    android:contentDescription="@string/contDesc" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:id="@+id/img_create_team_icon"
+                                    android:layout_width="65dp"
+                                    android:layout_height="65dp"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/create_team_popup"
+                                    tools:srcCompat="@drawable/create_team_popup" />
+                            </FrameLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
                 </ScrollView>
