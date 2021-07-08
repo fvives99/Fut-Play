@@ -17,6 +17,9 @@ public class UserClubs {
     }
 
     public void addClub(String clubID){
+        if(clubsJoined == null){
+            clubsJoined = new ArrayList<>();
+        }
         this.clubsJoined.add(clubID);
         this.numClubsJoined++;
     }

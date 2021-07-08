@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.example.futplay.Controllers.Items.Club;
 import com.example.futplay.Controllers.Items.Players;
 import com.example.futplay.Controllers.Items.Requests;
+import com.example.futplay.Controllers.Items.UserClubs;
 import com.example.futplay.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,7 +38,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -373,7 +377,43 @@ public class ClubMenuFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Log.d("firebase", "DocumentSnapshot successfully written!");
-                                            progressBarCreateClub.setVisibility(View.GONE);
+                                            DocumentReference verifyUserRef = firebaseFirestore.collection("users").document(userID);
+                                            verifyUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> userTask) {
+                                                    if (userTask.isSuccessful()) {
+                                                        DocumentSnapshot userDocument = userTask.getResult();
+                                                        if (userDocument.exists()) {
+                                                            Map<String, Object> user = userDocument.getData();
+                                                            Gson gson = new Gson();
+                                                            String json = gson.toJson(user.get("userClubs"));
+                                                            UserClubs temp = new Gson().fromJson(json, UserClubs.class);
+                                                            temp.addClub(newClub.getClubID());
+                                                            user.put("userClubs",temp);
+                                                            verifyUserRef.set(user,SetOptions.merge());
+
+                                                        } else {
+                                                            Log.d("firebase", "get failed with ", task.getException());
+                                                            Toast toast = Toast.makeText(getActivity(),
+                                                                    "Se ha producido un error, intenta de nuevo más tarde!",
+                                                                    Toast.LENGTH_SHORT);
+                                                            toast.show();
+                                                            createClubClearFields();
+                                                            createClubClearErrors();
+                                                            progressBarCreateClub.setVisibility(View.GONE);
+                                                        }
+                                                    } else {
+                                                        Log.d("firebase", "get failed with ", task.getException());
+                                                        Toast toast = Toast.makeText(getActivity(),
+                                                                "Se ha producido un error, intenta de nuevo más tarde!",
+                                                                Toast.LENGTH_SHORT);
+                                                        toast.show();
+                                                        createClubClearFields();
+                                                        createClubClearErrors();
+                                                        progressBarCreateClub.setVisibility(View.GONE);
+                                                    }
+                                                }
+                                            });
                                             displayPopupDone("Club "+newClub.getClubName()+" Creado Exitósamente!!");
                                             createClubClearFields();
                                             createClubClearErrors();
@@ -415,7 +455,6 @@ public class ClubMenuFragment extends Fragment {
         if (!joinRequestInvalidFields()) {
             progressBarSendRequest.setVisibility(View.VISIBLE);
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            final Requests[] newRequest = new Requests[1];
             String clubRequestID = edTxtRequestClubTag.getText().toString().trim()+"#"+edTxtRequestClubID.getText().toString().trim();
             String requestID = clubRequestID + "-" + userID;
             DocumentReference docRef = firebaseFirestore.collection("clubs").document(clubRequestID);
@@ -428,12 +467,42 @@ public class ClubMenuFragment extends Fragment {
                             Log.d("firebase", "DocumentSnapshot data: " + document.getData());
                             Club  clubFound = document.toObject(Club.class);
                             String clubName = clubFound.getClubName();
-                            newRequest[0] = new Requests(requestID,"Pending");
-                            DocumentReference requestReference= firebaseFirestore.collection("requests").document(requestID);
-                            requestReference.set(newRequest[0]);
-                            displayPopupDone("Solicitud a "+clubName+" Enviada Exitósamente!!");
-                            progressBarSendRequest.setVisibility(View.GONE);
-                            popupSendJoinClubRequest.dismiss();
+                            DocumentReference verifyRequestRef = firebaseFirestore.collection("requests").document(requestID);
+                            verifyRequestRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> reqTask) {
+                                    if (reqTask.isSuccessful()) {
+                                        DocumentSnapshot requestDocument = reqTask.getResult();
+                                        if (requestDocument.exists()) {
+                                            Log.d("firebase", "DocumentSnapshot data: " + requestDocument.getData());
+                                            Toast toast = Toast.makeText(getActivity(),
+                                                    "Ya tienes una solicitud pendiente con "+clubName+"!",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                            sendRequestClearFields();
+                                            sendRequestClearErrors();
+                                            progressBarSendRequest.setVisibility(View.GONE);
+                                        } else {
+                                            Log.d("firebase", "No such document");
+                                            Requests newRequest = new Requests(requestID,"Pending");
+                                            DocumentReference requestReference= firebaseFirestore.collection("requests").document(requestID);
+                                            requestReference.set(newRequest);
+                                            displayPopupDone("Solicitud a "+clubName+" Enviada Exitósamente!!");
+                                            progressBarSendRequest.setVisibility(View.GONE);
+                                            popupSendJoinClubRequest.dismiss();
+                                        }
+                                    } else {
+                                        Log.d("firebase", "get failed with ", task.getException());
+                                        Toast toast = Toast.makeText(getActivity(),
+                                                "No se ha podido acceder a la base de datos, intenta de nuevo más tarde!",
+                                                Toast.LENGTH_SHORT);
+                                        toast.show();
+                                        sendRequestClearFields();
+                                        sendRequestClearErrors();
+                                        progressBarSendRequest.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
                         } else {
                             Log.d("firebase", "No such document");
                             Toast toast = Toast.makeText(getActivity(),
