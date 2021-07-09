@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,6 +43,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -72,21 +80,26 @@ public class ClubMenuFragment extends Fragment {
 
     private EditText edTxtClubName;
     private EditText edTxtClubTag;
-    private EditText edTxtClubRegion;
+    private EditText edTxtPopupProfileInfoRegion;
+
+    //Region Picker variables
+    private Dialog regionPicker;
+
+    private NumberPicker regionPickerProvinces;
+    private NumberPicker regionPickerCantons;
+    private NumberPicker regionPickerDistricts;
+
+    private ArrayList<Integer> regionChosenValues;
+
+    private TextView txtVwRegionPickerAccept;
 
     //Club Fragment view Images
     private TextView txtVwCreateClub;
     private TextView txtVwJoinClub;
 
-    //Club Fragment
-    private Spinner spinnerClubJoined;
-
     //Club PopUps
     private Dialog popUpCreateClub;
     private Dialog popupSendJoinClubRequest;
-
-    //TeamsFragment
-    private TeamsFragment teamsFragment;
 
     //PopUps Progress Bars
     private ProgressBar progressBarCreateClub;
@@ -167,20 +180,32 @@ public class ClubMenuFragment extends Fragment {
         popUpCreateClub = new Dialog(this.getContext());
         popupDone = new Dialog(this.getContext());
         popupSendJoinClubRequest = new Dialog(this.getContext());
+        regionPicker = new Dialog(this.getContext());
         txtVwCreateClub = view.findViewById(R.id.txtVwCreateClub);
         txtVwJoinClub = view.findViewById(R.id.txtVwRequestJoinClub);
     }
 
-    private void fillUpSpinnerClubsJoined() {
+    private void initRegionPicker() {
+        regionPicker.setContentView(R.layout.region_picker);
+
+        txtVwRegionPickerAccept = regionPicker.findViewById(R.id.txtVwRegionPickerAccept);
+
+        regionPickerProvinces = regionPicker.findViewById(R.id.regionPickerProvinces);
+        regionPickerCantons = regionPicker.findViewById(R.id.regionPickerCantons);
+        regionPickerDistricts = regionPicker.findViewById(R.id.regionPickerDistricts);
+
+        regionChosenValues = new ArrayList<>();
     }
+
 
     private void initPopupCreateClub() {
         popUpCreateClub.setContentView(R.layout.popup_create_club);
+        initRegionPicker();
         imgVwPopupCreateClubExit = popUpCreateClub.findViewById(R.id.imgVwPopupCreateClubCloseButton);
         imgVwPopupCreateClubSave = popUpCreateClub.findViewById(R.id.imgVwPopupCreateClubSave);
         edTxtClubName = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubName);
         edTxtClubTag = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubTag);
-        edTxtClubRegion = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubRegion);
+        edTxtPopupProfileInfoRegion = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubRegion);
         progressBarCreateClub = popUpCreateClub.findViewById(R.id.progressBarCreateClub);
         createClubListeners();
     }
@@ -201,6 +226,8 @@ public class ClubMenuFragment extends Fragment {
     }
 
     private void createClubListeners(){
+        edTxtPopupProfileInfoRegionAddTextChangedListener();
+        edTxtPopupProfileInfoRegionOnClickListener();
         imgVwPopupCreateClubSaveClickListener();
         imgVwPopupCreateClubExitClickListener();
         createClubEdTxtFieldsOnFocusChangeListeners();
@@ -278,7 +305,7 @@ public class ClubMenuFragment extends Fragment {
             edTxtClubTag.setError("Campo Obligatorio");
             invalid = true;
         }
-        if (edTxtClubRegion.getText().toString().equals("")) {
+        if (edTxtPopupProfileInfoRegion.getText().toString().equals("")) {
             edTxtClubName.setError("Campo Obligatorio");
             invalid = true;
         }
@@ -325,13 +352,13 @@ public class ClubMenuFragment extends Fragment {
     private void createClubClearFields() {
         edTxtClubName.setText("");
         edTxtClubTag.setText("");
-        edTxtClubRegion.setText("");
+        edTxtPopupProfileInfoRegion.setText("");
     }
 
     private void createClubClearErrors() {
         edTxtClubName.setError(null);
         edTxtClubTag.setError(null);
-        edTxtClubRegion.setError(null);
+        edTxtPopupProfileInfoRegion.setError(null);
     }
 
     private void sendRequestClearFields() {
@@ -351,11 +378,11 @@ public class ClubMenuFragment extends Fragment {
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
             newClub.setClubName(edTxtClubName.getText().toString().trim().replaceAll(" +", " "));
             newClub.setClubTag(edTxtClubTag.getText().toString().trim());
-            newClub.setClubRegion(edTxtClubRegion.getText().toString().trim());
+            newClub.setClubRegion(edTxtPopupProfileInfoRegion.getText().toString().trim());
             newClub.setMatchesWon(0);newClub.setMatchesLost(0);newClub.setMatchesTied(0);
-            Players newMember = new Players(userID);
-            newMember.setPrivileges("C");
-            newClub.addMember(newMember);
+            //Players newMember = new Players(userID);
+            //newMember.setPrivileges("C");
+            newClub.addMember(userID);
             clubID = newClub.setClubID();
 
             DocumentReference docRef = firebaseFirestore.collection("clubs").document(clubID);
@@ -391,6 +418,10 @@ public class ClubMenuFragment extends Fragment {
                                                             temp.addClub(newClub.getClubID());
                                                             user.put("userClubs",temp);
                                                             verifyUserRef.set(user,SetOptions.merge());
+                                                            displayPopupDone("Club "+newClub.getClubName()+" Creado Exitósamente!!");
+                                                            View profileMenuOption = getActivity().findViewById(R.id.imgVwMenuProfile);
+                                                            profileMenuOption.performClick();
+
 
                                                         } else {
                                                             Log.d("firebase", "get failed with ", task.getException());
@@ -414,7 +445,6 @@ public class ClubMenuFragment extends Fragment {
                                                     }
                                                 }
                                             });
-                                            displayPopupDone("Club "+newClub.getClubName()+" Creado Exitósamente!!");
                                             createClubClearFields();
                                             createClubClearErrors();
                                             popUpCreateClub.dismiss();
@@ -488,6 +518,8 @@ public class ClubMenuFragment extends Fragment {
                                             DocumentReference requestReference= firebaseFirestore.collection("requests").document(requestID);
                                             requestReference.set(newRequest);
                                             displayPopupDone("Solicitud a "+clubName+" Enviada Exitósamente!!");
+                                            View profileMenuOption = getActivity().findViewById(R.id.imgVwMenuProfile);
+                                            profileMenuOption.performClick();
                                             progressBarSendRequest.setVisibility(View.GONE);
                                             popupSendJoinClubRequest.dismiss();
                                         }
@@ -587,4 +619,152 @@ public class ClubMenuFragment extends Fragment {
         popup.getWindow().setAttributes(lp);
     }
 
+
+    //-------------------------------------------------RegionPicker Methods-----------------------------------------------------------------------
+
+    private void displayRegionPicker() {
+        regionPicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        regionPicker.show();
+    }
+
+    private void edTxtPopupProfileInfoRegionAddTextChangedListener() {
+        edTxtPopupProfileInfoRegion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                edTxtPopupProfileInfoRegion.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void edTxtPopupProfileInfoRegionOnClickListener() {
+        edTxtPopupProfileInfoRegion.setOnClickListener(v -> {
+            if (edTxtPopupProfileInfoRegion.getText().toString().equals("")) {
+                initRegionPicker();
+                regionPickerListeners();
+                populateAndDisplayRegionPickers();
+            } else {
+                regionPickerProvinces.setValue(regionChosenValues.get(0));
+                regionPickerCantons.setValue(regionChosenValues.get(1));
+                regionPickerDistricts.setValue(regionChosenValues.get(2));
+                displayRegionPicker();
+            }
+        });
+    }
+
+    private void regionPickerListeners() {
+        regionPickerProvincesOnValueChangedListener();
+        regionPickerCantonsOnValueChangedListener();
+        txtVwRegionPickerAcceptOnClickListener();
+    }
+
+    private void regionPickerProvincesOnValueChangedListener() {
+        regionPickerProvinces.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            picker.setOnScrollListener((regionPicker, scrollState) -> {
+                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                    String province = String.valueOf(regionPicker.getValue() + 1);
+                    String canton = String.valueOf(regionPickerCantons.getValue() + 1);
+                    String districtsList = province + "_" + canton;
+                    regionPickerProvinceChange(province, districtsList);
+                }
+            });
+            String province = String.valueOf(newVal + 1);
+            String canton = String.valueOf(regionPickerCantons.getValue() + 1);
+            String districtsList = province + "_" + canton;
+            regionPickerProvinceChange(province, districtsList);
+        });
+    }
+
+    private void regionPickerCantonsOnValueChangedListener() {
+        regionPickerCantons.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            picker.setOnScrollListener((regionPicker, scrollState) -> {
+                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                    String province = String.valueOf(regionPickerProvinces.getValue() + 1);
+                    String canton = String.valueOf(regionPicker.getValue() + 1);
+                    String districtsList = province + "_" + canton;
+                    regionPickerCantonChange(districtsList);
+                }
+            });
+            String province = String.valueOf(regionPickerProvinces.getValue() + 1);
+            String canton = String.valueOf(newVal + 1);
+            String districtsList = province + "_" + canton;
+            regionPickerCantonChange(districtsList);
+        });
+    }
+
+    private void regionPickerProvinceChange(String province, String districtsList) {
+        DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            populateRegionPicker((String) documentSnapshot.get(province), province, regionPickerCantons);
+            populateRegionPicker((String) documentSnapshot.get(districtsList), districtsList, regionPickerDistricts);
+        });
+    }
+
+    private void regionPickerCantonChange(String districtsList) {
+        DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
+        documentReference.get().addOnSuccessListener(documentSnapshot ->
+                populateRegionPicker((String) documentSnapshot.get(districtsList), districtsList, regionPickerDistricts));
+    }
+
+    private void txtVwRegionPickerAcceptOnClickListener() {
+        txtVwRegionPickerAccept.setOnClickListener(v1 -> {
+            String region = regionPickerProvinces.getDisplayedValues()[regionPickerProvinces.getValue()] + "/"
+                    + regionPickerCantons.getDisplayedValues()[regionPickerCantons.getValue()] + "/"
+                    + regionPickerDistricts.getDisplayedValues()[regionPickerDistricts.getValue()];
+            edTxtPopupProfileInfoRegion.setText(region);
+            fillUpRegionChosenValues();
+            regionPicker.dismiss();
+        });
+    }
+
+    private void fillUpRegionChosenValues() {
+        regionChosenValues.clear();
+        regionChosenValues.add(regionPickerProvinces.getValue());
+        regionChosenValues.add(regionPickerCantons.getValue());
+        regionChosenValues.add(regionPickerDistricts.getValue());
+    }
+
+    private void populateRegionPicker(String json, String arrayName, NumberPicker picker) {
+        try {
+            if (json != null) {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray jsonArray = jsonObject.getJSONArray(arrayName);
+                String[] values = new String[jsonArray.length()];
+                for (int i = 0; i < values.length; i++) {
+                    values[i] = jsonArray.getString(i);
+                }
+                picker.setValue(0);
+                picker.setDisplayedValues(null);
+                picker.setMinValue(0);
+                picker.setMaxValue(values.length - 1);
+                picker.setDisplayedValues(values);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateAndDisplayRegionPickers() {
+        DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                populateRegionPicker((String) documentSnapshot.get("0"), "0", regionPickerProvinces);
+                populateRegionPicker((String) documentSnapshot.get("1"), "1", regionPickerCantons);
+                populateRegionPicker((String) documentSnapshot.get("1_1"), "1_1", regionPickerDistricts);
+            }
+            displayRegionPicker();
+        });
+    }
+
 }
+
+

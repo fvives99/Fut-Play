@@ -29,26 +29,35 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.Controllers.Adapters.PlayersAdapter;
+import com.example.futplay.Controllers.Items.Players;
 import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.Controllers.Items.Club;
+import com.example.futplay.Controllers.Items.UserClubs;
 import com.example.futplay.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -56,6 +65,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -79,6 +90,10 @@ public class TeamsFragment extends Fragment {
     private String mParam2;
 
     private View view;
+
+    private final int MAX_CLUB_MEMBERS = 5;
+    private final int MAX_CLUBS_JOINED = 3;
+
 
     private ImageView imgVwTeamProfileImg;
     private ImageView imgVwTeamSettings;
@@ -127,7 +142,7 @@ public class TeamsFragment extends Fragment {
 
     private ImageView imgVwPopupTeamMateProfileExit;
     private ImageView imgVwPopupTeamMateProfileDoAdmin;
-    private ImageView imgVwPopupTeamMateProfileBack;
+
 
     private TextView txtVwPopupTeamMateNickname;
     private TextView txtVwPopupTeamMateRegion;
@@ -137,6 +152,8 @@ public class TeamsFragment extends Fragment {
     private TextView txtVwPopupTeamMateMVPNumber;
     private TextView txtVwPopupTeamMateFutPlayPlayerNumber;
 
+    //Select Club Spinner
+    private Spinner spinnerClubJoined;
 
 
     public static Bitmap teamProfileImage = null;
@@ -179,8 +196,8 @@ public class TeamsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_teams, container, false);
 
         // Additional Settings
-        fillPlayersList();
         viewsMatching(view);
+        fillUpDataWithFirstClub();
         hideViews();
         retrieveData();
         permissions();
@@ -205,8 +222,6 @@ public class TeamsFragment extends Fragment {
                     PlayersItem selected = playersList.get(position);
                     displayPopupTeamMateProfile(selected.getUID());
                     recycVwTeamPlayersAdapter.notifyItemChanged(position);
-                    //View profileMenuOption = getActivity().findViewById(R.id.imgVwMenuProfile);
-                    //profileMenuOption.performClick();
                     break;
                 case ItemTouchHelper.RIGHT:
                     AlertDialog.Builder deletePlyr = new AlertDialog.Builder(getContext());
@@ -215,8 +230,10 @@ public class TeamsFragment extends Fragment {
                     deletePlyr.setPositiveButton("Sí", (dialog, which) -> {
                         playersList.remove(position);
                         recycVwTeamPlayersAdapter.notifyItemRemoved(position);
+                        removePlayerFromClub(playersList.get(position).getCID(),playersList.get(position).getUID());
                         Snackbar.make(recycVwTeamPlayers, "Jugador Eliminado", Snackbar.LENGTH_LONG).setAction("Deshacer", view -> {
                             view.setEnabled(false);
+                            addPlayerToClub(playersList.get(position).getCID(),playersList.get(position).getUID());
                             playersList.add(position, deletedPlayer);
                             recycVwTeamPlayersAdapter.notifyItemInserted(position);
                         }).show();
@@ -248,10 +265,257 @@ public class TeamsFragment extends Fragment {
         }
     };
 
-    private void fillPlayersList() {
-        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Ronald Esquivel","HE9Xhb6R2dPZid0YDMQFWt0dfA32"));
-        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Fabian Vives","S6LaJOrL8TRae7KDYz8En511wJY2"));
-        playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Ricardo Murilo", "p7gRJCKhqyWDHzexfKAuf9EkFsO2"));
+    private void addPlayerToClub(String ClubID, String UserID){
+        DocumentReference verifyUserClub = firebaseFirestore.collection("clubs").document(ClubID);
+        verifyUserClub.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> userClubTask) {
+                if (userClubTask.isSuccessful()) {
+                    DocumentSnapshot userClubDoc = userClubTask.getResult();
+                    if (userClubDoc.exists()) {
+                        DocumentReference verifyUserClubMember = firebaseFirestore.collection("users").document(UserID);
+                        verifyUserClubMember.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> userClubMemberTask) {
+                                if (userClubMemberTask.isSuccessful()) {
+                                    DocumentSnapshot userClubMemberDoc = userClubMemberTask.getResult();
+                                    if (userClubMemberDoc.exists()) {
+                                        Map<String, Object> clubList = userClubDoc.getData();
+                                        long clubMembersNum = (long) clubList.get("clubSize");
+                                        if(clubMembersNum <= MAX_CLUB_MEMBERS){
+                                            Map<String, Object> userClubList = userClubMemberDoc.getData();
+                                            Gson gson = new Gson();
+                                            String json = gson.toJson(userClubList.get("userClubs"));
+                                            UserClubs userClubsJoined = new Gson().fromJson(json, UserClubs.class);
+                                            if(userClubsJoined.getNumClubsJoined() <= MAX_CLUBS_JOINED){
+                                                userClubsJoined.addClub(ClubID);
+                                                userClubList.put("userClubs",userClubsJoined);
+                                                verifyUserClubMember.set(userClubList,SetOptions.merge());
+                                                String clubJson = gson.toJson(clubList.get("clubMembersList"));
+                                                ArrayList<String> clubPlayers = new Gson().fromJson(clubJson, ArrayList.class);
+                                                clubPlayers.add(UserID);
+                                                clubMembersNum++;
+                                                clubList.put("clubMembersList",clubPlayers);
+                                                clubList.put("clubSize",clubMembersNum);
+                                                verifyUserClub.set(clubList,SetOptions.merge());
+                                            }else{
+                                                Log.d("MAX CLUBS JOINED", "get failed with ", userClubMemberTask.getException());
+                                                Toast toast = Toast.makeText(getActivity(),
+                                                        "Este usuario ya está unido al máximo de clubes posibles, dile que se salga de alguno!",
+                                                        Toast.LENGTH_LONG);
+                                                toast.show();
+                                            }
+                                        }else{
+                                            Log.d("MAX CLUB MEMBER", "get failed with ", userClubMemberTask.getException());
+                                            Toast toast = Toast.makeText(getActivity(),
+                                                    "Este club está al máximo de su capacidad!",
+                                                    Toast.LENGTH_LONG);
+                                            toast.show();
+                                        }
+
+                                        //UserClubs temp = new Gson().fromJson(json, UserClubs.class);
+                                    } else {
+                                        Log.d("firebase", "get failed with ", userClubMemberTask.getException());
+                                        Toast toast = Toast.makeText(getActivity(),
+                                                "Algunos de los miembros del club no se han encontrado en la base de datos",
+                                                Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
+                                } else {
+                                    Log.d("firebase", "get failed with ", userClubMemberTask.getException());
+                                    Toast toast = Toast.makeText(getActivity(),
+                                            "Se ha producido un error, intenta de nuevo más tarde!",
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+                        });
+                    } else {
+                        Log.d("firebase", "get failed with ", userClubTask.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Tenemos problemas con encontrar el club en nuestra base de datos, intentalo más tarde!",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Log.d("firebase", "get failed with ", userClubTask.getException());
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha producido un error, intenta de nuevo más tarde!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+    }
+
+    private void removePlayerFromClub(String ClubID, String UserID){
+        DocumentReference verifyUserClub = firebaseFirestore.collection("clubs").document(ClubID);
+        verifyUserClub.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> userClubTask) {
+                if (userClubTask.isSuccessful()) {
+                    DocumentSnapshot userClubDoc = userClubTask.getResult();
+                    if (userClubDoc.exists()) {
+                        DocumentReference verifyUserClubMember = firebaseFirestore.collection("users").document(UserID);
+                        verifyUserClubMember.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> userClubMemberTask) {
+                                if (userClubMemberTask.isSuccessful()) {
+                                    DocumentSnapshot userClubMemberDoc = userClubMemberTask.getResult();
+                                    if (userClubMemberDoc.exists()) {
+                                        Map<String, Object> clubList = userClubDoc.getData();
+                                        long clubMembersNum = (long) clubList.get("clubSize");
+
+                                        Map<String, Object> userClubList = userClubMemberDoc.getData();
+                                        Gson gson = new Gson();
+                                        String json = gson.toJson(userClubList.get("userClubs"));
+                                        UserClubs userClubsJoined = new Gson().fromJson(json, UserClubs.class);
+                                        userClubsJoined.leaveClub(ClubID);
+                                        userClubList.put("userClubs",userClubsJoined);
+                                        verifyUserClubMember.set(userClubList,SetOptions.merge());
+                                        String clubJson = gson.toJson(clubList.get("clubMembersList"));
+                                        ArrayList<String> clubPlayers = new Gson().fromJson(clubJson, ArrayList.class);
+                                        for(int i = 0; i < clubPlayers.size(); i++){
+                                            if(clubPlayers.get(i).equals(UserID)){
+                                                clubPlayers.remove(i);
+                                                clubMembersNum--;
+                                            }
+                                        }
+                                        clubList.put("clubMembersList",clubPlayers);
+                                        clubList.put("clubSize",clubMembersNum);
+                                        verifyUserClub.set(clubList,SetOptions.merge());
+
+                                        //UserClubs temp = new Gson().fromJson(json, UserClubs.class);
+                                    } else {
+                                        Log.d("firebase", "get failed with ", userClubMemberTask.getException());
+                                        Toast toast = Toast.makeText(getActivity(),
+                                                "Algunos de los miembros del club no se han encontrado en la base de datos",
+                                                Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
+                                } else {
+                                    Log.d("firebase", "get failed with ", userClubMemberTask.getException());
+                                    Toast toast = Toast.makeText(getActivity(),
+                                            "Se ha producido un error, intenta de nuevo más tarde!",
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+                        });
+                    } else {
+                        Log.d("firebase", "get failed with ", userClubTask.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Tenemos problemas con encontrar el club en nuestra base de datos, intentalo más tarde!",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Log.d("firebase", "get failed with ", userClubTask.getException());
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha producido un error, intenta de nuevo más tarde!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+    }
+
+
+    private void fillUpDataWithFirstClub() {
+
+        DocumentReference verifyUserRef = firebaseFirestore.collection("users").document(userID);
+        verifyUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> userTask) {
+                if (userTask.isSuccessful()) {
+                    DocumentSnapshot userDocument = userTask.getResult();
+                    if (userDocument.exists()) {
+                        Map<String, Object> user = userDocument.getData();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(user.get("userClubs"));
+                        UserClubs temp = new Gson().fromJson(json, UserClubs.class);
+                        ArrayList<String> clubsFound = temp.getClubsJoined();
+                        String firstShowedClubID  = clubsFound.get(0);
+                        DocumentReference verifyUserClub = firebaseFirestore.collection("clubs").document(firstShowedClubID);
+                        verifyUserClub.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> userClubTask) {
+                                if (userClubTask.isSuccessful()) {
+                                    DocumentSnapshot userClubDoc = userClubTask.getResult();
+                                    if (userClubDoc.exists()) {
+                                        Club userClub = userClubDoc.toObject(Club.class);
+                                        txtVwTeamName.setText(userClub.getClubName());
+                                        txtVwTeamRegion.setText(userClub.getClubRegion());
+                                        txtVwTeamCode.setText(userClub.getClubID());
+                                        Map<String, Object> userList = userClubDoc.getData();
+                                        Gson gson = new Gson();
+                                        String json = gson.toJson(userList.get("clubMembersList"));
+                                        ArrayList<String> clubPlayers = new Gson().fromJson(json, ArrayList.class);
+                                        for(int j = 0; j < clubPlayers.size() ; j++){
+                                            String clubUserID = clubPlayers.get(j);
+                                            if(!clubUserID.equals(userID)){
+                                                DocumentReference verifyUserClubMember = firebaseFirestore.collection("users").document(clubUserID);
+                                                verifyUserClubMember.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> userClubMemberTask) {
+                                                        if (userClubMemberTask.isSuccessful()) {
+                                                            DocumentSnapshot userClubMemberDoc = userClubMemberTask.getResult();
+                                                            if (userClubMemberDoc.exists()) {
+                                                                Map<String, Object> userMember = userClubMemberDoc.getData();
+                                                                String userName = userMember.get("fullName").toString();
+                                                                playersList.add(new PlayersItem(R.drawable.profile_image_icon, userName,clubUserID,firstShowedClubID));
+                                                            } else {
+                                                                Log.d("firebase", "get failed with ", userClubMemberTask.getException());
+                                                                Toast toast = Toast.makeText(getActivity(),
+                                                                        "Algunos de los miembros del club no se han encontrado en la base de datos",
+                                                                        Toast.LENGTH_SHORT);
+                                                                toast.show();
+                                                            }
+                                                        } else {
+                                                            Log.d("firebase", "get failed with ", userClubMemberTask.getException());
+                                                            Toast toast = Toast.makeText(getActivity(),
+                                                                    "Se ha producido un error, intenta de nuevo más tarde!",
+                                                                    Toast.LENGTH_SHORT);
+                                                            toast.show();
+                                                        }
+                                                    }
+                                                });
+
+                                            }
+                                        }
+
+                                    } else {
+                                        Log.d("firebase", "get failed with ", userClubTask.getException());
+                                        Toast toast = Toast.makeText(getActivity(),
+                                                "Se ha producido un error a la hora de entrar a los clubs de la base de datos, intenta de nuevo más tarde!",
+                                                Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
+                                } else {
+                                    Log.d("firebase", "get failed with ", userClubTask.getException());
+                                    Toast toast = Toast.makeText(getActivity(),
+                                            "Se ha producido un error, intenta de nuevo más tarde!",
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+                        });
+                    } else {
+                        Log.d("firebase", "get failed with ", userTask.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Se ha producido un error cargando los datos de los clubes , intenta de nuevo más tarde!",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Log.d("firebase", "get failed with ", userTask.getException());
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha producido un error, intenta de nuevo más tarde!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
     }
     private void completeProfileInfo(String UID) {
         DocumentReference documentReference = firebaseFirestore.collection("users").document(UID);

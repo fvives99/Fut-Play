@@ -13,7 +13,7 @@ public class Club {
     private int matchesLost;
     private int matchesTied;
     private int clubSize;
-    private ArrayList<Players> clubMembers;
+    private ArrayList<String> clubMembers;
 
     public Club() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -34,11 +34,11 @@ public class Club {
         return this.clubID;
     }
 
-    public List<Players> getClubMembersList() {
+    public ArrayList<String> getClubMembersList() {
         return clubMembers;
     }
 
-    public Players getClubMember(String userID){
+    /*public Players getClubMember(String userID){
         Players memberSearched = null;
         int i = clubMembers.size() - 1;
         while(i >= 0){
@@ -48,9 +48,9 @@ public class Club {
             i--;
         }
         return memberSearched;
-    }
+    }*/
 
-    public boolean removeClubMember(String userID){
+    /*public boolean removeClubMember(String userID){
         boolean isRemoved = false;
         int i = clubMembers.size() - 1;
         while(i >= 0){
@@ -61,9 +61,9 @@ public class Club {
             i--;
         }
         return isRemoved;
-    }
+    }*/
 
-    public void addMember(Players newMember) {
+    public void addMember(String newMember) {
         if(this.clubMembers == null){
             clubMembers = new ArrayList<>();
         }

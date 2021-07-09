@@ -69,6 +69,12 @@
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="344dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/join_request_club_button_round_style" />
+
                     <TextView
                         android:id="@+id/txtVwTeamName"
                         android:layout_width="match_parent"

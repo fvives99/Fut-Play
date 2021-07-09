@@ -165,7 +165,9 @@
                                     android:inputType="textPersonName"
                                     android:paddingStart="55dp"
                                     android:paddingEnd="15dp"
-                                    android:textSize="22sp" />
+                                    android:textSize="22sp"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
