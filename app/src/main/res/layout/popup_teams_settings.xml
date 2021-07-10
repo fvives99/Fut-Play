@@ -193,7 +193,7 @@
                                 android:layout_height="match_parent">
 
                                 <ImageView
-                                    android:id="@+id/imgExitTeam"
+                                    android:id="@+id/imgVwPopupExitTeam"
                                     android:layout_width="65dp"
                                     android:layout_height="65dp"
                                     android:layout_gravity="center"
@@ -223,7 +223,7 @@
                                 android:layout_height="match_parent">
 
                                 <ImageView
-                                    android:id="@+id/img_create_team_icon"
+                                    android:id="@+id/imgVwPopupCreateTeam"
                                     android:layout_width="65dp"
                                     android:layout_height="65dp"
                                     android:layout_gravity="center"

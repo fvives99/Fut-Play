@@ -72,6 +72,10 @@
     <string name="txtVwRegionPickerDistrict">Distrito</string>
     <string name="txtVwRegionPickerAccept">Aceptar</string>
 
+    // Popup Team Solicitudes Strings
+    <string name="txtVwPopupTeamSolicitudesTitle">Solicitudes</string>
+    <string name="txtVwPopupTeamAceptarDenegar">Acepte o rechaze solicitudes para unirse al equipo:</string>
+
     // Crop Strings
     <string name="txtVwCropImageCrop">Recortar</string>
 

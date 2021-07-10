@@ -3,6 +3,7 @@ package com.example.futplay.Controllers.Fragments;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,16 +29,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +45,12 @@ import com.example.futplay.Controllers.Activities.CropImageActivity;
 import com.example.futplay.Controllers.Adapters.PlayersAdapter;
 import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -90,7 +92,7 @@ public class TeamsFragment extends Fragment {
 
     private View view;
 
-
+    //Team Profile
     private ImageView imgVwTeamProfileImg;
     private ImageView imgVwTeamSettings;
 
@@ -115,6 +117,7 @@ public class TeamsFragment extends Fragment {
 
     private ProgressBar progressBarTeam;
 
+    //Firebase
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
@@ -124,6 +127,7 @@ public class TeamsFragment extends Fragment {
 
     public static Bitmap teamProfileImage = null;
 
+    //Dialogs
     private Dialog popupTeamSettings;
     private Dialog regionPicker;
 
@@ -139,13 +143,24 @@ public class TeamsFragment extends Fragment {
     private EditText edTxtPopupTeamSettingsAbbreviation;
     private EditText edTxtPopupTeamSettingsRegion;
 
+    private ProgressBar progressBarPopupTeamSettings;
+
     private String teamID;
     private EditText txtTeamID;
 
     private ImageView imgVwPopupTeamSettingsSave;
     private ImageView imgVwPopupTeamSettingsClose;
+    private ImageView imgVwPopupExitTeam;
+    private ImageView imgVwPopupCreateTeam;
 
-    private ProgressBar progressBarPopupTeamSettings;
+    //PopUp Team Solicitudes
+    private Dialog popupTeamSolicitudes;
+
+    private ImageView imgVwTeamSolicitudes;
+
+    private ImageView imgVwPopupTeamSolicitudesClose;
+
+
 
     public TeamsFragment() {
         // Required empty public constructor
@@ -262,10 +277,11 @@ public class TeamsFragment extends Fragment {
         //popupTeamInfo = new Dialog(this.getContext());
         popupTeamSettings = new Dialog(this.getContext());
         regionPicker = new Dialog(this.getContext());
-        //  popupDone = new Dialog(this.getContext());
+        popupTeamSolicitudes = new Dialog(this.getContext());
 
         imgVwTeamProfileImg = view.findViewById(R.id.imgVwTeamProfileImg);
         imgVwTeamSettings = view.findViewById(R.id.imgVwTeamSettings);
+        imgVwTeamSolicitudes = view.findViewById(R.id.imgVwTeamSolicitudes);
         imgVwStreak1 = view.findViewById(R.id.imgVwStreak1);
         imgVwStreak2 = view.findViewById(R.id.imgVwStreak2);
         imgVwStreak3 = view.findViewById(R.id.imgVwStreak3);
@@ -398,6 +414,7 @@ public class TeamsFragment extends Fragment {
     private void listeners() {
         imgVwProfileImgOnClickListener();
         imgVwTeamSettingsOnClickListener();
+        imgVwPopupTeamSolicitudesOnClickListener();
     }
 
     private void imgVwProfileImgOnClickListener() {
@@ -552,6 +569,9 @@ public class TeamsFragment extends Fragment {
         imgVwPopupTeamSettingsSave = popupTeamSettings.findViewById(R.id.imgVwPopupTeamSettingsSave);
         imgVwPopupTeamSettingsClose = popupTeamSettings.findViewById(R.id.imgVwPopupTeamSettingsClose);
 
+        imgVwPopupExitTeam = popupTeamSettings.findViewById(R.id.imgVwPopupExitTeam);
+        imgVwPopupCreateTeam= popupTeamSettings.findViewById(R.id.imgVwPopupCreateTeam);
+
         progressBarPopupTeamSettings = popupTeamSettings.findViewById(R.id.progressBarPopupTeamSettings);
     }
 
@@ -559,6 +579,8 @@ public class TeamsFragment extends Fragment {
         imgVwPopupTeamSettingsSaveOnClickListener();
         imgVwPopupTeamSettingsCloseOnClickListener();
         edTxtPopupTeamSettingsRegionOnClickListener();
+        imgVwPopupExitTeamOnClickListener();
+        imgVwPopupCreateTeamOnClickListener();
     }
 
     /*
@@ -681,6 +703,9 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         });
     }
 
+    /*
+
+     */
     private void hidePopupTeamSettingsViews() {
         edTxtPopupTeamSettingsFullName.setVisibility(View.GONE);
         edTxtPopupTeamSettingsAbbreviation.setVisibility(View.GONE);
@@ -697,12 +722,13 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         imgVwPopupTeamSettingsSave.setVisibility(View.VISIBLE);
     }
 
-
-    /*
-    Región Picker
+        /*
+    -----------------------------------------------------------------------------------------------------
      */
 
-
+    /*
+    +++++++++++++++++++++++++++++++++++++++++Region Picker+++++++++++++++++++++++++++++++
+     */
 
     private void initRegionPicker() {
         regionPicker.setContentView(R.layout.region_picker);
@@ -769,6 +795,7 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         DocumentReference documentReference = firebaseFirestore.collection("countries_addresses").document("cri_addresses");
         documentReference.get().addOnSuccessListener(documentSnapshot ->
                 populateRegionPicker((String) documentSnapshot.get(districtsList), districtsList, regionPickerDistricts));
+
     }
 
     private void txtVwRegionPickerAcceptOnClickListener() {
@@ -862,5 +889,145 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
             }
         });
     }
+
+    /*
+    -----------------------------------------------------------------------------------------------------
+     */
+
+    /*
+    +++++++++++++++++++++++++++++++++++++++++Popup Solicitudes Team+++++++++++++++++++++++++++++++
+     */
+
+    private void imgVwPopupTeamSolicitudesOnClickListener() {
+        System.out.println("Listener de icon mail");
+        imgVwTeamSolicitudes.setOnClickListener(v -> {
+            displayPopupTeamSolicitudes();
+        });
+    }
+
+    private void displayPopupTeamSolicitudes() {
+        //DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        //System.out.println(documentReference.toString());
+        //documentReference.get().addOnSuccessListener(documentSnapshot -> {
+        initPopupTeamSolicitudes();
+        popupTeamSolicitudesListeners();
+        setupPopupLayoutParams(popupTeamSolicitudes);
+        //hidePopupTeamSettingsViews();
+        //retrieveCurrentTeamIDPopUp();
+        popupTeamSolicitudes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupTeamSolicitudes.show();
+        //imgVwPopupTeamSettingsSave.bringToFront();
+        //});
+    }
+
+
+    private void initPopupTeamSolicitudes() {
+        System.out.println("Entré al init Solis");
+        popupTeamSolicitudes.setContentView(R.layout.popup_requests);
+
+        imgVwPopupTeamSolicitudesClose = popupTeamSolicitudes.findViewById(R.id.imgVwPopupTeamSolicitudesClose);
+
+    }
+
+    private void popupTeamSolicitudesListeners() {
+        System.out.println("Entré al Solis listeners");
+        imgVwPopupTeamSolicitudesCloseOnClickListener();
+    }
+
+    private void imgVwPopupTeamSolicitudesCloseOnClickListener() {
+        System.out.println("Listener CLose");
+        System.out.println(imgVwPopupTeamSolicitudesClose);
+        imgVwPopupTeamSolicitudesClose.setOnClickListener(v -> {
+            popupTeamSolicitudes.dismiss();
+        });
+    }
+
+    /*
+    -----------------------------------------------------------------------------------------------------
+     */
+
+    /*
+    +++++++++++++++++++++++++++++++++++++++++Salir del Team+++++++++++++++++++++++++++++++
+     */
+
+    private void imgVwPopupExitTeamOnClickListener(){
+        System.out.println("Exit team pressed");
+        imgVwPopupExitTeam.setOnClickListener(v -> {
+            //popupTeamSolicitudes.dismiss();
+            onBackPressed();
+        });
+    }
+
+
+    public void onBackPressed() {
+        new AlertDialog.Builder(this.requireContext())
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit Team")
+                .setMessage("Está seguro que desea salir del equipo?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.out.println("vas a salir del team");
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    /*
+    -----------------------------------------------------------------------------------------------------
+     */
+
+    /*
+    +++++++++++++++++++++++++++++++++++++++++Crear Team+++++++++++++++++++++++++++++++
+     */
+
+    private void imgVwPopupCreateTeamOnClickListener() {
+        imgVwPopupCreateTeam.setOnClickListener(v -> {
+            //popupTeamSettings.dismiss();
+            System.out.println("Haz dado click en el boton de crear Team");
+            retrieveTeamIDNew();
+        });
+    }
+
+    /*
+    -----------------------------------------------------------------------------------------------------
+     */
+
+    /*
+    +++++++++++++++++++++++++++++++++++++++++Prueba Get Team New+++++++++++++++++++++++++++++++
+     */
+
+    /*private void pruebTakeTeams(){
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot ->
+                //Map<List, Object> teams = new HashMap<>();
+                Map<List, Object> teams = (Map<List, Object>)documentSnapshot.get("userClubs");
+    }*/
+
+    /*
+
+     */
+
+    private void retrieveTeamIDNew(){//agarro los valores dentro de la lista dentro del map
+        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+        CollectionReference applicationsRef = rootRef.collection("users");
+        DocumentReference applicationIdRef = applicationsRef.document(userID);
+        applicationIdRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Map<String, Object> users = (Map<String, Object>) document.get("userClubs");
+                    System.out.println(users.get("clubsJoined"));
+                }
+            }
+        });
+    }
+
+
+
+
 
 }
