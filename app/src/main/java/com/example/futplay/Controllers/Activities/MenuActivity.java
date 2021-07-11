@@ -156,7 +156,7 @@ public class MenuActivity extends AppCompatActivity {
         imgVwMenuMatches.setOnClickListener(view -> selectToolbarOption("matches"));
     }
 
-    private void selectToolbarOption(String tag) {
+    public void selectToolbarOption(String tag) {
         Fragment selectedFragment = new Fragment();
         clearToolbarSelection();
         switch (tag) {

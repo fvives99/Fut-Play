@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.futplay.Controllers.Activities.CropImageActivity;
+import com.example.futplay.Controllers.Activities.MenuActivity;
 import com.example.futplay.Controllers.Adapters.PlayersAdapter;
 import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.R;
@@ -117,6 +119,8 @@ public class TeamsFragment extends Fragment {
 
     private ProgressBar progressBarTeam;
 
+    private ArrayList<String> listaEquipos;
+
     //Firebase
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
@@ -130,7 +134,9 @@ public class TeamsFragment extends Fragment {
     //Dialogs
     private Dialog popupTeamSettings;
     private Dialog regionPicker;
+    private Dialog popupTeamSolicitudes;
 
+    //Región picker
     private TextView txtVwRegionPickerAccept;
 
     private NumberPicker regionPickerProvinces;
@@ -139,14 +145,12 @@ public class TeamsFragment extends Fragment {
 
     private ArrayList<Integer> regionChosenValues;
 
+    //Popup Team Settings
     private EditText edTxtPopupTeamSettingsFullName;
     private EditText edTxtPopupTeamSettingsAbbreviation;
     private EditText edTxtPopupTeamSettingsRegion;
 
     private ProgressBar progressBarPopupTeamSettings;
-
-    private String teamID;
-    private EditText txtTeamID;
 
     private ImageView imgVwPopupTeamSettingsSave;
     private ImageView imgVwPopupTeamSettingsClose;
@@ -154,10 +158,8 @@ public class TeamsFragment extends Fragment {
     private ImageView imgVwPopupCreateTeam;
 
     //PopUp Team Solicitudes
-    private Dialog popupTeamSolicitudes;
 
     private ImageView imgVwTeamSolicitudes;
-
     private ImageView imgVwPopupTeamSolicitudesClose;
 
 
@@ -502,20 +504,6 @@ public class TeamsFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(imgVwTeamProfileImg)))
                 .addOnFailureListener(e -> Toast.makeText(requireContext(), "Error al actualizar\nla foto de perfil", Toast.LENGTH_SHORT).show());
     }
-
-    /*
-    private void completeTeamInfo() {
-        //getTeamID();
-        DocumentReference documentReference = firebaseFirestore.collection("teams").document("O6GNayOlR6zMBRiinjbF");
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            String teamName = (String) Objects.requireNonNull(documentSnapshot.get("clubName"));
-            String teamAbb = (String) Objects.requireNonNull(documentSnapshot.get("clubTag"));
-            String teamRegion = ((String) Objects.requireNonNull(documentSnapshot.get("clubRegion"))).split("/")[0];
-            txtVwTeamName.setText(teamName);
-            txtVwTeamCode.setText(teamAbb);
-            txtVwTeamRegion.setText(teamRegion);
-        });
-    }*/
 
 
 /*
@@ -988,8 +976,24 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         imgVwPopupCreateTeam.setOnClickListener(v -> {
             //popupTeamSettings.dismiss();
             System.out.println("Haz dado click en el boton de crear Team");
-            retrieveTeamIDNew();
+            popupTeamSettings.dismiss();
+            createOrJoinClub();
+            //this.getParentFragmentManager().popBackStackImmediate();
         });
+    }
+
+    private void createOrJoinClub(){
+        System.out.println("Descomentar Código para agregar el fragment correcto");
+       /*
+        Fragment nuevoFragmento = new TeamsFragment();
+        FragmentTransaction transaction =
+                this.getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragContainerMenu, nuevoFragmento);
+        transaction.addToBackStack(null);
+
+        // Commit a la transacción
+        transaction.commit();
+        */
     }
 
     /*
@@ -1000,14 +1004,9 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     +++++++++++++++++++++++++++++++++++++++++Prueba Get Team New+++++++++++++++++++++++++++++++
      */
 
-    /*private void pruebTakeTeams(){
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.get().addOnSuccessListener(documentSnapshot ->
-                //Map<List, Object> teams = new HashMap<>();
-                Map<List, Object> teams = (Map<List, Object>)documentSnapshot.get("userClubs");
-    }*/
-
     /*
+    cuando se crea fragment, llamar función que obtiene el ID 0, y lo envía a
+    función  que reciba un ID, y crea el view team basado en ese ID
 
      */
 
@@ -1025,9 +1024,5 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
             }
         });
     }
-
-
-
-
 
 }
