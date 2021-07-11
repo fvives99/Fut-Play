@@ -69,6 +69,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -206,7 +207,8 @@ public class TeamsFragment extends Fragment {
         viewsMatching(view);
         hideViews();
         retrieveData();
-        retrieveCurrentTeamIDFragment();
+        //retrieveCurrentTeamIDFragment();
+        getChosenClubID(0);
         permissions();
         listeners();
         recycVwTeamPlayersConfig();
@@ -584,6 +586,24 @@ public class TeamsFragment extends Fragment {
         });
     }
 
+    private void getChosenClubID(int index ){//El número que recibe es el Indice de la lista de equipos
+        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+        CollectionReference applicationsRef = rootRef.collection("users");
+        DocumentReference applicationIdRef = applicationsRef.document(userID);
+
+        applicationIdRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Map<String, Object> users = (Map<String, Object>) document.get("userClubs");
+                    listaEquipos = (ArrayList<String>) users.get("clubsJoined");
+                    retrieveTeamData(listaEquipos.get(index));
+                    //return listaEquipos.get(index));
+                }
+            }
+        });
+    }
+
     /*
     Con el ID del TEAM, relleno la info del fragment con información del equipo actual
      */
@@ -702,6 +722,9 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         imgVwPopupTeamSettingsSave.setVisibility(View.GONE);
     }
 
+    /*
+
+     */
     private void showPopupTeamSettingsViews() {
         edTxtPopupTeamSettingsFullName.setVisibility(View.VISIBLE);
         edTxtPopupTeamSettingsAbbreviation.setVisibility(View.VISIBLE);
@@ -942,7 +965,8 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         System.out.println("Exit team pressed");
         imgVwPopupExitTeam.setOnClickListener(v -> {
             //popupTeamSolicitudes.dismiss();
-            onBackPressed();
+            getChosenClubID(1);
+            //onBackPressed();
         });
     }
 
@@ -1004,25 +1028,6 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     +++++++++++++++++++++++++++++++++++++++++Prueba Get Team New+++++++++++++++++++++++++++++++
      */
 
-    /*
-    cuando se crea fragment, llamar función que obtiene el ID 0, y lo envía a
-    función  que reciba un ID, y crea el view team basado en ese ID
 
-     */
-
-    private void retrieveTeamIDNew(){//agarro los valores dentro de la lista dentro del map
-        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-        CollectionReference applicationsRef = rootRef.collection("users");
-        DocumentReference applicationIdRef = applicationsRef.document(userID);
-        applicationIdRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    Map<String, Object> users = (Map<String, Object>) document.get("userClubs");
-                    System.out.println(users.get("clubsJoined"));
-                }
-            }
-        });
-    }
 
 }
