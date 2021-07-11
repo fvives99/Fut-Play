@@ -961,6 +961,9 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     +++++++++++++++++++++++++++++++++++++++++Salir del Team+++++++++++++++++++++++++++++++
      */
 
+    //Agarrar el ID team Actual, ir a teams, eliminar referencia a jugador,
+    //agarro el ID
+
     private void imgVwPopupExitTeamOnClickListener(){
         System.out.println("Exit team pressed");
         imgVwPopupExitTeam.setOnClickListener(v -> {
