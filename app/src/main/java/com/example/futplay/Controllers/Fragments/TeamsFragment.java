@@ -76,6 +76,7 @@ import java.util.Objects;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.PRINT_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,6 +133,8 @@ public class TeamsFragment extends Fragment {
 
     public static Bitmap teamProfileImage = null;
 
+    FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+
     //Dialogs
     private Dialog popupTeamSettings;
     private Dialog regionPicker;
@@ -162,6 +165,7 @@ public class TeamsFragment extends Fragment {
 
     private ImageView imgVwTeamSolicitudes;
     private ImageView imgVwPopupTeamSolicitudesClose;
+
 
 
 
@@ -586,8 +590,11 @@ public class TeamsFragment extends Fragment {
         });
     }
 
+    /*
+    retorna el ID de algun equipo en el que estemos, por eindice en la lista
+     */
     private void getChosenClubID(int index ){//El número que recibe es el Indice de la lista de equipos
-        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+
         CollectionReference applicationsRef = rootRef.collection("users");
         DocumentReference applicationIdRef = applicationsRef.document(userID);
 
@@ -968,12 +975,44 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         System.out.println("Exit team pressed");
         imgVwPopupExitTeam.setOnClickListener(v -> {
             //popupTeamSolicitudes.dismiss();
-            getChosenClubID(1);
+            //getChosenClubID(1);
+            deletePlayerFromTeam("RPL#7718");
             //onBackPressed();
         });
     }
 
+    /*
+    eliminamos el jugador actual, de la lista de jugadores de x team
+     */
+    private void deletePlayerFromTeam(String clubID){
+        CollectionReference applicationsRef = rootRef.collection("clubs");
+        DocumentReference applicationIdRef = applicationsRef.document(clubID);
 
+        applicationIdRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    ArrayList<String> playersInClub = (ArrayList<String>) document.get("clubMembersList");
+                    System.out.println(playersInClub);
+                    playersInClub.remove(clubID);
+                    System.out.println(playersInClub);
+                    //listaEquipos = (ArrayList<String>) users.get("clubsJoined");
+                    //retrieveTeamData(listaEquipos.get(index));
+                    //return listaEquipos.get(index));
+                    DocumentReference docRef = db.collection("cities").document("BJ");
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("capital", FieldValue.delete());
+                    // Update and delete the "capital" field in the document
+                    ApiFuture<WriteResult> writeResult = docRef.update(updates);
+                    System.out.println("Update time : " + writeResult.get());
+                }
+            }
+        });
+    }
+
+    /*
+    Display an alert to confirm exitTeam
+     */
     public void onBackPressed() {
         new AlertDialog.Builder(this.requireContext())
                 //.setIcon(android.R.drawable.ic_dialog_alert)
