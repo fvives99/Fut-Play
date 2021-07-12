@@ -55,6 +55,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -160,6 +161,8 @@ public class TeamsFragment extends Fragment {
     private ImageView imgVwPopupTeamSettingsClose;
     private ImageView imgVwPopupExitTeam;
     private ImageView imgVwPopupCreateTeam;
+
+    int currentTeam;//index of the current TEAM
 
     //PopUp Team Solicitudes
 
@@ -363,6 +366,10 @@ public class TeamsFragment extends Fragment {
         txtVwTeamWDL.setVisibility(View.VISIBLE);
 
         recycVwTeamPlayers.setVisibility(View.VISIBLE);
+    }
+
+    private void setCurrentTeam(int index){//el indíce de la lista de equipos actuales
+        currentTeam=index;
     }
 
     private void retrieveData() {
@@ -976,7 +983,8 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         imgVwPopupExitTeam.setOnClickListener(v -> {
             //popupTeamSolicitudes.dismiss();
             //getChosenClubID(1);
-            deletePlayerFromTeam("RPL#7718");
+            //deletePlayerFromClub("RPL#7718");
+            deleteClubFromPlayer("SOS#7182");
             //onBackPressed();
         });
     }
@@ -984,7 +992,7 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     /*
     eliminamos el jugador actual, de la lista de jugadores de x team
      */
-    private void deletePlayerFromTeam(String clubID){
+    private void deletePlayerFromClub(String clubID){
         CollectionReference applicationsRef = rootRef.collection("clubs");
         DocumentReference applicationIdRef = applicationsRef.document(clubID);
 
@@ -994,17 +1002,52 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
                 if (document.exists()) {
                     ArrayList<String> playersInClub = (ArrayList<String>) document.get("clubMembersList");
                     System.out.println(playersInClub);
-                    playersInClub.remove(clubID);
+                    playersInClub.remove(userID);
                     System.out.println(playersInClub);
                     //listaEquipos = (ArrayList<String>) users.get("clubsJoined");
                     //retrieveTeamData(listaEquipos.get(index));
                     //return listaEquipos.get(index));
-                    DocumentReference docRef = db.collection("cities").document("BJ");
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("capital", FieldValue.delete());
-                    // Update and delete the "capital" field in the document
-                    ApiFuture<WriteResult> writeResult = docRef.update(updates);
-                    System.out.println("Update time : " + writeResult.get());
+                    final Map<String, Object> removeUserFromArrayMap = new HashMap<>();
+                    removeUserFromArrayMap.put("clubMembersList", FieldValue.arrayRemove(userID));
+                    applicationIdRef.update(removeUserFromArrayMap).addOnSuccessListener(command -> {
+                        //displayPopupDone("¡Perfil Completado!");
+                        //retrieveTeamData(TeamID);
+                        System.out.println("logré actualizar la base de dats");
+                    });
+                }
+            }
+        });
+    }
+
+    /*
+    borramos el equipo de la lista de equipos de el jugador, y seteamos el equipo actual al indice 0
+     */
+    private void deleteClubFromPlayer(String clubID){
+        System.out.println("a esto es una prueba");
+        CollectionReference applicationsRef = rootRef.collection("users");
+        DocumentReference applicationIdRef = applicationsRef.document(userID);
+
+        applicationIdRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Map<String, Object> userClubs = (Map<String, Object>) document.get("userClubs");
+                    listaEquipos = (ArrayList<String>) userClubs.get("clubsJoined");
+                    Long numCLubs = (Long) userClubs.get("numClubsJoined");
+                    numCLubs-=1;
+                    listaEquipos.remove(clubID);
+                    userClubs.put("userClubs", listaEquipos);
+                    userClubs.put("numClubsJoined", numCLubs);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("userClubs", userClubs);
+                    //listaEquipos.put("clubMembersList", FieldValue.arrayRemove(userID));
+                    //retrieveTeamData(listaEquipos.get(indqex));
+                    //return listaEquipos.get(index));
+                    applicationIdRef.update(map).addOnSuccessListener(command -> {
+                        //displayPopupDone("¡Perfil Completado!");
+                        //retrieveTeamData(TeamID);
+                        System.out.println("logré actualizar la base de dats sin team");
+                    });
                 }
             }
         });
@@ -1065,11 +1108,4 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     /*
     -----------------------------------------------------------------------------------------------------
      */
-
-    /*
-    +++++++++++++++++++++++++++++++++++++++++Prueba Get Team New+++++++++++++++++++++++++++++++
-     */
-
-
-
 }
