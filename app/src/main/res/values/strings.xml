@@ -63,6 +63,15 @@
     <string name="txtVwTeamMateProfileMVP">Jugador del Partido: </string>
     <string name="txtVwTeamMateProfileFutPlayPlayer">Jugador FutPlay: </string>
 
+    // Popup Club Requests
+    <string name="txtVwPopupRequestsMainTitle">Ver Solicitudes de Ingreso</string>
+    <string name="txtVwPopupRequestsDescription">En el cuadro de abajo aparecerán (si las hay) solicitudes de ingreso al Club, puedes aceptarlas o rechazarlas.</string>
+    <string name="txtVwPopUpRequestsTitle">Solicitudes de Ingreso</string>
+
+    // Popup Club Requesters
+    <string name="txtVwPopUpRequestersTitle">Ver Perfil del Solicitante</string>
+    <string name="txtVwPopUpRequestersDescription">Presiona el boton para aceptar al jugador en tu club!</string>
+    <string name="btnAcceptRequest">Aceptar Solicitud</string>
 
     // Profile Settings Strings
     <string name="edTxtProfileSettingsNickname">Apodo:</string>

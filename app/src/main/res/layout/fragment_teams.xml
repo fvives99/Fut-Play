@@ -18,27 +18,27 @@
         android:id="@+id/imgVwTeamSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/settings_icon"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/contDesc" />
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/contDesc"
+        android:src="@drawable/settings_icon" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TableLayout
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:focusableInTouchMode="true">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:gravity="center">
 
@@ -56,6 +56,31 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/teams_image_icon" />
                 </androidx.cardview.widget.CardView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgVwTeamCheckRequests"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/n_drawer_club_requests" />
+
+                    <ImageView
+                        android:id="@+id/imgVwAdministrativeConfigurations"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/n_drawer_club_admin_config" />
+                </LinearLayout>
+
             </TableRow>
 
             <TableRow
@@ -229,4 +254,5 @@
             </TableRow>
         </TableLayout>
     </ScrollView>
+
 </RelativeLayout>
