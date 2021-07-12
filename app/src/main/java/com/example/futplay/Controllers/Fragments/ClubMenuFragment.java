@@ -13,6 +13,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.provider.Settings;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -205,6 +206,7 @@ public class ClubMenuFragment extends Fragment {
         imgVwPopupCreateClubSave = popUpCreateClub.findViewById(R.id.imgVwPopupCreateClubSave);
         edTxtClubName = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubName);
         edTxtClubTag = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubTag);
+        edTxtClubTag.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(3) });
         edTxtPopupProfileInfoRegion = popUpCreateClub.findViewById(R.id.edTxtPopupCreateClubRegion);
         progressBarCreateClub = popUpCreateClub.findViewById(R.id.progressBarCreateClub);
         createClubListeners();
@@ -216,6 +218,7 @@ public class ClubMenuFragment extends Fragment {
         imgVwRequestJoinClubSend = popupSendJoinClubRequest.findViewById(R.id.imgVwPopupSendJoinClubRequest);
         edTxtRequestClubID = popupSendJoinClubRequest.findViewById(R.id.txtVwPopupJoinClubRequestID);
         edTxtRequestClubTag = popupSendJoinClubRequest.findViewById(R.id.txtVwPopupJoinClubRequestTag);
+        edTxtRequestClubTag.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(3) });
         progressBarSendRequest = popupSendJoinClubRequest.findViewById(R.id.progressBarJoinClubRequest);
         joinRequestListeners();
     }

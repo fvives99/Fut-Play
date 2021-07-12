@@ -140,9 +140,11 @@
                                     android:hint="@string/edTxtPopupClubTag"
                                     android:imeOptions="actionNext"
                                     android:inputType="text|textCapCharacters"
+                                    android:maxLength="3"
                                     android:paddingStart="55dp"
                                     android:paddingEnd="15dp"
-                                    android:textSize="22sp" />
+                                    android:textSize="22sp"
+                                    tools:textAllCaps="true" />
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout

@@ -52,8 +52,8 @@
     <string name="edTxtPopupClubRequestName">TAG del club: Ej. ABC</string>
 
     // Popup TeamMate Profile Strings
+    <string name="txtVwTeamMateProfileMakeAdmin">Hacer Admin</string>
     <string name="txtVwTeamMateProfileTitle">Ver Perfil</string>
-    <string name="txtVwPopupTeamMateAdminDescription">Presiona el balón para hacer a este jugador líder del equipo.</string>
     <string name="txtVwTeamMateProfileNickname">Apodo:</string>
     <string name="txtVwTeamMateProfileRegion">Región:</string>
     <string name="txtVwTeamMateProfilePosition">Posición:</string>

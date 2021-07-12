@@ -49,9 +49,12 @@ import com.example.futplay.Controllers.Adapters.RequestsAdapter;
 import com.example.futplay.Controllers.Items.Players;
 import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.Controllers.Items.Club;
+import com.example.futplay.Controllers.Items.Requests;
 import com.example.futplay.Controllers.Items.UserClubs;
 import com.example.futplay.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -145,7 +148,7 @@ public class TeamsFragment extends Fragment {
     private ProgressBar progressBarPopupTeamMateProfile;
 
     private ImageView imgVwPopupTeamMateProfileExit;
-    private ImageView imgVwPopupTeamMateProfileDoAdmin;
+    private TextView txtVwPopupTeamMateProfileDoAdmin;
 
 
     private TextView txtVwPopupTeamMateNickname;
@@ -170,7 +173,25 @@ public class TeamsFragment extends Fragment {
 
     private ImageView imgVwPopupClubRequestsExit;
 
-    private ProgressBar progressBarPopupClubRequets;
+    private ProgressBar progressBarPopupClubRequests;
+
+    private Dialog popUpClubRequestersProfile;
+
+    private TextView txtVwPopupRequesterNickname;
+    private TextView txtVwPopupRequesterRegion;
+    private TextView txtVwPopupRequesterAge;
+    private TextView txtVwPopupRequesterPosition;
+    private TextView txtVwPopupRequesterMatchesPlayedNumber;
+    private TextView txtVwPopupRequesterMVPNumber;
+    private TextView txtVwPopupRequesterFutPlayPlayerNumber;
+
+    private String tempRequestedSelectedUID;
+    private String tempRequestedSelectedCID;
+
+    private ProgressBar progressBarPopupRequesterProfile;
+
+    private ImageView imgVwPopupRequesterProfileExit;
+    private TextView txtVwPopupAcceptRequesterRequest;
 
 
     public static Bitmap teamProfileImage = null;
@@ -216,11 +237,12 @@ public class TeamsFragment extends Fragment {
         viewsMatching(view);
         fillUpDataWithFirstClub();
         hideViews();
-        retrieveData();
         permissions();
         recycVwTeamPlayersConfig();
         recycVwClubRequestersConfig();
         listeners();
+        progressBarTeam.setVisibility(View.GONE);
+        showViews();
         return view;
     }
 
@@ -252,7 +274,7 @@ public class TeamsFragment extends Fragment {
                         Snackbar.make(recycVwTeamPlayers, "Jugador Eliminado", Snackbar.LENGTH_LONG).setAction("Deshacer", view -> {
                             view.setEnabled(false);
                             playersList.add(position, deletedPlayer);
-                            addPlayerToClub(playersList.get(position).getCID(),playersList.get(position).getUID());
+                            addPlayerToClub(playersList.get(position).getCID(),playersList.get(position).getUID(),false);
                             recycVwTeamPlayersAdapter.notifyItemInserted(position);
                         }).show();
                     });
@@ -297,10 +319,16 @@ public class TeamsFragment extends Fragment {
             PlayersItem deletedRequest = requestsList.get(position);
             switch (direction) {
                 case ItemTouchHelper.LEFT:
-                    //initPopupTeamMate();
-                    PlayersItem selected = requestsList.get(position);
-                    //displayPopupTeamMateProfile(selected.getUID());
+                    initPopupClubRequesters();
+                    setupPopupLayoutParams(popUpClubRequestersProfile);
+                    popUpClubRequestersProfile.setCancelable(false);
+                    popUpClubRequestersProfile.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popUpClubRequests.hide();
+                    popUpClubRequestersProfile.show();
                     recycVwClubRequestersAdapter.notifyItemChanged(position);
+                    tempRequestedSelectedCID = requestsList.get(position).getCID();
+                    tempRequestedSelectedUID = requestsList.get(position).getUID();
+                    completeRequesterProfileInfo(requestsList.get(position).getUID());
                     break;
                 case ItemTouchHelper.RIGHT:
                     AlertDialog.Builder deleteRequest = new AlertDialog.Builder(getContext());
@@ -308,11 +336,12 @@ public class TeamsFragment extends Fragment {
                     deleteRequest.setMessage("¿Está seguro de que desea eliminar la solicitud de " + requestsList.get(position).getName() + "para entrar a tu club?");
                     deleteRequest.setPositiveButton("Sí", (dialog, which) -> {
                         recycVwClubRequestersAdapter.notifyItemRemoved(position);
-                        //removePlayerFromClub(requestsList.get(position).getCID(),requestsList.get(position).getUID());
+                        deleteRequest(requestsList.get(position).getUID(), requestsList.get(position).getCID());
                         requestsList.remove(position);
                         Snackbar.make(recycVwClubRequesters, "Solicitud Eliminada", Snackbar.LENGTH_LONG).setAction("Deshacer", view -> {
                             view.setEnabled(false);
                             requestsList.add(position, deletedRequest);
+                            createRequests(requestsList.get(position).getUID(), requestsList.get(position).getCID());
                             //addPlayerToClub(requestsList.get(position).getCID(),requestsList.get(position).getUID());
                             recycVwClubRequestersAdapter.notifyItemInserted(position);
                         }).show();
@@ -346,7 +375,36 @@ public class TeamsFragment extends Fragment {
 
     private void deleteRequest(String UID, String CID){
         String requestID = CID + "-" + UID;
+        firebaseFirestore.collection("requests").document(requestID)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("FIREBASE DELETE", "DocumentSnapshot successfully deleted!");
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Se ha eliminado la solicitud con éxito!",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FIREBASE DELETE", "Error deleting document", e);
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Ha ocurrido un problema borrando la solicitud, inténtalo más tarde!",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
 
+    }
+
+    private void createRequests(String UID, String CID){
+        String requestID = CID + "-" + UID;
+        Requests newRequest = new Requests(requestID,"Pending");
+        DocumentReference requestReference= firebaseFirestore.collection("requests").document(requestID);
+        requestReference.set(newRequest);
     }
 
 
@@ -357,17 +415,17 @@ public class TeamsFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recycVwClubRequesters);
     }
 
-    private void initPopupClubRequets() {
+    private void initPopupClubRequests() {
         imgVwPopupClubRequestsExit = popUpClubRequests.findViewById(R.id.imgVwPopupClubRequestsClose);
-        progressBarPopupClubRequets = popUpClubRequests.findViewById(R.id.progressBarClubRequests);
+        progressBarPopupClubRequests = popUpClubRequests.findViewById(R.id.progressBarClubRequests);
         clubRequestsPopupListeners();
-        progressBarPopupClubRequets.setVisibility(View.GONE);
+        progressBarPopupClubRequests.setVisibility(View.GONE);
     }
 
     private void imgVwClubRequestsImgOnClickListener() {
         if(imgVwPopupClubRequests != null){
             imgVwPopupClubRequests.setOnClickListener(v -> {
-                initPopupClubRequets();
+                initPopupClubRequests();
                 setupPopupLayoutParams(popUpClubRequests);
                 popUpClubRequests.setCancelable(false);
                 popUpClubRequests.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -409,7 +467,16 @@ public class TeamsFragment extends Fragment {
                                                 }
                                                 String userName = gson.toJson(userFound.get("fullName"));
                                                 if(!isUserAlreadyMember){
-                                                    requestsList.add(new PlayersItem(R.drawable.profile_image_icon, userName,userRequestingID,clubID));
+                                                    boolean isPlayerItemAlreadyExisted = false;
+                                                    for(PlayersItem item : requestsList){
+                                                        if (item.getUID().equals(userRequestingID) && item.getCID().equals(clubID)){
+                                                            isPlayerItemAlreadyExisted = true;
+                                                        }
+                                                    }
+                                                    if(!isPlayerItemAlreadyExisted){
+                                                        requestsList.add(new PlayersItem(R.drawable.profile_image_icon, userName,userRequestingID,clubID));
+                                                    }
+
                                                 }/*else{
                                                     Toast toast = Toast.makeText(getActivity(),
                                                             userName + " ya es un usuario que pertenece a este club!",
@@ -457,8 +524,83 @@ public class TeamsFragment extends Fragment {
         }
     }
 
+// -----------------------------------REQUESTER POPUP METHODS--------------------------------------------------------
+    private void initPopupClubRequesters() {
+        popUpClubRequestersProfile.setContentView(R.layout.popup_requester_profile);
+        progressBarPopupRequesterProfile = popUpClubRequestersProfile.findViewById(R.id.progressPopUpRequesterProfile);
+        txtVwPopupRequesterNickname = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileNickname);
+        txtVwPopupRequesterRegion = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileRegion);
+        txtVwPopupRequesterPosition = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfilePosition);
+        txtVwPopupRequesterMatchesPlayedNumber = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileMatchesPlayed);
+        txtVwPopupRequesterMVPNumber = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileMVP);
+        txtVwPopupRequesterFutPlayPlayerNumber = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileFutPlayPlayerNumber);
+        txtVwPopupRequesterAge = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileAge);
+        imgVwPopupRequesterProfileExit = popUpClubRequestersProfile.findViewById(R.id.imgVwPopUpRequesterProfileClose);
+        txtVwPopupAcceptRequesterRequest = popUpClubRequestersProfile.findViewById(R.id.txtVwPopUpRequesterProfileAcceptRequest);
+        clubRequestersProfilePopupListeners();
+        progressBarPopupRequesterProfile.setVisibility(View.GONE);
+    }
 
-    private void addPlayerToClub(String ClubID, String UserID){
+    private void clubRequestersProfilePopupListeners(){
+        imgVwPopupRequestersProfileExitOnClickListener();
+        txtVwPopupRequestersApproveRequestOnClickListener();
+    }
+
+    private void imgVwPopupRequestersProfileExitOnClickListener() {
+        if(imgVwPopupRequesterProfileExit != null){
+            imgVwPopupRequesterProfileExit.setOnClickListener(v -> {
+                popUpClubRequestersProfile.dismiss();
+                popUpClubRequests.show();
+            });
+        }
+    }
+
+    private void txtVwPopupRequestersApproveRequestOnClickListener(){
+        if(txtVwPopupAcceptRequesterRequest != null){
+            txtVwPopupAcceptRequesterRequest.setOnClickListener(v -> {
+                addPlayerToClub(tempRequestedSelectedCID,tempRequestedSelectedUID,true);
+                popUpClubRequestersProfile.dismiss();
+                popUpClubRequests.show();
+            });
+        }
+    }
+    private void completeRequesterProfileInfo(String UID) {
+
+        DocumentReference verifyUserExistence = firebaseFirestore.collection("users").document(UID);
+        verifyUserExistence.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> userFound) {
+                if (userFound.isSuccessful()) {
+                    DocumentSnapshot userFoundData = userFound.getResult();
+                    if (userFoundData.exists()) {
+                        String nickname = (String) Objects.requireNonNull(userFoundData.get("nickname"));
+                        String region = ((String) Objects.requireNonNull(userFoundData.get("region"))).split("/")[0];
+                        String position = (String) Objects.requireNonNull(userFoundData.get("position"));
+                        String age = calculateAge((String) Objects.requireNonNull(userFoundData.get("birthDate")));
+                        txtVwPopupRequesterNickname.setText(nickname);
+                        txtVwPopupRequesterRegion.setText(region);
+                        txtVwPopupRequesterPosition.setText(position);
+                        txtVwPopupRequesterAge.setText(age);
+                    } else {
+                        Log.d("firebase", "get failed with ", userFound.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Algunos de los solicitantes no se han encontrado en la base de datos",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Log.d("firebase", "get failed with ", userFound.getException());
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha producido un error, intenta de nuevo más tarde!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+    }
+
+
+    private void addPlayerToClub(String ClubID, String UserID, boolean ShowDonePopUp){
         DocumentReference verifyUserClub = firebaseFirestore.collection("clubs").document(ClubID);
         verifyUserClub.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -491,6 +633,10 @@ public class TeamsFragment extends Fragment {
                                                 clubList.put("clubMembersList",clubPlayers);
                                                 clubList.put("clubSize",clubMembersNum);
                                                 verifyUserClub.set(clubList,SetOptions.merge());
+                                                if(ShowDonePopUp){
+                                                    String UserName = userClubList.get("fullName").toString();
+                                                    displayPopupDone("Ahora " +UserName+ "pertenece al club!");
+                                                }
                                             }else{
                                                 Log.d("MAX CLUBS JOINED", "get failed with ", userClubMemberTask.getException());
                                                 Toast toast = Toast.makeText(getActivity(),
@@ -639,7 +785,10 @@ public class TeamsFragment extends Fragment {
                                         Gson gson = new Gson();
                                         String json = gson.toJson(userList.get("clubMembersList"));
                                         ArrayList<String> clubPlayers = new Gson().fromJson(json, ArrayList.class);
-                                        playersList.clear();
+                                        Club userClub = userClubDoc.toObject(Club.class);
+                                        txtVwTeamName.setText(userClub.getClubName());
+                                        txtVwTeamRegion.setText(userClub.getClubRegion());
+                                        txtVwTeamCode.setText(userClub.getClubID());
                                         for(int j = 0; j < clubPlayers.size() ; j++){
                                             String clubUserID = clubPlayers.get(j);
                                             if(!clubUserID.equals(userID)){
@@ -652,7 +801,16 @@ public class TeamsFragment extends Fragment {
                                                             if (userClubMemberDoc.exists()) {
                                                                 Map<String, Object> userMember = userClubMemberDoc.getData();
                                                                 String userName = userMember.get("fullName").toString();
-                                                                playersList.add(new PlayersItem(R.drawable.profile_image_icon, userName,clubUserID,firstShowedClubID));
+                                                                boolean isPlayerItemAlreadyExisted = false;
+                                                                for(PlayersItem item : playersList){
+                                                                    if (item.getUID().equals(clubUserID) && item.getCID().equals(firstShowedClubID)){
+                                                                        isPlayerItemAlreadyExisted = true;
+                                                                    }
+                                                                }
+                                                                if(!isPlayerItemAlreadyExisted){
+                                                                    playersList.add(new PlayersItem(R.drawable.profile_image_icon, userName,clubUserID,firstShowedClubID));
+                                                                }
+
                                                             } else {
                                                                 Log.d("firebase", "get failed with ", userClubMemberTask.getException());
                                                                 Toast toast = Toast.makeText(getActivity(),
@@ -674,10 +832,6 @@ public class TeamsFragment extends Fragment {
                                         }
                                         fillUpClubRequests(firstShowedClubID);
                                         recycVwClubRequesters.setAdapter(recycVwClubRequestersAdapter);
-                                        Club userClub = userClubDoc.toObject(Club.class);
-                                        txtVwTeamName.setText(userClub.getClubName());
-                                        txtVwTeamRegion.setText(userClub.getClubRegion());
-                                        txtVwTeamCode.setText(userClub.getClubID());
                                     } else {
                                         Log.d("firebase", "get failed with ", userClubTask.getException());
                                         Toast toast = Toast.makeText(getActivity(),
@@ -713,17 +867,38 @@ public class TeamsFragment extends Fragment {
         recycVwTeamPlayersAdapter = new PlayersAdapter(playersList);
     }
     private void completeProfileInfo(String UID) {
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(UID);
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            String nickname = (String) Objects.requireNonNull(documentSnapshot.get("nickname"));
-            String region = ((String) Objects.requireNonNull(documentSnapshot.get("region"))).split("/")[0];
-            String position = (String) Objects.requireNonNull(documentSnapshot.get("position"));
-            String age = calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate")));
-            txtVwPopupTeamMateNickname.setText(nickname);
-            txtVwPopupTeamMateRegion.setText(region);
-            txtVwPopupTeamMatePosition.setText(position);
-            txtVwPopupTeamMateAge.setText(age);
-            progressBarPopupTeamMateProfile.setVisibility(View.GONE);
+
+        DocumentReference verifyUserExistence = firebaseFirestore.collection("users").document(UID);
+        verifyUserExistence.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> userFound) {
+                if (userFound.isSuccessful()) {
+                    DocumentSnapshot userFoundData = userFound.getResult();
+                    if (userFoundData.exists()) {
+                        String nickname = (String) Objects.requireNonNull(userFoundData.get("nickname"));
+                        String region = ((String) Objects.requireNonNull(userFoundData.get("region"))).split("/")[0];
+                        String position = (String) Objects.requireNonNull(userFoundData.get("position"));
+                        String age = calculateAge((String) Objects.requireNonNull(userFoundData.get("birthDate")));
+                        txtVwPopupTeamMateNickname.setText(nickname);
+                        txtVwPopupTeamMateRegion.setText(region);
+                        txtVwPopupTeamMatePosition.setText(position);
+                        txtVwPopupTeamMateAge.setText(age);
+                        progressBarPopupTeamMateProfile.setVisibility(View.GONE);
+                    } else {
+                        Log.d("firebase", "get failed with ", userFound.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Algunos de los miembros del club no se han encontrado en la base de datos",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Log.d("firebase", "get failed with ", userFound.getException());
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha producido un error, intenta de nuevo más tarde!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
         });
     }
 
@@ -816,7 +991,7 @@ public class TeamsFragment extends Fragment {
     private void initPopupTeamMate() {
         popupVwTeamMate.setContentView(R.layout.popup_teammate_profile);
         imgVwPopupTeamMateProfileExit = popupVwTeamMate.findViewById(R.id.imgVwPopupTeamMateProfileClose);
-        imgVwPopupTeamMateProfileDoAdmin = popupVwTeamMate.findViewById(R.id.imgVwTeamMateMakeAdmin);
+        txtVwPopupTeamMateProfileDoAdmin = popupVwTeamMate.findViewById(R.id.txtVwTeamMateMakeAdmin);
         teamMatePopupListeners();
         txtVwPopupTeamMateNickname = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileNickname);
         txtVwPopupTeamMateRegion = popupVwTeamMate.findViewById(R.id.txtVwTeamMateProfileRegion);
@@ -838,7 +1013,7 @@ public class TeamsFragment extends Fragment {
 
 
     private void imgVwTeamMateAdminOnClickListener() {
-        imgVwPopupTeamMateProfileDoAdmin.setOnClickListener(v -> {
+        txtVwPopupTeamMateProfileDoAdmin.setOnClickListener(v -> {
             popupVwTeamMate.dismiss();
             displayPopupDone("Lider establecido");
         });
@@ -848,6 +1023,7 @@ public class TeamsFragment extends Fragment {
         popupVwTeamMate = new Dialog(this.getContext());
         popupDone = new Dialog(this.getContext());
         popUpClubRequests = new Dialog(this.getContext());
+        popUpClubRequestersProfile = new Dialog(this.getContext());
 
         imgVwTeamProfileImg = view.findViewById(R.id.imgVwTeamProfileImg);
         imgVwTeamSettings = view.findViewById(R.id.imgVwTeamSettings);
@@ -908,7 +1084,6 @@ public class TeamsFragment extends Fragment {
         txtVwTeamPlayers.setVisibility(View.GONE);
         txtVwTeamWDL.setVisibility(View.GONE);
 
-        recycVwTeamPlayers.setVisibility(View.GONE);
     }
 
     private void showViews() {
@@ -927,20 +1102,6 @@ public class TeamsFragment extends Fragment {
         txtVwTeamStreak.setVisibility(View.VISIBLE);
         txtVwTeamPlayers.setVisibility(View.VISIBLE);
         txtVwTeamWDL.setVisibility(View.VISIBLE);
-
-        recycVwTeamPlayers.setVisibility(View.VISIBLE);
-    }
-
-    private void retrieveData() {
-        retrieveTeamProfileImage();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            progressBarTeam.setVisibility(View.GONE);
-            showViews();
-            if (documentSnapshot.exists()) {
-                //txtVwProfileAge.setText(calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate"))));
-            }
-        });
     }
 
     private void retrieveTeamProfileImage() {
