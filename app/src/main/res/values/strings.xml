@@ -47,7 +47,7 @@
 
     // Send Join-Club Request
     <string name="txtVwPopupSendClubRequestTitle">Solicitud de Ingreso a un Club:</string>
-    <string name="txtVwPopupSendClubRequestDescription">Ingresa el TAG y el ID del club para solicitar unirte:</string>
+    <string name="txtVwPopupSendClubRequestDescription">Ingresa el ID del club para solicitar unirte:</string>
     <string name="edTxtPopupClubRequestID">ID del club:</string>
     <string name="edTxtPopupClubRequestName">TAG del club: Ej. ABC</string>
 

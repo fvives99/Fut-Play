@@ -8,14 +8,26 @@ public class Requests {
     String userRequestingID;
     String clubRequestedID;
     String requestStatus;
-    Timestamp requestBirthDate;
+    Date requestBirthDate;
+
+    public Requests(){
+
+    }
 
     public Requests(String requestID, String requestStatus){
         String[] parts = requestID.split("-");
         this.userRequestingID = parts[1];
         this.clubRequestedID = parts[0];
         this.requestStatus = requestStatus;
-        this.requestBirthDate = new Timestamp(new Date());
+        this.requestBirthDate = new Timestamp(new Date()).toDate();
+    }
+
+    public Date getRequestBirthDate() {
+        return requestBirthDate;
+    }
+
+    public void setRequestBirthDate(Date requestBirthDate) {
+        this.requestBirthDate = requestBirthDate;
     }
 
     public String getUserRequestingID() {
@@ -44,6 +56,5 @@ public class Requests {
         }else{
             this.requestStatus = "Pending";
         }
-
     }
 }

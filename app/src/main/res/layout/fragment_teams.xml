@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/imgVwClubChanger"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -23,6 +24,17 @@
         android:layout_marginEnd="20dp"
         android:contentDescription="@string/contDesc"
         android:src="@drawable/settings_icon" />
+
+    <ImageView
+        android:id="@+id/imgVwSelectClub"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:focusableInTouchMode="true"
+        android:src="@drawable/teammate_change_club"
+        android:translationX="20dp"
+        tools:layout_marginEnd="20dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -69,16 +81,17 @@
                     android:gravity="center">
 
                     <ImageView
+                        android:id="@+id/imgVwCopyClubID"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/teammate_copy_club_id" />
+
+                    <ImageView
                         android:id="@+id/imgVwTeamCheckRequests"
                         android:layout_width="100dp"
                         android:layout_height="40dp"
                         android:src="@drawable/n_drawer_club_requests" />
 
-                    <ImageView
-                        android:id="@+id/imgVwAdministrativeConfigurations"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/n_drawer_club_admin_config" />
                 </LinearLayout>
 
             </TableRow>
@@ -114,15 +127,6 @@
                         android:textColor="@color/black"
                         android:textSize="30sp" />
 
-                    <TextView
-                        android:id="@+id/txtVwTeamCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_semibold"
-                        android:text="@string/txtVwTeamCode"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="30sp" />
                 </LinearLayout>
             </TableRow>
 
@@ -133,11 +137,13 @@
 
                 <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
 
                         <TextView
                             android:id="@+id/txtVwTeamHistory"
@@ -163,7 +169,8 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
 
                         <TextView
                             android:id="@+id/txtVwTeamStreak"
@@ -219,7 +226,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:gravity="center">
 
@@ -236,7 +243,27 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="182dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/imgVwRefreshTeamMates"
+                        android:layout_width="16dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/club_info_refresh" />
+
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center">
 
                 <androidx.recyclerview.widget.RecyclerView

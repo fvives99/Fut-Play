@@ -104,21 +104,7 @@
                                 android:gravity="bottom"
                                 app:boxStrokeWidth="0dp"
                                 app:boxStrokeWidthFocused="0dp"
-                                app:errorEnabled="true">
-
-                                <EditText
-                                    android:id="@+id/txtVwPopupJoinClubRequestTag"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="45dp"
-                                    android:autofillHints="textPersonName"
-                                    android:background="@drawable/join_request_field_bckgrnd"
-                                    android:fontFamily="@font/montserrat_semibold"
-                                    android:hint="@string/edTxtPopupClubRequestName"
-                                    android:inputType="text|textCapWords"
-                                    android:paddingStart="75dp"
-                                    android:paddingEnd="15dp"
-                                    android:textSize="20sp" />
-                            </com.google.android.material.textfield.TextInputLayout>
+                                app:errorEnabled="true"/>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="wrap_content"

@@ -18,7 +18,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -29,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.os.Environment;
-import android.provider.Contacts;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,10 +42,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.futplay.Controllers.Activities.CropImageActivity;
-import com.example.futplay.Controllers.Activities.MenuActivity;
 import com.example.futplay.Controllers.Adapters.PlayersAdapter;
 import com.example.futplay.Controllers.Adapters.RequestsAdapter;
-import com.example.futplay.Controllers.Items.Players;
 import com.example.futplay.Controllers.Items.PlayersItem;
 import com.example.futplay.Controllers.Items.Club;
 import com.example.futplay.Controllers.Items.Requests;
@@ -74,7 +71,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -103,6 +99,7 @@ public class TeamsFragment extends Fragment {
     private final int MAX_CLUB_MEMBERS = 5;
     private final int MAX_CLUBS_JOINED = 3;
 
+    private String temporalClubDisplayed = "";
 
     private ImageView imgVwTeamProfileImg;
     private ImageView imgVwTeamSettings;
@@ -111,10 +108,10 @@ public class TeamsFragment extends Fragment {
     private ImageView imgVwStreak3;
     private ImageView imgVwStreak4;
     private ImageView imgVwStreak5;
+    private ImageView imgVwRefreshTeamMatesRecyclerVw;
 
     private TextView txtVwTeamName;
     private TextView txtVwTeamRegion;
-    private TextView txtVwTeamCode;
     private TextView txtVwTeamHistory;
     private TextView txtVwTeamStreak;
     private TextView txtVwTeamPlayers;
@@ -124,6 +121,7 @@ public class TeamsFragment extends Fragment {
     private RecyclerView.Adapter recycVwTeamPlayersAdapter;
     private RecyclerView.LayoutManager recycVwTeamPlayersLytMngr;
     private ArrayList<PlayersItem> playersList = new ArrayList<>();
+    private int tempTeamMateSelectedPosition = 0;
 
     private ProgressBar progressBarTeam;
 
@@ -187,6 +185,7 @@ public class TeamsFragment extends Fragment {
 
     private String tempRequestedSelectedUID;
     private String tempRequestedSelectedCID;
+    private int tempRequestedSelectedPosition;
 
     private ProgressBar progressBarPopupRequesterProfile;
 
@@ -235,16 +234,67 @@ public class TeamsFragment extends Fragment {
 
         // Additional Settings
         viewsMatching(view);
-        fillUpDataWithFirstClub();
+        checkIfClubIsDisplayed();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if(temporalClubDisplayed == ""){
+                    Toast toast = Toast.makeText(getActivity(),
+                            "TIMEOUT!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }else{
+                    fillUpDataWithClub(temporalClubDisplayed);
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha escogido al club favorito para mostrarse!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+            }
+        }, 500);
         hideViews();
         permissions();
         recycVwTeamPlayersConfig();
         recycVwClubRequestersConfig();
         listeners();
-        progressBarTeam.setVisibility(View.GONE);
         showViews();
+        progressBarTeam.setVisibility(View.GONE);
         return view;
     }
+     private void checkIfClubIsDisplayed(){
+        if(temporalClubDisplayed == ""){ //IF THERE'S NOT ALREADY A CLUB DISPLAYED: THEN IS USED THE USER FAVORITE TEAM
+            DocumentReference verifyUserExistence = firebaseFirestore.collection("users").document(userID);
+            verifyUserExistence.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> userFound) {
+                    if (userFound.isSuccessful()) {
+                        DocumentSnapshot userFoundData = userFound.getResult();
+                        if (!userFoundData.exists()) {
+                            Log.d("FB SEEKING CLUB", "get failed with ", userFound.getException());
+                            Toast toast = Toast.makeText(getActivity(),
+                                    "Algunos de los solicitantes no se han encontrado en la base de datos",
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+                            String favoriteClubID = userFoundData.get("favoriteClubID").toString();
+                            Log.d("FB SEEKING CLUB", favoriteClubID, userFound.getException());
+                            temporalClubDisplayed = favoriteClubID;
+                        }
+                    } else {
+                        Log.d("FB SEEKING CLUB", "get failed with ", userFound.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Se ha producido un error, intenta de nuevo más tarde!",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            });
+        }
+
+     }
 
     ItemTouchHelper.SimpleCallback simpleCallbackMembers = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
@@ -328,6 +378,7 @@ public class TeamsFragment extends Fragment {
                     recycVwClubRequestersAdapter.notifyItemChanged(position);
                     tempRequestedSelectedCID = requestsList.get(position).getCID();
                     tempRequestedSelectedUID = requestsList.get(position).getUID();
+                    tempRequestedSelectedPosition = position;
                     completeRequesterProfileInfo(requestsList.get(position).getUID());
                     break;
                 case ItemTouchHelper.RIGHT:
@@ -338,12 +389,13 @@ public class TeamsFragment extends Fragment {
                         recycVwClubRequestersAdapter.notifyItemRemoved(position);
                         deleteRequest(requestsList.get(position).getUID(), requestsList.get(position).getCID());
                         requestsList.remove(position);
+                        tempTeamMateSelectedPosition--;
                         Snackbar.make(recycVwClubRequesters, "Solicitud Eliminada", Snackbar.LENGTH_LONG).setAction("Deshacer", view -> {
                             view.setEnabled(false);
                             requestsList.add(position, deletedRequest);
                             createRequests(requestsList.get(position).getUID(), requestsList.get(position).getCID());
-                            //addPlayerToClub(requestsList.get(position).getCID(),requestsList.get(position).getUID());
                             recycVwClubRequestersAdapter.notifyItemInserted(position);
+                            tempTeamMateSelectedPosition++;
                         }).show();
                     });
                     deleteRequest.setNegativeButton("No", (dialog, which) -> {
@@ -430,6 +482,12 @@ public class TeamsFragment extends Fragment {
                 popUpClubRequests.setCancelable(false);
                 popUpClubRequests.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 popUpClubRequests.show();
+                if(requestsList.isEmpty()){
+                    Toast toast = Toast.makeText(getActivity(),
+                            "De momento no hay solicitudes de ingreso en este club!",
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                }
             });
         }
     }
@@ -475,6 +533,8 @@ public class TeamsFragment extends Fragment {
                                                     }
                                                     if(!isPlayerItemAlreadyExisted){
                                                         requestsList.add(new PlayersItem(R.drawable.profile_image_icon, userName,userRequestingID,clubID));
+                                                        recycVwTeamPlayersAdapter.notifyItemInserted(tempTeamMateSelectedPosition);
+                                                        tempTeamMateSelectedPosition++;
                                                     }
 
                                                 }/*else{
@@ -559,11 +619,46 @@ public class TeamsFragment extends Fragment {
         if(txtVwPopupAcceptRequesterRequest != null){
             txtVwPopupAcceptRequesterRequest.setOnClickListener(v -> {
                 addPlayerToClub(tempRequestedSelectedCID,tempRequestedSelectedUID,true);
+                setRequestApproved(tempRequestedSelectedCID,tempRequestedSelectedUID);
+                requestsList.remove(tempRequestedSelectedPosition);
+                recycVwClubRequestersAdapter.notifyItemChanged(tempRequestedSelectedPosition);
                 popUpClubRequestersProfile.dismiss();
                 popUpClubRequests.show();
+                fillUpDataWithClub(temporalClubDisplayed);
             });
         }
     }
+
+    private void setRequestApproved(String CID, String UID){
+        String requestID = CID + "-" + UID;
+        DocumentReference verifyRequestExistence = firebaseFirestore.collection("requests").document(requestID);
+        verifyRequestExistence.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> requestsFound) {
+                if (requestsFound.isSuccessful()) {
+                    DocumentSnapshot requestsFoundData = requestsFound.getResult();
+                    if (requestsFoundData.exists()) {
+                        Requests tempRequests = requestsFoundData.toObject(Requests.class);
+                        tempRequests.setRequestStatus("Approved");
+                        verifyRequestExistence.set(tempRequests,SetOptions.merge());
+                    } else {
+                        Log.d("FB REQUEST APPR", "get failed with ", requestsFound.getException());
+                        Toast toast = Toast.makeText(getActivity(),
+                                "Ha ocurrido un problema aceptando la solicitud",
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Log.d("FB REQUEST APPR", "get failed with ", requestsFound.getException());
+                    Toast toast = Toast.makeText(getActivity(),
+                            "Se ha producido un error, intenta de nuevo más tarde!",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+    }
+
     private void completeRequesterProfileInfo(String UID) {
 
         DocumentReference verifyUserExistence = firebaseFirestore.collection("users").document(UID);
@@ -624,15 +719,25 @@ public class TeamsFragment extends Fragment {
                                             UserClubs userClubsJoined = new Gson().fromJson(json, UserClubs.class);
                                             if(userClubsJoined.getNumClubsJoined() <= MAX_CLUBS_JOINED){
                                                 userClubsJoined.addClub(ClubID);
+                                                String favoriteClub = userClubList.get("favoriteClubID").toString();
+                                                if(favoriteClub == ""){
+                                                    favoriteClub = ClubID;
+                                                }
+                                                userClubList.put("favoriteClubID",favoriteClub);
                                                 userClubList.put("userClubs",userClubsJoined);
-                                                verifyUserClubMember.set(userClubList,SetOptions.merge());
+                                                verifyUserClubMember.set(userClubList,SetOptions.merge()); //USER DATA MERGED
+
                                                 String clubJson = gson.toJson(clubList.get("clubMembersList"));
+                                                String privilegesJson = gson.toJson(clubList.get("clubMembersPrivileges"));
                                                 ArrayList<String> clubPlayers = new Gson().fromJson(clubJson, ArrayList.class);
+                                                ArrayList<String> clubPlayersPrivileges = new Gson().fromJson(privilegesJson, ArrayList.class);
                                                 clubPlayers.add(UserID);
+                                                clubPlayersPrivileges.add("P");
                                                 clubMembersNum++;
+                                                clubList.put("clubMembersPrivileges",clubPlayersPrivileges);
                                                 clubList.put("clubMembersList",clubPlayers);
                                                 clubList.put("clubSize",clubMembersNum);
-                                                verifyUserClub.set(clubList,SetOptions.merge());
+                                                verifyUserClub.set(clubList,SetOptions.merge()); //CLUB DATA MERGED
                                                 if(ShowDonePopUp){
                                                     String UserName = userClubList.get("fullName").toString();
                                                     displayPopupDone("Ahora " +UserName+ "pertenece al club!");
@@ -713,18 +818,20 @@ public class TeamsFragment extends Fragment {
                                         userClubList.put("userClubs",userClubsJoined);
                                         verifyUserClubMember.set(userClubList,SetOptions.merge());
                                         String clubJson = gson.toJson(clubList.get("clubMembersList"));
+                                        String clubPermissionsJson = gson.toJson(clubList.get("clubMembersPrivileges"));
                                         ArrayList<String> clubPlayers = new Gson().fromJson(clubJson, ArrayList.class);
+                                        ArrayList<String> clubPlayersPermissions = new Gson().fromJson(clubPermissionsJson, ArrayList.class);
                                         for(int i = 0; i < clubPlayers.size(); i++){
                                             if(clubPlayers.get(i).equals(UserID)){
                                                 clubPlayers.remove(i);
+                                                clubPlayersPermissions.remove(i);
                                                 clubMembersNum--;
                                             }
                                         }
+                                        clubList.put("clubMembersPrivileges",clubPlayersPermissions);
                                         clubList.put("clubMembersList",clubPlayers);
                                         clubList.put("clubSize",clubMembersNum);
                                         verifyUserClub.set(clubList,SetOptions.merge());
-
-                                        //UserClubs temp = new Gson().fromJson(json, UserClubs.class);
                                     } else {
                                         Log.d("firebase", "get failed with ", userClubMemberTask.getException());
                                         Toast toast = Toast.makeText(getActivity(),
@@ -760,7 +867,7 @@ public class TeamsFragment extends Fragment {
     }
 
 
-    private void fillUpDataWithFirstClub() {
+    private void fillUpDataWithClub(String clubID) {
         DocumentReference verifyUserRef = firebaseFirestore.collection("users").document(userID);
         verifyUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -768,13 +875,7 @@ public class TeamsFragment extends Fragment {
                 if (userTask.isSuccessful()) {
                     DocumentSnapshot userDocument = userTask.getResult();
                     if (userDocument.exists()) {
-                        Map<String, Object> user = userDocument.getData();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user.get("userClubs"));
-                        UserClubs temp = new Gson().fromJson(json, UserClubs.class);
-                        ArrayList<String> clubsFound = temp.getClubsJoined();
-                        String firstShowedClubID  = clubsFound.get(0);
-                        DocumentReference verifyUserClub = firebaseFirestore.collection("clubs").document(firstShowedClubID);
+                        DocumentReference verifyUserClub = firebaseFirestore.collection("clubs").document(clubID);
                         verifyUserClub.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> userClubTask) {
@@ -785,10 +886,6 @@ public class TeamsFragment extends Fragment {
                                         Gson gson = new Gson();
                                         String json = gson.toJson(userList.get("clubMembersList"));
                                         ArrayList<String> clubPlayers = new Gson().fromJson(json, ArrayList.class);
-                                        Club userClub = userClubDoc.toObject(Club.class);
-                                        txtVwTeamName.setText(userClub.getClubName());
-                                        txtVwTeamRegion.setText(userClub.getClubRegion());
-                                        txtVwTeamCode.setText(userClub.getClubID());
                                         for(int j = 0; j < clubPlayers.size() ; j++){
                                             String clubUserID = clubPlayers.get(j);
                                             if(!clubUserID.equals(userID)){
@@ -803,12 +900,12 @@ public class TeamsFragment extends Fragment {
                                                                 String userName = userMember.get("fullName").toString();
                                                                 boolean isPlayerItemAlreadyExisted = false;
                                                                 for(PlayersItem item : playersList){
-                                                                    if (item.getUID().equals(clubUserID) && item.getCID().equals(firstShowedClubID)){
+                                                                    if (item.getUID().equals(clubUserID) && item.getCID().equals(clubID)){
                                                                         isPlayerItemAlreadyExisted = true;
                                                                     }
                                                                 }
                                                                 if(!isPlayerItemAlreadyExisted){
-                                                                    playersList.add(new PlayersItem(R.drawable.profile_image_icon, userName,clubUserID,firstShowedClubID));
+                                                                    playersList.add(new PlayersItem(R.drawable.profile_image_icon, userName,clubUserID,clubID));
                                                                 }
 
                                                             } else {
@@ -830,7 +927,12 @@ public class TeamsFragment extends Fragment {
 
                                             }
                                         }
-                                        fillUpClubRequests(firstShowedClubID);
+                                        recycVwTeamPlayersAdapter = new PlayersAdapter(playersList);
+                                        recycVwTeamPlayers.setAdapter(recycVwTeamPlayersAdapter);
+                                        Club userClub = userClubDoc.toObject(Club.class);
+                                        txtVwTeamName.setText(userClub.getClubName());
+                                        txtVwTeamRegion.setText(userClub.getClubRegion());
+                                        fillUpClubRequests(clubID);
                                         recycVwClubRequesters.setAdapter(recycVwClubRequestersAdapter);
                                     } else {
                                         Log.d("firebase", "get failed with ", userClubTask.getException());
@@ -864,10 +966,8 @@ public class TeamsFragment extends Fragment {
                 }
             }
         });
-        recycVwTeamPlayersAdapter = new PlayersAdapter(playersList);
     }
     private void completeProfileInfo(String UID) {
-
         DocumentReference verifyUserExistence = firebaseFirestore.collection("users").document(UID);
         verifyUserExistence.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -1032,6 +1132,7 @@ public class TeamsFragment extends Fragment {
         imgVwStreak3 = view.findViewById(R.id.imgVwStreak3);
         imgVwStreak4 = view.findViewById(R.id.imgVwStreak4);
         imgVwStreak5 = view.findViewById(R.id.imgVwStreak5);
+        imgVwRefreshTeamMatesRecyclerVw = view.findViewById(R.id.imgVwRefreshTeamMates);
 
         recycVwClubRequestersLytMngr = new LinearLayoutManager(view.getContext());
         imgVwPopupClubRequests = view.findViewById(R.id.imgVwTeamCheckRequests);
@@ -1041,7 +1142,6 @@ public class TeamsFragment extends Fragment {
 
         txtVwTeamName = view.findViewById(R.id.txtVwTeamName);
         txtVwTeamRegion = view.findViewById(R.id.txtVwTeamRegion);
-        txtVwTeamCode = view.findViewById(R.id.txtVwTeamCode);
         txtVwTeamHistory = view.findViewById(R.id.txtVwTeamHistory);
         txtVwTeamStreak = view.findViewById(R.id.txtVwTeamStreak);
         txtVwTeamPlayers = view.findViewById(R.id.txtVwTeamPlayers);
@@ -1062,7 +1162,6 @@ public class TeamsFragment extends Fragment {
     private void recycVwTeamPlayersConfig() {
         recycVwTeamPlayers.setHasFixedSize(true);
         recycVwTeamPlayers.setLayoutManager(recycVwTeamPlayersLytMngr);
-        recycVwTeamPlayers.setAdapter(recycVwTeamPlayersAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallbackMembers);
         itemTouchHelper.attachToRecyclerView(recycVwTeamPlayers);
     }
@@ -1078,7 +1177,6 @@ public class TeamsFragment extends Fragment {
 
         txtVwTeamName.setVisibility(View.GONE);
         txtVwTeamRegion.setVisibility(View.GONE);
-        txtVwTeamCode.setVisibility(View.GONE);
         txtVwTeamHistory.setVisibility(View.GONE);
         txtVwTeamStreak.setVisibility(View.GONE);
         txtVwTeamPlayers.setVisibility(View.GONE);
@@ -1097,7 +1195,6 @@ public class TeamsFragment extends Fragment {
 
         txtVwTeamName.setVisibility(View.VISIBLE);
         txtVwTeamRegion.setVisibility(View.VISIBLE);
-        txtVwTeamCode.setVisibility(View.VISIBLE);
         txtVwTeamHistory.setVisibility(View.VISIBLE);
         txtVwTeamStreak.setVisibility(View.VISIBLE);
         txtVwTeamPlayers.setVisibility(View.VISIBLE);
@@ -1147,8 +1244,24 @@ public class TeamsFragment extends Fragment {
     }
 
     private void listeners() {
+        imgVwRefreshTeamMatesRecyclerVwListener();
         imgVwProfileImgOnClickListener();
         imgVwClubRequestsImgOnClickListener();
+    }
+
+    private void imgVwRefreshTeamMatesRecyclerVwListener(){
+        imgVwRefreshTeamMatesRecyclerVw.setOnClickListener(view -> {
+            /*Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recycVwTeamPlayersAdapter = new PlayersAdapter(playersList);
+                    recycVwTeamPlayers.setAdapter(recycVwTeamPlayersAdapter);
+                }
+            }, 1000);*/
+            recycVwTeamPlayersAdapter = new PlayersAdapter(playersList);
+            recycVwTeamPlayers.setAdapter(recycVwTeamPlayersAdapter);
+        });
     }
 
     private void imgVwProfileImgOnClickListener() {

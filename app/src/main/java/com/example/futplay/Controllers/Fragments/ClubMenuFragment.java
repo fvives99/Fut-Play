@@ -115,7 +115,6 @@ public class ClubMenuFragment extends Fragment {
     private ImageView imgVwRequestJoinClubSend;
 
     //Request Join Club EditText
-    private EditText edTxtRequestClubTag;
     private EditText edTxtRequestClubID;
 
     //Done popUp Variables
@@ -217,8 +216,6 @@ public class ClubMenuFragment extends Fragment {
         imgVwRequestJoinCLubExit = popupSendJoinClubRequest.findViewById(R.id.imgVwPopupJoinClubRequestCloseButton);
         imgVwRequestJoinClubSend = popupSendJoinClubRequest.findViewById(R.id.imgVwPopupSendJoinClubRequest);
         edTxtRequestClubID = popupSendJoinClubRequest.findViewById(R.id.txtVwPopupJoinClubRequestID);
-        edTxtRequestClubTag = popupSendJoinClubRequest.findViewById(R.id.txtVwPopupJoinClubRequestTag);
-        edTxtRequestClubTag.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(3) });
         progressBarSendRequest = popupSendJoinClubRequest.findViewById(R.id.progressBarJoinClubRequest);
         joinRequestListeners();
     }
@@ -239,7 +236,6 @@ public class ClubMenuFragment extends Fragment {
     private void joinRequestListeners(){
         imgVwPopupJoinRequestExitClickListener();
         imgVwCreateClubRequestSendClickListener();
-        sendRequestEdTxtFieldsOnFocusChangeListeners();
     }
  //CREATE TEAM LISTENERS
     private void imgVwPopupCreateTeamOnClickListener() {
@@ -318,10 +314,6 @@ public class ClubMenuFragment extends Fragment {
 
     private boolean joinRequestInvalidFields() {
         boolean invalid = false;
-        if (edTxtRequestClubTag.getText().toString().trim().equals("")) {
-            edTxtClubName.setError("Campo Obligatorio");
-            invalid = true;
-        }
         if (edTxtRequestClubID.getText().toString().trim().equals("")) {
             edTxtClubTag.setError("Campo Obligatorio");
             invalid = true;
@@ -344,13 +336,6 @@ public class ClubMenuFragment extends Fragment {
         });
     }
 
-    private void sendRequestEdTxtFieldsOnFocusChangeListeners() {
-        edTxtRequestClubTag.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus && !edTxtRequestClubTag.getText().toString().equals("") && edTxtRequestClubTag.getText().toString().length() > 3 || edTxtRequestClubTag.getText().toString().length() < 3) {
-                edTxtRequestClubTag.setError("El TAG del club tiene que tener 3 letras mayúsculas");
-            }
-        });
-    }
 
     private void createClubClearFields() {
         edTxtClubName.setText("");
@@ -366,12 +351,10 @@ public class ClubMenuFragment extends Fragment {
 
     private void sendRequestClearFields() {
         edTxtRequestClubID.setText("");
-        edTxtRequestClubTag.setText("");
     }
 
     private void sendRequestClearErrors() {
         edTxtRequestClubID.setError(null);
-        edTxtRequestClubTag.setError(null);
     }
 
     private void insertClub() {
@@ -383,11 +366,8 @@ public class ClubMenuFragment extends Fragment {
             newClub.setClubTag(edTxtClubTag.getText().toString().trim());
             newClub.setClubRegion(edTxtPopupProfileInfoRegion.getText().toString().trim());
             newClub.setMatchesWon(0);newClub.setMatchesLost(0);newClub.setMatchesTied(0);
-            //Players newMember = new Players(userID);
-            //newMember.setPrivileges("C");
-            newClub.addMember(userID);
+            newClub.addMember(userID,"C");
             clubID = newClub.setClubID();
-
             DocumentReference docRef = firebaseFirestore.collection("clubs").document(clubID);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -416,6 +396,7 @@ public class ClubMenuFragment extends Fragment {
                                                         if (userDocument.exists()) {
                                                             Map<String, Object> user = userDocument.getData();
                                                             Gson gson = new Gson();
+                                                            user.put("favoriteClubID",newClub.getClubID());
                                                             String json = gson.toJson(user.get("userClubs"));
                                                             UserClubs temp = new Gson().fromJson(json, UserClubs.class);
                                                             temp.addClub(newClub.getClubID());
@@ -488,7 +469,7 @@ public class ClubMenuFragment extends Fragment {
         if (!joinRequestInvalidFields()) {
             progressBarSendRequest.setVisibility(View.VISIBLE);
             userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            String clubRequestID = edTxtRequestClubTag.getText().toString().trim()+"#"+edTxtRequestClubID.getText().toString().trim();
+            String clubRequestID = edTxtRequestClubID.getText().toString().trim();
             String requestID = clubRequestID + "-" + userID;
             DocumentReference docRef = firebaseFirestore.collection("clubs").document(clubRequestID);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
