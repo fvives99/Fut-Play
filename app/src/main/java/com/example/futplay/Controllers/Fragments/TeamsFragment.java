@@ -162,7 +162,7 @@ public class TeamsFragment extends Fragment {
     private ImageView imgVwPopupExitTeam;
     private ImageView imgVwPopupCreateTeam;
 
-    int currentTeam;//index of the current TEAM
+    String currentTeam;//index of the current TEAM
 
     //PopUp Team Solicitudes
 
@@ -208,14 +208,11 @@ public class TeamsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_teams, container, false);
-
         // Additional Settings
         fillPlayersList();
         viewsMatching(view);
         hideViews();
-        retrieveData();
-        //retrieveCurrentTeamIDFragment();
-        getChosenClubID(0);
+        getFavoriteClubID();//Inicializo la pantalla siempre con el Team Favorito
         permissions();
         listeners();
         recycVwTeamPlayersConfig();
@@ -277,6 +274,30 @@ public class TeamsFragment extends Fragment {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+
+    /*
+    Guardo el team actual como el team fdavorito almacenado enla base
+     */
+    private void getFavoriteClubID() {
+        CollectionReference applicationsRef = rootRef.collection("users");
+        DocumentReference applicationIdRef = applicationsRef.document(userID);
+        System.out.println("hjhjhjhjhjhjhjhj");
+        applicationIdRef.get().addOnSuccessListener(documentSnapshot -> {
+            System.out.println("asdafafasdasdasdasdasd");
+            if (documentSnapshot.exists()) {
+                String clubID = (String) Objects.requireNonNull(documentSnapshot.get("favoriteClubID"));
+                System.out.println("1 This is the crreunt team or favorita"+clubID);
+                setCurrentTeam(clubID);
+                System.out.println("This is the crreunt team or favorita"+currentTeam);
+                retrieveTeamData();//llena info del team
+            }
+        });
+    }
+
+    private void setCurrentTeam(String clubID){//el indíce de la lista de equipos actuales
+        currentTeam=clubID;
+        System.out.println(clubID+" aaaaaaaaaaaaaaasssss");
+    }
 
     private void fillPlayersList() {
         playersList.add(new PlayersItem(R.drawable.profile_image_icon, "Jean Pierre Araya Meléndez"));
@@ -368,11 +389,9 @@ public class TeamsFragment extends Fragment {
         recycVwTeamPlayers.setVisibility(View.VISIBLE);
     }
 
-    private void setCurrentTeam(int index){//el indíce de la lista de equipos actuales
-        currentTeam=index;
-    }
 
-    private void retrieveData() {
+
+    /*private void retrieveData() {
         retrieveTeamProfileImage();
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
@@ -382,7 +401,7 @@ public class TeamsFragment extends Fragment {
                 //txtVwProfileAge.setText(calculateAge((String) Objects.requireNonNull(documentSnapshot.get("birthDate"))));
             }
         });
-    }
+    }*/
 
     private void retrieveTeamProfileImage() {
         checkCroppedImage();
@@ -552,7 +571,8 @@ public class TeamsFragment extends Fragment {
             popupTeamSettingsListeners();
             setupPopupLayoutParams(popupTeamSettings);
             hidePopupTeamSettingsViews();
-            retrieveCurrentTeamIDPopUp();
+            retrieveTeamDataPopup();
+            //retrieveCurrentTeamIDPopUp
             popupTeamSettings.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             popupTeamSettings.show();
             imgVwPopupTeamSettingsSave.bringToFront();
@@ -593,14 +613,14 @@ public class TeamsFragment extends Fragment {
         System.out.println("Document SnapShot "+ documentReference.getPath());
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             String TeamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
-            retrieveTeamData(TeamID);
+            retrieveTeamData();
         });
     }
 
     /*
     retorna el ID de algun equipo en el que estemos, por eindice en la lista
      */
-    private void getChosenClubID(int index ){//El número que recibe es el Indice de la lista de equipos
+    /*private void retrieveData(){
 
         CollectionReference applicationsRef = rootRef.collection("users");
         DocumentReference applicationIdRef = applicationsRef.document(userID);
@@ -611,64 +631,71 @@ public class TeamsFragment extends Fragment {
                 if (document.exists()) {
                     Map<String, Object> users = (Map<String, Object>) document.get("userClubs");
                     listaEquipos = (ArrayList<String>) users.get("clubsJoined");
-                    retrieveTeamData(listaEquipos.get(index));
+                    //retrieveTeamData(listaEquipos.get(currentTeam));
                     //return listaEquipos.get(index));
                 }
             }
         });
-    }
+    }*/
 
     /*
     Con el ID del TEAM, relleno la info del fragment con información del equipo actual
      */
-    private void retrieveTeamData(String teamID) {
+    private void retrieveTeamData() {//String teamID
+        retrieveTeamProfileImage();
 
-        if(teamID == null){
-            txtVwTeamName.setText("");
-            txtVwTeamRegion.setText("");
-            txtVwTeamCode.setText("");
-        }else{
-            DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
-            System.out.println("Document SnapShot "+ documentReference.getPath());
-            System.out.println("teamIDaaa: "+teamID);
-            documentReference.get().addOnSuccessListener(documentSnapshot ->{
-                String fullName = (String) Objects.requireNonNull(documentSnapshot.get("clubName"));
-                System.out.println("Name team "+ fullName);
-                String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("clubTag"));
-                String code = ((String) Objects.requireNonNull(documentSnapshot.get("clubID")));
-                txtVwTeamName.setText(fullName);
-                txtVwTeamRegion.setText(Abbreviation);
-                txtVwTeamCode.setText(code);
-
-            });
-        }
+        System.out.println(currentTeam+" sisisiisis");
+        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(currentTeam);
+        System.out.println("Document SnapShot "+ documentReference.getPath());
+        System.out.println("teamIDaaa: "+currentTeam);
+        documentReference.get().addOnSuccessListener(documentSnapshot ->{
+            progressBarTeam.setVisibility(View.GONE);
+            showViews();
+            String fullName = (String) Objects.requireNonNull(documentSnapshot.get("clubName"));
+            System.out.println("Name team "+ fullName);
+            String Abbreviation = (String) Objects.requireNonNull(documentSnapshot.get("clubTag"));
+            String code = ((String) Objects.requireNonNull(documentSnapshot.get("clubID")));
+            txtVwTeamName.setText(fullName);
+            txtVwTeamRegion.setText(Abbreviation);
+            txtVwTeamCode.setText(code);
+        });
     }
 
     /*
     Se llama a función de rellenar info del popup con ID del equipo actual
      */
-    private void retrieveCurrentTeamIDPopUp() {//retrieve current TEAM Data for pop up
+    /*private void retrieveCurrentTeamIDPopUp() {//retrieve current TEAM Data for pop up
         System.out.println("id usera: "+userID);//para relllenar el pop pop
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             String TeamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
-            retrieveTeamDataPopup(TeamID);
+            retrieveTeamDataPopz|up(TeamID);
         });
-    }
+        CollectionReference applicationsRef = rootRef.collection("users");
+        DocumentReference applicationIdRef = applicationsRef.document(userID);
 
+        applicationIdRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Map<String, Object> userClubs = (Map<String, Object>) document.get("userClubs");
+                    listaEquipos = (ArrayList<String>) userClubs.get("clubsJoined");
+                    Long numCLubs = (Long) userClubs.get("numClubsJoined");
+                    if(numCLubs==0 || numCLubs==null){
+                        System.out.println("no perteneces a ningún club");
+                    }else{
 
+                    }
+                }
+            }
+        });
+    }*/
 
     /*
 Con el ID del TEAM, relleno la info del pop up con información del equipo actual
  */
-    private void retrieveTeamDataPopup(String teamID) {
-
-        //if(teamID == null){
-        //    edTxtPopupTeamSettingsFullName.setText("");
-        //    edTxtPopupTeamSettingsAbbreviation.setText("");
-        //    edTxtPopupTeamSettingsRegion.setText("");
-        //}else{
-        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(teamID);
+    private void retrieveTeamDataPopup() {
+        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(currentTeam);
         documentReference.get().addOnSuccessListener(documentSnapshot ->{
             //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
             String region = ((String) Objects.requireNonNull(documentSnapshot.get("clubRegion")));//.split("/")[0]
@@ -688,30 +715,29 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     private void imgVwPopupTeamSettingsSaveOnClickListener() {
         imgVwPopupTeamSettingsSave.setOnClickListener(v -> {
             //if (!invalidFields()) {
-            DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+            //DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
 
-            documentReference.get().addOnSuccessListener(documentSnapshot ->{
+            //documentReference.get().addOnSuccessListener(documentSnapshot ->{
                 //agarrar info del pop, de la pantalla actual, para no hacer tantas consultas a la base
-                String teamID = (String) Objects.requireNonNull(documentSnapshot.get("teamID"));
-                SaveInfoPopUpTeamSettings(teamID);
-            });
+                SaveInfoPopUpTeamSettings();
+            //});
         });
     }
 
-    private void SaveInfoPopUpTeamSettings(String TeamID){
+    private void SaveInfoPopUpTeamSettings(){
 
         //if (!invalidFields()) {
         String teamName = edTxtPopupTeamSettingsFullName.getText().toString();
         String abb = edTxtPopupTeamSettingsAbbreviation.getText().toString();
         String region = edTxtPopupTeamSettingsRegion.getText().toString();
-        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(TeamID);
+        DocumentReference documentReference = firebaseFirestore.collection("clubs").document(currentTeam);
         Map<String, Object> team = new HashMap<>();
         team.put("clubName", teamName);
         team.put("clubTag", abb);
         team.put("clubRegion", region);
         documentReference.update(team).addOnSuccessListener(command -> {
             //displayPopupDone("¡Perfil Completado!");
-            retrieveTeamData(TeamID);
+            retrieveTeamData();
         });
         popupTeamSettings.dismiss();
     }
@@ -983,8 +1009,10 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
         imgVwPopupExitTeam.setOnClickListener(v -> {
             //popupTeamSolicitudes.dismiss();
             //getChosenClubID(1);
-            //deletePlayerFromClub("RPL#7718");
-            deleteClubFromPlayer("SOS#7182");
+            deletePlayerFromClub();
+            deleteClubFromPlayer();
+            getNextTeam();
+            popupTeamSettings.dismiss();
             //onBackPressed();
         });
     }
@@ -992,23 +1020,22 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     /*
     eliminamos el jugador actual, de la lista de jugadores de x team
      */
-    private void deletePlayerFromClub(String clubID){
+    private void deletePlayerFromClub(){
         CollectionReference applicationsRef = rootRef.collection("clubs");
-        DocumentReference applicationIdRef = applicationsRef.document(clubID);
+        DocumentReference applicationIdRef = applicationsRef.document(currentTeam);
 
         applicationIdRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     ArrayList<String> playersInClub = (ArrayList<String>) document.get("clubMembersList");
-                    System.out.println(playersInClub);
+                    Long clubSize = (Long) document.get("clubSize");
+                    clubSize-=1;
                     playersInClub.remove(userID);
-                    System.out.println(playersInClub);
-                    //listaEquipos = (ArrayList<String>) users.get("clubsJoined");
-                    //retrieveTeamData(listaEquipos.get(index));
-                    //return listaEquipos.get(index));
+
                     final Map<String, Object> removeUserFromArrayMap = new HashMap<>();
                     removeUserFromArrayMap.put("clubMembersList", FieldValue.arrayRemove(userID));
+                    removeUserFromArrayMap.put("clubSize", clubSize);
                     applicationIdRef.update(removeUserFromArrayMap).addOnSuccessListener(command -> {
                         //displayPopupDone("¡Perfil Completado!");
                         //retrieveTeamData(TeamID);
@@ -1022,8 +1049,46 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
     /*
     borramos el equipo de la lista de equipos de el jugador, y seteamos el equipo actual al indice 0
      */
-    private void deleteClubFromPlayer(String clubID){
+    private void deleteClubFromPlayer(){
         System.out.println("a esto es una prueba");
+        CollectionReference applicationsRef = rootRef.collection("users");
+        DocumentReference applicationIdRef = applicationsRef.document(userID);
+
+        applicationIdRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+
+                    Map<String, Object> userClubs = (Map<String, Object>) document.get("userClubs");
+                    System.out.println("userCLubs0: "+userClubs);
+
+                    listaEquipos = (ArrayList<String>) userClubs.get("clubsJoined");
+                    listaEquipos.remove(currentTeam);
+                    Long numCLubs = (Long) userClubs.get("numClubsJoined");
+                    numCLubs-=1;
+
+                    userClubs.put("clubsJoined", listaEquipos);
+                    userClubs.put("numClubsJoined", numCLubs);
+                    System.out.println("userCLubs1: "+userClubs);
+
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("userClubs", userClubs);
+                    System.out.println("map final: "+map);
+
+                    //listaEquipos.put("clubMembersList", FieldValue.arrayRemove(userID));
+                    //retrieveTeamData(listaEquipos.get(indqex));
+                    //return listaEquipos.get(index));
+                    applicationIdRef.update(map).addOnSuccessListener(command -> {
+                        //displayPopupDone("¡Perfil Completado!");
+                        //retrieveTeamData(TeamID);
+                        System.out.println("logré actualizar la base de dats sin team");
+                    });
+                }
+            }
+        });
+    }
+
+    private void getNextTeam(){
         CollectionReference applicationsRef = rootRef.collection("users");
         DocumentReference applicationIdRef = applicationsRef.document(userID);
 
@@ -1033,21 +1098,16 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
                 if (document.exists()) {
                     Map<String, Object> userClubs = (Map<String, Object>) document.get("userClubs");
                     listaEquipos = (ArrayList<String>) userClubs.get("clubsJoined");
-                    Long numCLubs = (Long) userClubs.get("numClubsJoined");
-                    numCLubs-=1;
-                    listaEquipos.remove(clubID);
-                    userClubs.put("userClubs", listaEquipos);
-                    userClubs.put("numClubsJoined", numCLubs);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("userClubs", userClubs);
-                    //listaEquipos.put("clubMembersList", FieldValue.arrayRemove(userID));
-                    //retrieveTeamData(listaEquipos.get(indqex));
-                    //return listaEquipos.get(index));
-                    applicationIdRef.update(map).addOnSuccessListener(command -> {
-                        //displayPopupDone("¡Perfil Completado!");
-                        //retrieveTeamData(TeamID);
-                        System.out.println("logré actualizar la base de dats sin team");
+                    String nextTeam = (String) listaEquipos.get(0);
+                    setCurrentTeam(nextTeam);
+
+                    Map<String, Object> favTeam = new HashMap<>();
+                    favTeam.put("favoriteClubID", nextTeam);
+                    applicationIdRef.update(favTeam).addOnSuccessListener(command -> {
+                        retrieveTeamData();
+                        System.out.println("retrieveng data afeter exitting team");
                     });
+
                 }
             }
         });
@@ -1093,7 +1153,7 @@ Con el ID del TEAM, relleno la info del pop up con información del equipo actua
 
     private void createOrJoinClub(){
         System.out.println("Descomentar Código para agregar el fragment correcto");
-       /*
+        /*
         Fragment nuevoFragmento = new TeamsFragment();
         FragmentTransaction transaction =
                 this.getParentFragmentManager().beginTransaction();
